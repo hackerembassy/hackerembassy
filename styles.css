@@ -61,7 +61,7 @@ body {
 .header {
     display: -webkit-flex;
     display: flex;
-    flex-direction: row;
+    flex-direction: row no-wrap;
     justify-content: end;
     align-items: center;
     position: fixed;
