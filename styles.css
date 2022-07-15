@@ -61,7 +61,7 @@ body {
 .header {
     display: -webkit-flex;
     display: flex;
-    flex-direction: row no-wrap;
+    flex-direction: row nowrap;
     justify-content: end;
     align-items: center;
     position: fixed;
@@ -80,6 +80,7 @@ body {
     display: block;
 }
 .header li {
+    flex: 0 0 100%;
     display: inline;
     padding-left: 30px;
     padding-right: 30px;
