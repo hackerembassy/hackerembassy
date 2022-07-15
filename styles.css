@@ -1,0 +1,224 @@
+/*Сброс стилей браузера */
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+}
+
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+  display: block;
+}
+
+body {
+  line-height: 1;
+}
+
+ol, ul {
+  list-style: none;
+}
+
+blockquote, q {
+  quotes: none;
+}
+
+blockquote:before, blockquote:after,
+q:before, q:after {
+  content: '';
+  content: none;
+}
+  
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+/* Конец сбросов стилей браузера */
+
+body {
+  background-color: #2D2D2B;
+  color: #F6F5F0;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+
+/* Стили для header */
+
+.header {
+    display: -webkit-flex;
+    display: flex;
+    flex-direction: row;
+    justify-content: end;
+    align-items: center;
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    opacity: 1;
+    z-index: 10;
+    background-color: #2D2D2B;
+    border-bottom: 1px solid #F0E4D8;
+    font-size: 1.5rem;
+    padding: 20px;  
+}
+.header ul {
+    list-style-type: none;  
+    display: block;
+}
+.header li {
+    display: inline;
+    padding-left: 30px;
+    padding-right: 30px;
+}
+.header a {
+  text-decoration: none;
+  color: #F6F5F0;
+}
+
+/* Конец стилей header */
+
+.main {
+  display: -webkit-flex;
+  display: flex;
+  flex-direction: column;
+  z-index: 1;
+  width: 100%;
+  margin-top: 6%;
+}
+
+.first, .second, .third, .cont {
+  height: 100%;
+  font-size: 2.3rem;
+  padding: 5%;
+}
+
+.second {
+  padding-top: 10%;
+  padding-bottom: 10%;
+}
+
+.cont {
+  padding-top: 7%;
+  text-align: center;
+}
+
+.cont img {
+  padding-top: 3%;
+} 
+
+.first h1 {
+  color: #C39E9E;
+  font-size: 6.5rem;
+  font-family: 'Courier New', Courier, monospace;
+  padding-bottom: 4%;
+  padding-top: 9%;
+}
+
+h2 {
+  color: #C39E9E;
+  font-size: 4rem;
+  padding-bottom: 5%;
+  padding-top: 10%;
+}
+
+h3 {
+  color: #F6F5F0;
+  font-size: 3.5rem;
+  padding-bottom: 7%;
+  padding-top: 3%;
+}
+
+p {
+  padding-top: 2%;
+  padding-bottom: 2%;
+  line-height: 3rem;
+}
+
+.third img {
+  width: 100%; 
+}
+
+/* ОСНОВНЫЕ СТИЛИ СЛАЙДЕРА */
+.slider {
+  padding-top: 3%;
+  position: relative;
+  overflow: hidden;
+}
+.slider_wrapper {
+  display: -webkit-flex;
+  display: flex;
+  flex-direction: row;
+  transition: transform 0.7s ease; /* 0.6 длительность смены слайда в секундах */
+}
+.slider_item {
+  flex: 0 0 100%;
+  max-width: 100%;
+  padding: 10px;
+  box-sizing: border-box;
+}
+@media (min-width: 980px) {
+  .slider_item {
+    flex: 0 0 50%;
+    max-width: 50%; 
+  }
+}
+/* СТИЛИ ДЛЯ КНОПОК "НАЗАД" И "ВПЕРЁД" */
+.slider_control {
+  position: absolute;
+  display: none;  
+  top: 50%;
+  transform: translateY(-50%);
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  width: 40px; /* ширина кнопки */
+  height: 50px; /* высота кнопки */ 
+  opacity: .5; /* прозрачность */
+  background: #000; /* цвет фона */
+}
+.slider_control_show {
+  display: -webkit-flex;
+  display: flex;
+}
+.slider_control:hover,
+.slider_control:focus {
+  text-decoration: none;
+  outline: 0;
+  opacity: .9; /* прозрачность */
+}
+.slider_control_left {
+  left: 0;
+}
+.slider_control_right {
+  right: 0;
+}
+.slider_control::before {
+  content: '';
+  display: inline-block;
+  width: 20px; /* ширина иконки (стрелочки) */
+  height: 20px; /* высота иконки (стрелочки) */
+  background: transparent no-repeat center center;
+  background-size: 100% 100%;
+}
+.slider_control_left::before {
+  background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23fff' viewBox='0 0 8 8'%3E%3Cpath d='M5.25 0l-4 4 4 4 1.5-1.5-2.5-2.5 2.5-2.5-1.5-1.5z'/%3E%3C/svg%3E");
+}
+.slider_control_right::before {
+  background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23fff' viewBox='0 0 8 8'%3E%3Cpath d='M2.75 0l-1.5 1.5 2.5 2.5-2.5 2.5 1.5 1.5 4-4-4-4z'/%3E%3C/svg%3E");
+}
+
+/* Слайдер закончился */
