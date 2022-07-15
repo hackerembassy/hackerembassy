@@ -73,14 +73,13 @@ body {
     background-color: #2D2D2B;
     border-bottom: 1px solid #F0E4D8;
     font-size: 1.5rem;
-    padding: 20px;  
+    padding: 15px;  
 }
 .header ul {
     list-style-type: none;  
     display: block;
 }
 .header li {
-    flex: 0 0 100%;
     display: inline;
     padding-left: 30px;
     padding-right: 30px;
