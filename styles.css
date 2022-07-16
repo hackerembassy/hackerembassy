@@ -89,7 +89,6 @@ body {
     flex: 1 1 100%;
     max-width: 100%;
     display: inline;
-    padding-left: 15px;
     padding-right: 15px;
 }
 .header a {
