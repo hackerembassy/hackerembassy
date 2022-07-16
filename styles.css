@@ -124,10 +124,6 @@ body {
   text-align: center;
 }
 
-@media(max-width: 400px) {
-  padding-top: 20%;
-}
-
 .cont img {
   padding-top: 3%;
   flex: 0 0 100%;
@@ -165,6 +161,18 @@ p {
 .third img {
   flex: 0 0 100%;
   max-width: 100%;
+}
+
+@media(max-width: 400px) {
+  .cont {
+    padding-top: 20%;
+  }
+  .first h1 {
+    font-size: 5rem;
+  }
+  h2 {
+    font-size: 3.5rem;
+  }
 }
 
 /* ОСНОВНЫЕ СТИЛИ СЛАЙДЕРА */
