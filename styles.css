@@ -121,8 +121,12 @@ body {
 }
 
 .cont {
-  padding-top: 15%; 
+  padding-top: 10%; 
   text-align: center;
+}
+
+@media(max-width: 400px) {
+  padding-top: 15%;
 }
 
 .cont img {
