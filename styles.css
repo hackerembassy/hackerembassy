@@ -120,13 +120,12 @@ body {
   padding-bottom: 10%;
 }
 
-.cont {
-  padding-top: 10%; 
+.cont { 
   text-align: center;
 }
 
 @media(max-width: 400px) {
-  padding-top: 15%;
+  padding-top: 20%;
 }
 
 .cont img {
