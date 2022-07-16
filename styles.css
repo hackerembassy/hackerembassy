@@ -79,15 +79,19 @@ body {
     padding-right: 10px;
 }
 .header ul {
+    display: -webkit-flex;
+    display: flex;
+    flex-direction: row;
+    justify-content: end;
     list-style-type: none;  
-    display: block;
+   
 }
 .header li {
     flex: 1 1 100%;
     max-width: 100%;
     display: inline;
-    padding-left: 30px;
-    padding-right: 30px;
+    padding-left: 20px;
+    padding-right: 20px;
 }
 .header a {
   text-decoration: none;
