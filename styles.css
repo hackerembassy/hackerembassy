@@ -178,6 +178,13 @@ p {
   }
 }
 
+@media(min-width: 950px) {
+  .text {
+    padding-left: 15%;
+    padding-right: 15%;
+  }
+}
+
 /* ОСНОВНЫЕ СТИЛИ СЛАЙДЕРА */
 .slider {
   padding-top: 3%;
