@@ -195,7 +195,7 @@ p {
   display: -webkit-flex;
   display: flex;
   flex-direction: row;
-  transition: transform 0.7s ease; /* 0.6 длительность смены слайда в секундах */
+  transition: transform 0.7s ease; 
 }
 .slider_item {
   flex: 0 0 100%;
@@ -209,7 +209,7 @@ p {
     max-width: 50%; 
   }
 }
-СТИЛИ ДЛЯ КНОПОК "НАЗАД" И "ВПЕРЁД"
+
 .slider_control {
   position: absolute;
   display: none;  
@@ -252,9 +252,7 @@ p {
 }
 .slider_control_right::before {
   background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23fff' viewBox='0 0 8 8'%3E%3Cpath d='M2.75 0l-1.5 1.5 2.5 2.5-2.5 2.5 1.5 1.5 4-4-4-4z'/%3E%3C/svg%3E");
-}
-
-Слайдер закончился */
+} */
 
 :root {
   --carousel-width: 40vw;
