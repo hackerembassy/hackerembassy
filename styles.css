@@ -218,10 +218,10 @@ p {
   align-items: center;
   justify-content: center;
   text-align: center;
-  width: 40px; /* ширина кнопки */
-  height: 50px; /* высота кнопки */ 
-  opacity: .5; /* прозрачность */
-  background: #000; /* цвет фона */
+  width: 40px; 
+  height: 50px;  
+  opacity: .5; 
+  background: #000; 
 }
 .slider_control_show {
   display: -webkit-flex;
@@ -231,7 +231,7 @@ p {
 .slider_control:focus {
   text-decoration: none;
   outline: 0;
-  opacity: .9; /* прозрачность */
+  opacity: .9; 
 }
 .slider_control_left {
   left: 0;
@@ -242,8 +242,8 @@ p {
 .slider_control::before {
   content: '';
   display: inline-block;
-  width: 20px; /* ширина иконки (стрелочки) */
-  height: 20px; /* высота иконки (стрелочки) */
+  width: 20px; 
+  height: 20px; 
   background: transparent no-repeat center center;
   background-size: 100% 100%;
 }
