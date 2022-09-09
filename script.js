@@ -102,13 +102,13 @@ function smoothScrollPolyfill (node, key, target) {
       e.preventDefault();
       e.stopPropagation();
       setAriaPressed(i);
-      const scrollLeft = Math.floor(scroller.scrollWidth * (i / 4));
+      const scrollLeft = Math.floor(scroller.scrollWidth * (i / 6));
       smoothScroll(scroller, scrollLeft, true);
     })
   })
   
   scroller.addEventListener('scroll', debounce(() => {
-    let index = Math.round((scroller.scrollLeft / scroller.scrollWidth) * 4);
+    let index = Math.round((scroller.scrollLeft / scroller.scrollWidth) * 6);
     setAriaPressed(index);
   }, 200))
   
