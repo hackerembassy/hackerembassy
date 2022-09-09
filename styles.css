@@ -345,3 +345,49 @@ img {
     scroll-snap-coordinate: 0 0;
   }
 }
+
+.indicators {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+}
+
+ul.indicators {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.indicator {
+  padding: 10px;
+}
+
+.indicator-button {
+  cursor: pointer;
+  background: none;
+  border: none;
+  color: #666;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+}
+
+.indicator-button:after {
+  content: '○';
+  font-size: 1.4em;
+  padding: 12px 15px 17px;
+}
+
+.indicator-button:hover {
+  color: white;
+}
+
+.indicator-button:active {
+  color: white;
+  padding: 0;
+}
+
+.indicator-button[aria-pressed="true"]:after {
+  content: '●';
+}
