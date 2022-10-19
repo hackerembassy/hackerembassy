@@ -73,16 +73,23 @@ body {
     background-color: #2D2D2B;
     border-bottom: 1px solid #F0E4D8;
     font-size: 1.5rem;
-    padding: 20px;  
+    padding-top: 20px;
+    padding-bottom: 20px; 
+    padding-right: 10px;
 }
 .header ul {
+    display: -webkit-flex;
+    display: flex;
+    flex-direction: row;
+    justify-content: end;
     list-style-type: none;  
-    display: block;
+   
 }
 .header li {
+    flex: 1 1 100%;
+    max-width: 100%;
     display: inline;
-    padding-left: 30px;
-    padding-right: 30px;
+    padding-right: 15px;
 }
 .header a {
   text-decoration: none;
@@ -101,6 +108,8 @@ body {
 }
 
 .first, .second, .third, .cont {
+  flex: 1 1 100%;
+  max-width: 100%;
   height: 100%;
   font-size: 2.3rem;
   padding: 5%;
@@ -111,13 +120,14 @@ body {
   padding-bottom: 10%;
 }
 
-.cont {
-  padding-top: 7%;
+.cont { 
   text-align: center;
 }
 
 .cont img {
   padding-top: 3%;
+  flex: 0 0 100%;
+  max-width: 100%;
 } 
 
 .first h1 {
@@ -149,10 +159,33 @@ p {
 }
 
 .third img {
-  width: 100%; 
+  flex: 0 0 100%;
+  max-width: 100%;
 }
 
-/* ОСНОВНЫЕ СТИЛИ СЛАЙДЕРА */
+@media(max-width: 400px) {
+  .cont {
+    padding-top: 20%;
+  }
+  .first h1 {
+    font-size: 5rem;
+  }
+  h2 {
+    font-size: 3rem;
+  }
+  .first p {
+    font-size: 2rem;
+  }
+}
+
+@media(min-width: 950px) {
+  .text {
+    padding-left: 10%;
+    padding-right: 10%;
+  }
+}
+
+/* ОСНОВНЫЕ СТИЛИ СЛАЙДЕРА 
 .slider {
   padding-top: 3%;
   position: relative;
@@ -162,7 +195,7 @@ p {
   display: -webkit-flex;
   display: flex;
   flex-direction: row;
-  transition: transform 0.7s ease; /* 0.6 длительность смены слайда в секундах */
+  transition: transform 0.7s ease; 
 }
 .slider_item {
   flex: 0 0 100%;
@@ -176,7 +209,7 @@ p {
     max-width: 50%; 
   }
 }
-/* СТИЛИ ДЛЯ КНОПОК "НАЗАД" И "ВПЕРЁД" */
+
 .slider_control {
   position: absolute;
   display: none;  
@@ -185,10 +218,10 @@ p {
   align-items: center;
   justify-content: center;
   text-align: center;
-  width: 40px; /* ширина кнопки */
-  height: 50px; /* высота кнопки */ 
-  opacity: .5; /* прозрачность */
-  background: #000; /* цвет фона */
+  width: 40px; 
+  height: 50px;  
+  opacity: .5; 
+  background: #000; 
 }
 .slider_control_show {
   display: -webkit-flex;
@@ -198,7 +231,7 @@ p {
 .slider_control:focus {
   text-decoration: none;
   outline: 0;
-  opacity: .9; /* прозрачность */
+  opacity: .9; 
 }
 .slider_control_left {
   left: 0;
@@ -209,8 +242,8 @@ p {
 .slider_control::before {
   content: '';
   display: inline-block;
-  width: 20px; /* ширина иконки (стрелочки) */
-  height: 20px; /* высота иконки (стрелочки) */
+  width: 20px; 
+  height: 20px; 
   background: transparent no-repeat center center;
   background-size: 100% 100%;
 }
@@ -219,6 +252,142 @@ p {
 }
 .slider_control_right::before {
   background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23fff' viewBox='0 0 8 8'%3E%3Cpath d='M2.75 0l-1.5 1.5 2.5 2.5-2.5 2.5 1.5 1.5 4-4-4-4z'/%3E%3C/svg%3E");
+} */
+
+:root {
+  --carousel-width: 40vw;
+  --carousel-height: calc(0.7 * var(--carousel-width));
+  --carousel-padding: 5px;
 }
 
-/* Слайдер закончился */
+@media (max-width: 479px) {
+  :root {
+    --carousel-width: 95vw;
+  }
+}
+
+.viewport {
+  width: 100%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.carousel-frame {
+  background: #fafafa;
+  padding: 10px;
+  border-radius: 3px;
+  border: 1px solid #ddd;
+  width: calc(var(--carousel-width) + (2 * var(--carousel-padding)));
+  height: calc(var(--carousel-height) + (2 * var(--carousel-padding)));
+}
+
+.carousel {
+  width: var(--carousel-width);
+  height: var(--carousel-height);
+}
+
+.scroll {
+  display: flex;
+  align-items: center;
+  overflow-x: auto;
+  overflow-y: hidden;
+  width: 100%;
+  height: 100%;
+  -webkit-overflow-scrolling: touch;
+}
+
+ul.scroll {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.scroll-item-outer {
+  width: 100%;
+  height: 100%
+}
+
+.scroll-item {
+  width: var(--carousel-width);
+  height: 100%;
+}
+
+img {
+  object-fit: contain;
+  width: 100%;
+  height: 100%;
+}
+
+@supports (scroll-snap-align: start) {
+  /* modern scroll snap points */
+  .scroll {
+    scroll-snap-type: x mandatory;
+  }
+  .scroll-item-outer {
+    scroll-snap-align: center;
+  }
+}
+
+@supports not (scroll-snap-align: start) {
+  /* old scroll snap points spec */
+  .scroll {
+    -webkit-scroll-snap-type: mandatory;
+            scroll-snap-type: mandatory;
+    -webkit-scroll-snap-destination: 0 50%;
+            scroll-snap-destination: 0 50%;
+    -webkit-scroll-snap-points-x: repeat(100%);
+            scroll-snap-points-x: repeat(100%);
+  }
+  
+  .scroll-item-outer {
+    scroll-snap-coordinate: 0 0;
+  }
+}
+
+.indicators {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+}
+
+ul.indicators {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.indicator {
+  padding: 10px;
+}
+
+.indicator-button {
+  cursor: pointer;
+  background: none;
+  border: none;
+  color: #666;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+}
+
+.indicator-button:after {
+  content: '○';
+  font-size: 1.4em;
+  padding: 12px 15px 17px;
+}
+
+.indicator-button:hover {
+  color: white;
+}
+
+.indicator-button:active {
+  color: white;
+  padding: 0;
+}
+
+.indicator-button[aria-pressed="true"]:after {
+  content: '●';
+}
