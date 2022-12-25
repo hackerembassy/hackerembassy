@@ -13,31 +13,34 @@
   <link rel="mask-icon" href="icons/safari-pinned-tab.svg" color="#a17070">
   <meta name="msapplication-TileColor" content="#a17070">
   <meta name="theme-color" content="#ffffff">
-
   <script src="script.js" defer></script>
 </head>
 
 <body>
+  <div id="topbar"><span>user@hackerembassy.site: ~</span><img src="/icons/topbuttons.png" alt=""></div>
   <header>
     <ul>
       <li><a href="#">Главная</a></li>
       <li><a href="#about">О нас</a></li>
       <li><a href="#announces">Мероприятия</a></li>
-      <li><a href="#contact">Контакты</a></li>
+      <li><a href="#contacts">Контакты</a></li>
     </ul>
   </header>
   <main>
     <section id="promo">
       <h1>Hacker Embassy</h1>
-      <p>Ереванский хакспейс. С британским флагом на входе и хакерской теплотой внутри</p>
+      <span>></span>
+      <p id="subheading" class="typed" data-period="2000"
+        data-type='[ "Ереванский хакспейс", "С британским флагом на входе и хакерской теплотой внутри", "Скролль ниже, не стесняйся" ]'>
+      </p>
     </section>
     <section id="about">
       <h2>О нас</h2>
       <p>
-        Мы приехали из разных стран и городов и открыли хакспейс в Ереване.
+        >Мы приехали из разных стран и городов и открыли хакспейс в Ереване.
       </p>
       <p>
-        Хакспейс - это пространство, где собираются единомышленники, увлеченные технологиями и творчеством.
+        >Хакспейс - это пространство, где собираются единомышленники, увлеченные технологиями и творчеством.
         Мы вместе работаем над проектами, делимся идеями и знаниями, просто общаемся.<br>
         Здесь разные люди находят себе занятие и единомышленников.
         Мы поддерживаем друг друга, договариваемся и общаемся на равных. <br>
@@ -45,7 +48,7 @@
         обмениваясь опытом и помогая друг другу.
       </p>
       <p>
-        Хакспейс не является коммерческим проектом и существует на пожертвования участников.
+        >Хакспейс не является коммерческим проектом и существует на пожертвования участников.
         Мы вносим свой вклад в развитие хакспейса: забота о пространстве, пожертвования, помощь в приобретении
         оборудования.<br>
         Если вы находитесь в Ереване, увлечены технологиями и ищете единомышленников, заходите к нам.
@@ -116,35 +119,31 @@
     <section id="announces">
       <h2>Мероприятия</h2>
       <p>
-        Полуоткрытые встречи каждую пятницу в 20.00
+        >Полуоткрытые встречи каждую пятницу в 20.00
       </p>
       <p>
-        Музыкальные встречи каждый понедельник в 20.00
+        >Музыкальные встречи каждый понедельник в 20.00
       </p>
     </section>
 
     <section id="contacts">
       <h2>Как нас найти</h2>
-      <p>Армения, Ереван, Пушкина 38 (вход со двора)</p>
+      <p>>Армения, Ереван, Пушкина 38 (вход со двора)</p>
       <div id="place">
-        <img id="house" src="Images/britishHouse2.jpeg">
+        <img id="house" src="Images/britishHouse2.jpeg" loading="lazy">
 
         <div id="map">
           <a href="https://yandex.ru/maps/10262/yerevan/?utm_medium=mapframe&utm_source=maps"
             style="color:#eee;font-size:12px;position:absolute;top:0px;">Ереван</a><a
             href="https://yandex.ru/maps/10262/yerevan/house/YE0YcwZjS0ABQFpqfX15c3hkZg==/?indoorLevel=1&ll=44.513885%2C40.182452&utm_medium=mapframe&utm_source=maps&z=18.58"
             style="color:#eee;font-size:12px;position:absolute;top:14px;">Улица Пушкина, 38 — Яндекс Карты</a>
-            <iframe
-            src="https://yandex.ru/map-widget/v1/-/CCUrUZBH8A" frameborder="1" allowfullscreen="true"
+          <iframe src="https://yandex.ru/map-widget/v1/-/CCUrUZBH8A" frameborder="1" allowfullscreen="true"
             style="position:relative;"></iframe>
         </div>
 
       </div>
     </section>
   </main>
-
-
-
 </body>
 
 </html>

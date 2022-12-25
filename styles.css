@@ -1,87 +1,107 @@
-/*Сброс стилей браузера */
-
 * {
-  margin: 0;
-  padding: 0;
-  border: 0;
-  font-size: 100%;
   font: inherit;
-  vertical-align: baseline;
 }
 
-article, aside, details, figcaption, figure, 
-footer, header, hgroup, menu, nav, section {
-  display: block;
+:root {
+  --carousel-width: 50vw;
+  --carousel-height: calc(0.7 * var(--carousel-width));
+  --carousel-padding: 5px;
+  --accent-color: #C39E9E;
+  --secondary-color: #F6F5F0;
+  scroll-behavior: smooth;
 }
 
-body {
-  line-height: 1;
+@media (max-width: 479px) {
+  :root {
+    --carousel-width: 95vw;
+  }
 }
 
-ol, ul {
+ol,
+ul {
   list-style: none;
+  margin: 0;
 }
-
-blockquote, q {
-  quotes: none;
-}
-
-blockquote:before, blockquote:after,
-q:before, q:after {
-  content: '';
-  content: none;
-}
-  
-table {
-  border-collapse: collapse;
-  border-spacing: 0;
-}
-/* Конец сбросов стилей браузера */
 
 body {
   background-color: #2D2D2B;
-  color: #F6F5F0;
+  color: var(--secondary-color);
   font-family: 'Courier New', Courier, monospace;
 }
 
 /* Стили для header */
 
 header {
-    display: -webkit-flex;
-    display: flex;
-    flex-direction: row;
-    justify-content: end;
-    align-items: center;
-    position: fixed;
-    left: 0;
-    right: 0;
-    top: 0;
-    opacity: 1;
-    z-index: 10;
-    background-color: #2D2D2B;
-    border-bottom: 1px solid #F0E4D8;
-    font-size: 1.5rem;
-    padding-top: 20px;
-    padding-bottom: 20px; 
-    padding-right: 10px;
+  display: -webkit-flex;
+  display: flex;
+  flex-direction: row;
+  justify-content: start;
+  align-items: center;
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 40px;
+  opacity: 1;
+  z-index: 10;
+  background-color: #373737;
+  font-size: 1.2rem;
+  padding-top: 10px;
 }
+
 header ul {
-    display: -webkit-flex;
-    display: flex;
-    flex-direction: row;
-    justify-content: end;
-    list-style-type: none;  
-   
+  padding-left: 10px;
+  display: -webkit-flex;
+  display: flex;
+  flex-direction: row;
+  list-style-type: none;
+  flex-wrap: wrap;
+
 }
+
 header li {
-    flex: 1 1 100%;
-    max-width: 100%;
-    display: inline;
-    padding-right: 15px;
+  display: inline-block;
+  padding: 5px 10px;
 }
+
 header a {
   text-decoration: none;
-  color: #F6F5F0;
+  color: var(--secondary-color);
+}
+
+header li:hover {
+  background-color: var(--secondary-color);
+
+}
+
+header li:hover a {
+  color: #2D2D2B;
+}
+
+#topbar {
+  height: 40px;
+  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 10;
+  background: rgb(51, 51, 51);
+  background: linear-gradient(0deg, rgb(54, 54, 54) 0%, rgb(93, 93, 93) 100%);
+
+  text-align: center;
+}
+
+#topbar img {
+  position: absolute;
+  margin: 5px;
+  right: 0;
+  width: 90px;
+  height: 30px;
+}
+
+#topbar span {
+  display: inline-block;
+  margin-top: 10px;
+  font-weight: bold;
 }
 
 /* Конец стилей header */
@@ -104,35 +124,35 @@ section {
 }
 
 #promo {
-  height: 100vh;
+  height: 95vh;
 }
 
 #promo h1 {
-  color: #C39E9E;
+  color: var(--accent-color);
   font-size: 6.5rem;
   font-family: 'Courier New', Courier, monospace;
-  padding-bottom: 4%;
-  padding-top: 9%;
+  margin-top: 20vh;
+  margin-bottom: 50px;
+}
+
+#subheading {
+  display: inline;
 }
 
 h2 {
-  
-  color: #C39E9E;
+  color: var(--accent-color);
   font-size: 4rem;
-  padding-bottom: 20px;
+  padding-bottom: 10px;
 }
 
 h3 {
-  color: #F6F5F0;
   font-size: 3.5rem;
   padding-bottom: 7%;
   padding-top: 3%;
 }
 
 p {
-  padding-top: 2%;
-  padding-bottom: 2%;
-  line-height: 3rem;
+  padding: 10px 0;
 }
 
 .slider img {
@@ -140,40 +160,7 @@ p {
   max-width: 100%;
 }
 
-@media(max-width: 400px) {
-  .cont {
-    padding-top: 20%;
-  }
-  .first h1 {
-    font-size: 5rem;
-  }
-  h2 {
-    font-size: 3rem;
-  }
-  .first p {
-    font-size: 2rem;
-  }
-}
 
-@media(min-width: 950px) {
-  .text {
-    padding-left: 10%;
-    padding-right: 10%;
-  }
-}
-
-:root {
-  --carousel-width: 50vw;
-  --carousel-height: calc(0.7 * var(--carousel-width));
-  --carousel-padding: 5px;
-  scroll-behavior: smooth;
-}
-
-@media (max-width: 479px) {
-  :root {
-    --carousel-width: 95vw;
-  }
-}
 
 .viewport {
   width: 100%;
@@ -184,12 +171,13 @@ p {
 }
 
 .carousel-frame {
-  background: #fafafa;
+  background: var(--secondary-color);
   border-radius: 3px;
-  border: 1px solid #ddd;
+  border: 1px solid var(--secondary-color);
 }
 
 .carousel {
+  max-width: 90vw;
   width: var(--carousel-width);
   height: var(--carousel-height);
 }
@@ -227,26 +215,29 @@ img {
 }
 
 @supports (scroll-snap-align: start) {
+
   /* modern scroll snap points */
   .scroll {
     scroll-snap-type: x mandatory;
   }
+
   .scroll-item-outer {
     scroll-snap-align: center;
   }
 }
 
 @supports not (scroll-snap-align: start) {
+
   /* old scroll snap points spec */
   .scroll {
     -webkit-scroll-snap-type: mandatory;
-            scroll-snap-type: mandatory;
+    scroll-snap-type: mandatory;
     -webkit-scroll-snap-destination: 0 50%;
-            scroll-snap-destination: 0 50%;
+    scroll-snap-destination: 0 50%;
     -webkit-scroll-snap-points-x: repeat(100%);
-            scroll-snap-points-x: repeat(100%);
+    scroll-snap-points-x: repeat(100%);
   }
-  
+
   .scroll-item-outer {
     scroll-snap-coordinate: 0 0;
   }
@@ -286,11 +277,11 @@ ul.indicators {
 }
 
 .indicator-button:hover {
-  color: white;
+  color: var(--secondary-color);
 }
 
 .indicator-button:active {
-  color: white;
+  color: var(--secondary-color);
   padding: 0;
 }
 
@@ -302,7 +293,7 @@ ul.indicators {
   display: flex;
 }
 
-#place img{
+#place img {
   width: 50%;
 }
 
@@ -315,13 +306,58 @@ ul.indicators {
   height: 100%;
 }
 
+@media(max-width: 600px) {
+  header li {
+    padding: 2px 5px;
+  }
+
+  #promo h1 {
+    font-size: 4rem;
+  }
+
+  h2 {
+    font-size: 2.5rem;
+  }
+
+  #promo p,
+  #promo span {
+    font-size: 2rem;
+  }
+
+  section p {
+    font-size: 1.5rem;
+  }
+
+  .indicator {
+    padding: 0px;
+  }
+
+  #topbar {
+    text-align: start;
+    padding: 0 10px;
+  }
+
+  #topbar img {
+    right: 20px;
+  }
+}
+
+@media(min-width: 950px) {
+  .text {
+    padding-left: 10%;
+    padding-right: 10%;
+  }
+}
+
 @media (max-width: 800px) {
-  #place img{
+  #place img {
     width: 100%;
   }
+
   #place {
     flex-direction: column;
   }
+
   #map iframe {
     height: 500px;
   }
