@@ -306,7 +306,7 @@ ul.indicators {
 .indicator-button:after {
   content: '○';
   font-size: 1.4em;
-  padding: 12px 15px 17px;
+  padding: 12px 10px 17px;
 }
 
 .indicator-button:hover {
@@ -339,7 +339,7 @@ ul.indicators {
   height: 100%;
 }
 
-#bsod {
+#bsod, #screenshot, #site {
   display: none;
   z-index: 100;
   position: fixed;
@@ -349,11 +349,44 @@ ul.indicators {
   height: 100vh;
 }
 
+#site {
+  z-index: 102;
+  animation-fill-mode: both;
+}
+
+#tab {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  left: 48.5vw;
+  width: 3vw;
+  height: fit-content;
+  z-index: 101;
+}
+
 @media(max-width: 600px) {
-  #bsod {
+  .indicator-button:after {
+    content: '○';
+    font-size: 1em;
+    padding: 12px 10px 17px;
+  }
+
+  #tab {
+    left: 48.5vw;
+    width: 10vw;
+    height: fit-content;
+    z-index: 101;
+  }
+
+  #bsod, #screenshot{
     left: -15vw;
     width: 170vw;
-    height: 100vh;
+    height: 110vh;
+  }
+
+  #screenshot {
+    left: -50vw;
+    width: 205vw;
   }
 
   header a {
@@ -400,7 +433,7 @@ ul.indicators {
   }
 
   section p {
-    font-size: 1.2rem;
+    font-size: 1rem;
     margin: 0;
   }
 
@@ -426,6 +459,10 @@ ul.indicators {
 }
 
 @media (max-width: 800px) {
+  section p {
+    font-size: 1.4rem;
+  }
+
   #place img {
     width: 100%;
   }
@@ -436,6 +473,22 @@ ul.indicators {
 
   #map iframe {
     height: 500px;
+  }
+}
+
+@keyframes minimize {
+  0% {
+    transform: translateY(1px) scale(1);
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 1;
+  }
+
+  100% {
+    transform: translateY(51vh) scale(0.01);
+    opacity: 0;
   }
 }
 
