@@ -178,3 +178,69 @@ window.onload = function () {
   css.innerHTML = ".typed > .wrap { border-right: 0.08em solid #fff}";
   document.body.appendChild(css);
 };
+
+// Top buttons FUN
+let maximizeButton = document.getElementById('maximize');
+let minimizeButtom = document.getElementById('minimize');
+let closeButton = document.getElementById('close');
+let bsodImage = document.getElementById("bsod");
+let siteStubImage = document.getElementById("site");
+let desktopImage = document.getElementById("screenshot");
+let menuTabImage = document.getElementById("tab");
+
+let fullscreenMode = false;
+
+maximizeButton.addEventListener("click", ()=>{
+  if (!fullscreenMode){
+    openFullscreen(document.documentElement);
+  }
+  else {
+    document.exitFullscreen();
+  }
+  fullscreenMode = !fullscreenMode;
+})
+
+function openFullscreen(elem) {
+  if (elem.requestFullscreen) {
+    elem.requestFullscreen();
+  } else if (elem.webkitRequestFullscreen) { /* Safari */
+    elem.webkitRequestFullscreen();
+  } else if (elem.msRequestFullscreen) { /* IE11 */
+    elem.msRequestFullscreen();
+  }
+}
+
+closeButton.addEventListener("click", ()=>{
+  openFullscreen(document.documentElement);
+  bsodImage.style.display = "block";
+  document.documentElement.style.cursor = "none";
+})
+
+minimizeButtom.addEventListener("click", ()=>{
+  siteStubImage.style.display = "block";
+  desktopImage.style.display = "block";
+  menuTabImage.style.display = "block";
+  siteStubImage.style.animation = "minimize 0.5s ease 0.05s 1 normal both";
+})
+
+menuTabImage.addEventListener("click", ()=>{
+  siteStubImage.style.animation = "minimize 0.5s ease 1s 1 reverse";
+  setTimeout(()=>{
+    siteStubImage.style.display = "none";
+    desktopImage.style.display = "none";
+    menuTabImage.style.display = "none";
+  }, 350);
+})
+
+desktopImage.addEventListener("click", ()=>{
+  alert("NO! You shouldn't fuck around here! Unminimize the console!");
+})
+
+let clickCount = 0;
+
+bsodImage.addEventListener("click", ()=>{
+  clickCount++;
+  
+  if (clickCount>2)
+    alert("LOL!");
+})
