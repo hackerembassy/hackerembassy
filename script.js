@@ -178,3 +178,36 @@ window.onload = function () {
   css.innerHTML = ".typed > .wrap { border-right: 0.08em solid #fff}";
   document.body.appendChild(css);
 };
+
+
+let maximizeButton = document.getElementById('maximize');
+let minimizeButtom = document.getElementById('minimize');
+let closeButton = document.getElementById('close');
+
+let fullscreenMode = false;
+
+maximizeButton.addEventListener("click", ()=>{
+  if (!fullscreenMode){
+    openFullscreen(document.documentElement);
+  }
+  else {
+    document.exitFullscreen();
+  }
+  fullscreenMode = !fullscreenMode;
+})
+
+function openFullscreen(elem) {
+  if (elem.requestFullscreen) {
+    elem.requestFullscreen();
+  } else if (elem.webkitRequestFullscreen) { /* Safari */
+    elem.webkitRequestFullscreen();
+  } else if (elem.msRequestFullscreen) { /* IE11 */
+    elem.msRequestFullscreen();
+  }
+}
+
+closeButton.addEventListener("click", ()=>{
+  openFullscreen(document.documentElement);
+  document.getElementById("bsod").style.display = "block";
+  document.documentElement.style.cursor = "none";
+})
