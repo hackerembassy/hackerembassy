@@ -2,6 +2,11 @@
   font: inherit;
 }
 
+@font-face {
+  font-family: "Courier New";
+  src: url("/Fonts/СourierNew.ttf");
+}
+
 :root {
   --carousel-width: 50vw;
   --carousel-height: calc(0.7 * var(--carousel-width));
@@ -41,6 +46,17 @@ ol,
 ul {
   list-style: none;
   margin: 0;
+}
+
+section a {
+  display: block;
+  text-decoration: none;
+  color: var(--secondary-color);
+  margin-bottom: 10px;
+}
+
+section a:hover{
+  color: var(--accent-color);
 }
 
 body {
@@ -323,6 +339,7 @@ ul.indicators {
 }
 
 #place {
+  margin-top: 20px;
   display: flex;
 }
 
@@ -339,7 +356,7 @@ ul.indicators {
   height: 100%;
 }
 
-#bsod, #screenshot, #site {
+#bsod, #screenshot, #site, #mobile-bsod {
   display: none;
   z-index: 100;
   position: fixed;
@@ -364,6 +381,31 @@ ul.indicators {
   z-index: 101;
 }
 
+@media(min-width: 950px) {
+  .text {
+    padding-left: 10%;
+    padding-right: 10%;
+  }
+}
+
+@media (max-width: 800px) {
+  section p {
+    font-size: 1.4rem;
+  }
+
+  #place img {
+    width: 100%;
+  }
+
+  #place {
+    flex-direction: column;
+  }
+
+  #map iframe {
+    height: 500px;
+  }
+}
+
 @media(max-width: 600px) {
   .indicator-button:after {
     content: '○';
@@ -372,21 +414,25 @@ ul.indicators {
   }
 
   #tab {
-    left: 48.5vw;
+    left: 46vw;
     width: 10vw;
     height: fit-content;
     z-index: 101;
   }
 
-  #bsod, #screenshot{
+  #screenshot{
     left: -15vw;
     width: 170vw;
     height: 110vh;
   }
 
+  #bsod {
+    display: none;
+  }
+
   #screenshot {
-    left: -50vw;
-    width: 205vw;
+    left: -73vw;
+    width: 250vw;
   }
 
   header a {
@@ -432,9 +478,9 @@ ul.indicators {
     font-size: 2rem;
   }
 
-  section p {
+  section p, section a {
     font-size: 1rem;
-    margin: 0;
+    margin-bottom: 5px;
   }
 
   .indicator {
@@ -448,31 +494,6 @@ ul.indicators {
 
   #topbar img {
     right: 20px;
-  }
-}
-
-@media(min-width: 950px) {
-  .text {
-    padding-left: 10%;
-    padding-right: 10%;
-  }
-}
-
-@media (max-width: 800px) {
-  section p {
-    font-size: 1.4rem;
-  }
-
-  #place img {
-    width: 100%;
-  }
-
-  #place {
-    flex-direction: column;
-  }
-
-  #map iframe {
-    height: 500px;
   }
 }
 

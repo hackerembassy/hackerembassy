@@ -184,6 +184,7 @@ let maximizeButton = document.getElementById('maximize');
 let minimizeButtom = document.getElementById('minimize');
 let closeButton = document.getElementById('close');
 let bsodImage = document.getElementById("bsod");
+let mobileBsodImage = document.getElementById("mobile-bsod");
 let siteStubImage = document.getElementById("site");
 let desktopImage = document.getElementById("screenshot");
 let menuTabImage = document.getElementById("tab");
@@ -212,7 +213,12 @@ function openFullscreen(elem) {
 
 closeButton.addEventListener("click", ()=>{
   openFullscreen(document.documentElement);
-  bsodImage.style.display = "block";
+  
+  if (window.screen.width>600)
+    bsodImage.style.display = "block";
+  else
+    mobileBsodImage.style.display = "block";
+
   document.documentElement.style.cursor = "none";
 })
 
@@ -238,9 +244,11 @@ desktopImage.addEventListener("click", ()=>{
 
 let clickCount = 0;
 
-bsodImage.addEventListener("click", ()=>{
-  clickCount++;
+document.querySelectorAll(".bsod-image").forEach((bsod)=>{
+  bsod.addEventListener("click", ()=>{
+    clickCount++;
   
-  if (clickCount>2)
-    alert("LOL!");
+    if (clickCount>2)
+      alert("LOL!");
+  })
 })
