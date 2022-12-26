@@ -366,6 +366,39 @@ ul.indicators {
   height: 100vh;
 }
 
+#achievement {
+  position: fixed;
+  right: 0;
+  width: 250px;
+  height: 95.5px;
+  bottom:-100px;
+  z-index: 200;
+}
+
+#achievement.triggered {
+  animation: up-down-steam 8s both;
+}
+
+#achievement .achievement-text {
+  position: absolute;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+  z-index: 1;
+  width: 145px;
+  left: 105px;
+  height: 65px;
+  padding: 15px 0;
+  justify-content: space-around;
+}
+
+
+#achievement .achievement-text p{
+  margin: 0;
+  padding: 0;
+  font-size: 0.7rem;
+}
+
 #site {
   z-index: 102;
   animation-fill-mode: both;
@@ -512,4 +545,23 @@ ul.indicators {
     opacity: 0;
   }
 }
+
+@keyframes up-down-steam {
+  0% {
+    bottom: -96px;
+  }
+
+  15% {
+    bottom: 0;
+  }
+
+  75%{
+    bottom: 0;
+  }
+
+  100% {
+    bottom: -96px;
+  }
+}
+
 
