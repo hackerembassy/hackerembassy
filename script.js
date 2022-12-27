@@ -121,279 +121,388 @@ scroller.addEventListener(
 
 setAriaLabels();
 
-function Typing (el, toRotate, period) {
-  this.toRotate = toRotate;
-  this.el = el;
-  this.loopNum = 0;
-  this.period = parseInt(period, 10) || 2000;
-  this.txt = "";
-  this.tick();
-  this.isDeleting = false;
-};
-
-let typingTimeout;
-
-Typing.prototype.tick = function () {
-  let i = this.loopNum % this.toRotate.length;
-  let fullTxt = this.toRotate[i];
-
-  if (this.isDeleting) {
-    this.txt = fullTxt.substring(0, this.txt.length - 1);
-  } else {
-    this.txt = fullTxt.substring(0, this.txt.length + 1);
+class TyperDOM {
+  constructor(el, toRotate, period) {
+    this.toRotate = toRotate;
+    this.el = el;
+    this.loopNum = 0;
+    this.period = parseInt(period, 10) || 2000;
+    this.txt = "";
   }
 
-  this.el.innerHTML = '<span class="wrap">' + this.txt + "</span>";
+  static typers;
 
-  let that = this;
-  let delta = 120 - Math.random() * 100;
-
-  if (this.isDeleting) {
-    delta /= 2;
+  static {
+    let css = document.createElement("style");
+    css.innerHTML = ".typed > .wrap { border-right: 0.08em solid #fff}";
+    document.body.appendChild(css);
   }
 
-  if (!this.isDeleting && this.txt === fullTxt) {
-    delta = this.period;
-    this.isDeleting = true;
-  } else if (this.isDeleting && this.txt === "") {
-    this.isDeleting = false;
-    this.loopNum++;
-    delta = 500;
-  }
-
-  typingTimeout = setTimeout(function () {
-    that.tick();
-  }, delta);
-};
-
-function StartTyping() {
-  let elements = document.getElementsByClassName("typed");
-  for (let i = 0; i < elements.length; i++) {
-    let toRotate = elements[i].getAttribute("data-type");
-    let period = elements[i].getAttribute("data-period");
-    if (toRotate) {
-      new Typing(elements[i], JSON.parse(toRotate), period);
+  static *GetAllTypers() {
+    let elements = document.getElementsByClassName("typed");
+    for (let i = 0; i < elements.length; i++) {
+      let toRotate = elements[i].getAttribute("data-type");
+      let period = elements[i].getAttribute("data-period");
+      if (toRotate) {
+        yield new TyperDOM(elements[i], JSON.parse(toRotate), period);
+      }
     }
   }
 
-  let css = document.createElement("style");
-  css.innerHTML = ".typed > .wrap { border-right: 0.08em solid #fff}";
-  document.body.appendChild(css);
-};
-
-function StopTyping(){
-  clearTimeout(typingTimeout);
-}
-
-window.onload = StartTyping;
-
-// MEMES
-const AchievementsAll = {
-  bsod:"Я сломаль :O",
-  dogs: "Ой, я, наверное, позже зайду",
-  alive: "Уснул за компом",
-  ass: "Yes"
-}
-const DefaultMediumAchievementDelay = 2000;
-const DefaultLongAchievementDelay = 5000;
-const IdleTimeout = 10000;
-const AchievementPopupDuration = 8000;
-const AchievementTriggeredClass = "triggered";
-const AchievementStorageKey = "achievements";
-
-let maximizeButton = document.getElementById('maximize');
-let minimizeButtom = document.getElementById('minimize');
-let closeButton = document.getElementById('close');
-let bsodImage = document.getElementById("bsod");
-let mobileBsodImage = document.getElementById("mobile-bsod");
-let siteStubImage = document.getElementById("site");
-let desktopImage = document.getElementById("screenshot");
-let menuTabImage = document.getElementById("tab");
-let achievementPopup = document.getElementById("achievement");
-let achievementPlaceholder = document.getElementById("achievement-placeholder");
-let barkAudio = new Audio('/Sounds/bark.mp3');
-let subheading = document.getElementById("subheading");
-
-let fullscreenMode = false;
-
-maximizeButton.addEventListener("click", ()=>{
-  if (!fullscreenMode){
-    openFullscreen();
+  static StartTypingAll() {
+    this.typers = [...this.GetAllTypers()];
+    for (const typer of this.typers) {
+      typer.StartTyping();
+    }
   }
-  else {
-    document.exitFullscreen();
-  }
-  fullscreenMode = !fullscreenMode;
-})
 
-function openFullscreen(elem = document.documentElement) {
-  if (elem.requestFullscreen) {
-    elem.requestFullscreen();
-  } else if (elem.webkitRequestFullscreen) { /* Safari */
-    elem.webkitRequestFullscreen();
-  } else if (elem.msRequestFullscreen) { /* IE11 */
-    elem.msRequestFullscreen();
+  static StopTypingAll() {
+    for (const typer of this.typers) {
+      typer.StopTyping();
+    }
+  }
+
+  typingTimeout;
+
+  StartTyping() {
+    this.tick();
+    this.isDeleting = false;
+  }
+
+  StopTyping() {
+    clearTimeout(this.typingTimeout);
+  }
+
+  tick() {
+    let i = this.loopNum % this.toRotate.length;
+    let fullTxt = this.toRotate[i];
+
+    if (this.isDeleting) {
+      this.txt = fullTxt.substring(0, this.txt.length - 1);
+    } else {
+      this.txt = fullTxt.substring(0, this.txt.length + 1);
+    }
+
+    this.el.innerHTML = '<span class="wrap">' + this.txt + "</span>";
+
+    let that = this;
+    let delta = 120 - Math.random() * 100;
+
+    if (this.isDeleting) {
+      delta /= 2;
+    }
+
+    if (!this.isDeleting && this.txt === fullTxt) {
+      delta = this.period;
+      this.isDeleting = true;
+    } else if (this.isDeleting && this.txt === "") {
+      this.isDeleting = false;
+      this.loopNum++;
+      delta = 500;
+    }
+
+    this.typingTimeout = setTimeout(function () {
+      that.tick();
+    }, delta);
   }
 }
 
-closeButton.addEventListener("click", ()=>{
-  openFullscreen();
-  
-  if (window.screen.width > 600)
-    displayElement(bsodImage);
-  else
-    displayElement(mobileBsodImage);
 
-  document.documentElement.style.cursor = "none";
+class DOMHelpers {
+  static displayElement(element, displayType = "block") {
+    element.style.display = displayType;
+  }
 
-  if (earnAchievment("bsod"))
-    triggerAchievmentPopup(AchievementsAll["bsod"], DefaultLongAchievementDelay);
-})
+  static hideElement(element) {
+    element.style.display = "none";
+  }
 
-minimizeButtom.addEventListener("click", ()=>{
-  displayElement(siteStubImage);
-  displayElement(desktopImage);
-  displayElement(menuTabImage);
-  siteStubImage.style.animation = "minimize 0.5s ease 0.05s 1 normal both";
+  static addMultipleEventListeners(events, func) {
+    events.forEach((event) => {
+      window.addEventListener(event, func);
+    });
+  }
 
-  if (earnAchievment("dogs"))
-    triggerAchievmentPopup(AchievementsAll["dogs"], DefaultMediumAchievementDelay);
-})
+  static removeMultipleEventListeners(events, func) {
+    events.forEach((event) => {
+      window.removeEventListener(event, func);
+    });
+  }
 
-menuTabImage.addEventListener("click", ()=>{
-  siteStubImage.style.animation = "minimize 0.5s ease 1s 1 reverse";
-  setTimeout(()=>{
-    hideElement(siteStubImage);
-    hideElement(desktopImage);
-    hideElement(menuTabImage);
-  }, 350);
-})
+  static getSelectionText() {
+    var text = "";
+    if (window.getSelection) {
+      text = window.getSelection().toString();
+    } else if (document.selection && document.selection.type != "Control") {
+      text = document.selection.createRange().text;
+    }
+    return text;
+  }
 
-desktopImage.addEventListener("click", ()=>{
-  barkAudio.play();
-  setTimeout(()=> alert("NO! You shouldn't fuck around here! Unminimize the console!"), 500);
-})
-
-let clickCount = 0;
-
-document.querySelectorAll(".bsod-image").forEach((bsod)=>{
-  bsod.addEventListener("click", ()=>{
-    clickCount++;
-  
-    if (clickCount>2)
-      alert("LOL!");
-  })
-})
+  static openFullscreen(elem = document.documentElement) {
+    if (elem.requestFullscreen) {
+      elem.requestFullscreen();
+    } else if (elem.webkitRequestFullscreen) {
+      /* Safari */
+      elem.webkitRequestFullscreen();
+    } else if (elem.msRequestFullscreen) {
+      /* IE11 */
+      elem.msRequestFullscreen();
+    }
+  }
+}
 
 // Achievments functions
+class AchievementsDOM {
+  static AllAchievements = {
+    bsod: "Я сломаль :O",
+    dogs: "Ой, я, наверное, позже зайду",
+    alive: "Уснул за компом",
+    ass: "Yes",
+  };
+  static AchievementPopup;
+  static AchievementPlaceholder;
+  static DefaultShortAchievementDelay = 500;
+  static DefaultMediumAchievementDelay = 2000;
+  static DefaultLongAchievementDelay = 5000;
+  static AchievementPopupDuration = 8000;
+  static AchievementTriggeredClass = "triggered";
+  static AchievementStorageKey = "achievements";
 
-function triggerAchievmentPopup(text, delay = 0){
-  setTimeout(()=>{
-    achievementPlaceholder.innerHTML = text;
-    achievementPopup.classList.toggle(AchievementTriggeredClass);
-    setTimeout(()=>achievementPopup.classList.toggle(AchievementTriggeredClass), AchievementPopupDuration);
-  }, delay)
-}
+  static {
+    this.AchievementPopup = document.getElementById("achievement");
+    this.AchievementPlaceholder = document.getElementById(
+      "achievement-placeholder"
+    );
+  }
 
-function earnAchievment(key){
-  let value = AchievementsAll[key];
-  let achievementsString = localStorage.getItem(AchievementStorageKey);
-  let achievements = achievementsString ? JSON.parse(achievementsString) : {};
+  static triggerAchievmentPopup(text, delay = 0) {
+    setTimeout(() => {
+      this.AchievementPlaceholder.innerHTML = text;
+      this.AchievementPopup.classList.toggle(this.AchievementTriggeredClass);
+      setTimeout(
+        () =>
+          this.AchievementPopup.classList.toggle(
+            this.AchievementTriggeredClass
+          ),
+        this.AchievementPopupDuration
+      );
+    }, delay);
+  }
 
-  if (achievements[key]) return false; 
+  static earnAchievment(key) {
+    let value = this.AllAchievements[key];
+    let achievementsString = localStorage.getItem(this.AchievementStorageKey);
+    let achievements = achievementsString ? JSON.parse(achievementsString) : {};
 
-  achievements[key] = value;
-  localStorage.setItem(AchievementStorageKey, JSON.stringify(achievements));
+    if (achievements[key]) return false;
 
-  return true;
-}
+    achievements[key] = value;
+    localStorage.setItem(
+      this.AchievementStorageKey,
+      JSON.stringify(achievements)
+    );
 
-function hasAchievment(key){
-  let achievementsString = localStorage.getItem(AchievementStorageKey);
-  let achievements = achievementsString ? JSON.parse(achievementsString) : {};
+    return true;
+  }
 
-  if (achievements[key]) return true; 
+  static hasAchievment(key) {
+    let achievementsString = localStorage.getItem(this.AchievementStorageKey);
+    let achievements = achievementsString ? JSON.parse(achievementsString) : {};
 
-  return false; 
-}
+    if (achievements[key]) return true;
 
-// Idle
-
-let idleTimeout;
-
-function resetIdleTimer() {
-  clearTimeout(idleTimeout);
-  idleTimeout = setTimeout(()=>{
-    idleHandler()
-  }, IdleTimeout);
-}
-
-const ActivityEvents = ["mousemove", "mousedown", "touchstart", "touchmove", "click", "keydown", "scroll"];
-
-function idleHandler(){
-  removeMultipleEventListeners(ActivityEvents, resetIdleTimer);
-  addMultipleEventListeners(ActivityEvents, heIsAlive);
-
-  StopTyping()
-  subheading.dataset.type = '[ "Эй", "Ты там живой?", "Я волнуюсь", "Проснись, пожалуйста", "Я всё прощу", "Не умирай!", "Нам было так хорошо вместе" ]';
-  StartTyping();
-
-  function heIsAlive(){
-    removeMultipleEventListeners(ActivityEvents, heIsAlive);
-
-    StopTyping()
-    subheading.dataset.type = '[ "Ура", "Он проснулся", "Я уже собирался в скорую звонить", "Пронесло..." ]';
-    StartTyping();
-
-    if (earnAchievment("alive"))
-      triggerAchievmentPopup(AchievementsAll["alive"], DefaultMediumAchievementDelay);
+    return false;
   }
 }
 
-if (!hasAchievment("alive")){
-  addMultipleEventListeners(ActivityEvents, resetIdleTimer);
+class MemesDOM {
+  static fullscreenMode = false;
+  static clickCount = 0;
+  static idleTimeout;
+  static maximizeButton = document.getElementById("maximize");
+  static minimizeButtom = document.getElementById("minimize");
+  static closeButton = document.getElementById("close");
+  static bsodImage = document.getElementById("bsod");
+  static mobileBsodImage = document.getElementById("mobile-bsod");
+  static siteStubImage = document.getElementById("site");
+  static desktopImage = document.getElementById("screenshot");
+  static menuTabImage = document.getElementById("tab");
+  static barkAudio = new Audio("/Sounds/bark.mp3");
+  static subheading = document.getElementById("subheading");
+  static IdleTimeout = 10000;
+  static ActivityEvents = [
+    "mousemove",
+    "mousedown",
+    "touchstart",
+    "touchmove",
+    "click",
+    "keydown",
+    "scroll",
+  ];
 
-  resetIdleTimer();
-}
-
-// Ass
-
-function getSelectionText() {
-  var text = "";
-  if (window.getSelection) {
-      text = window.getSelection().toString();
-  } else if (document.selection && document.selection.type != "Control") {
-      text = document.selection.createRange().text;
+  static maximizeHandler=()=> {
+    if (!this.fullscreenMode) {
+      DOMHelpers.openFullscreen();
+    } else {
+      document.exitFullscreen();
+    }
+    this.fullscreenMode = !this.fullscreenMode;
   }
-  return text;
-}
 
-setInterval(()=>{
-  let selectedText = getSelectionText();
-  if (selectedText === "ass"){
-    if (earnAchievment("ass"))
-      triggerAchievmentPopup(AchievementsAll["ass"], DefaultMediumAchievementDelay);
+  static closeHandler=()=> {
+    DOMHelpers.openFullscreen();
+
+    if (window.screen.width > 600) DOMHelpers.displayElement(this.bsodImage);
+    else DOMHelpers.displayElement(this.mobileBsodImage);
+
+    document.documentElement.style.cursor = "none";
+
+    if (AchievementsDOM.earnAchievment("bsod"))
+      AchievementsDOM.triggerAchievmentPopup(
+        AchievementsDOM.AllAchievements["bsod"],
+        AchievementsDOM.DefaultLongAchievementDelay
+      );
   }
-}, 500)
 
-// Helpers
+  static minimizeHandler=()=> {
+    DOMHelpers.displayElement(this.siteStubImage);
+    DOMHelpers.displayElement(this.desktopImage);
+    DOMHelpers.displayElement(this.menuTabImage);
+    this.siteStubImage.style.animation =
+      "minimize 0.5s ease 0.05s 1 normal both";
 
-function displayElement(element, displayType = "block"){
-  element.style.display = displayType;
+    if (AchievementsDOM.earnAchievment("dogs"))
+      AchievementsDOM.triggerAchievmentPopup(
+        AchievementsDOM.AllAchievements["dogs"],
+        AchievementsDOM.DefaultMediumAchievementDelay
+      );
+  }
+
+  static menuTabHandler=()=> {
+    this.siteStubImage.style.animation = "minimize 0.5s ease 1s 1 reverse";
+    setTimeout(() => {
+      DOMHelpers.hideElement(this.siteStubImage);
+      DOMHelpers.hideElement(this.desktopImage);
+      DOMHelpers.hideElement(this.menuTabImage);
+    }, 350);
+  }
+
+  static desktopClickHandler=()=> {
+    this.barkAudio.play();
+    setTimeout(
+      () =>
+        alert("NO! You shouldn't fuck around here! Unminimize the console!"),
+      500
+    );
+  }
+
+  static AddBsodImageHandlers=(bsod)=> {
+    bsod.addEventListener("click", ()=>this.bsodImageClickHandler());
+  }
+
+  static bsodImageClickHandler=()=> {
+    this.clickCount++;
+    if (this.clickCount > 2) alert("LOL!");
+  }
+
+  static resetIdleTimer = ()=>{
+    clearTimeout(this.idleTimeout);
+    this.idleTimeout = setTimeout(() => {
+      this.idleHandler();
+    }, this.IdleTimeout);
+  }
+
+  static idleHandler =()=> {
+    DOMHelpers.removeMultipleEventListeners(
+      this.ActivityEvents,
+      this.resetIdleTimer
+    );
+    DOMHelpers.addMultipleEventListeners(
+      this.ActivityEvents,
+      this.heIsAliveHandler
+    );
+
+    TyperDOM.StopTypingAll();
+    this.subheading.dataset.type =
+      '[ "Эй", "Ты там живой?", "Я волнуюсь", "Проснись, пожалуйста", "Я всё прощу", "Не умирай!", "Нам было так хорошо вместе" ]';
+    TyperDOM.StartTypingAll();
+  }
+
+  static heIsAliveHandler = ()=>{
+    DOMHelpers.removeMultipleEventListeners(
+      this.ActivityEvents,
+      this.heIsAliveHandler
+    );
+    TyperDOM.StopTypingAll();
+    this.subheading.dataset.type =
+      '[ "Ура", "Он проснулся", "Я уже собирался в скорую звонить", "Пронесло..." ]';
+    TyperDOM.StartTypingAll();
+
+    if (AchievementsDOM.earnAchievment("alive"))
+      AchievementsDOM.triggerAchievmentPopup(
+        AchievementsDOM.AllAchievements["alive"],
+        AchievementsDOM.DefaultMediumAchievementDelay
+      );
+  }
+
+  static startListeningForTextSelections=()=> {
+    setInterval(() => {
+      let selectedText = DOMHelpers.getSelectionText();
+      if (selectedText === "ass") {
+        if (AchievementsDOM.earnAchievment("ass"))
+          AchievementsDOM.triggerAchievmentPopup(
+            AchievementsDOM.AllAchievements["ass"],
+            AchievementsDOM.DefaultShortAchievementDelay
+          );
+      }
+    }, 500);
+  }
+
+  static initDogs() {
+    this.minimizeButtom.addEventListener("click", this.minimizeHandler);
+
+    this.menuTabImage.addEventListener("click", this.menuTabHandler);
+
+    this.desktopImage.addEventListener("click", this.desktopClickHandler);
+  }
+
+  static initBsod() {
+    this.closeButton.addEventListener("click", this.closeHandler);
+
+    document
+      .querySelectorAll(".bsod-image")
+      .forEach((bsod) => this.AddBsodImageHandlers(bsod));
+  }
+
+  static initIdle() {
+    if (!AchievementsDOM.hasAchievment("alive")) {
+      DOMHelpers.addMultipleEventListeners(
+        this.ActivityEvents,
+        ()=>this.resetIdleTimer()
+      );
+
+      this.resetIdleTimer();
+    }
+  }
+
+  static initAss() {
+    this.startListeningForTextSelections();
+  }
+
+  // Not technically a meme now, but I have some plans for it :)
+  static initMaximize() {
+    this.maximizeButton.addEventListener("click", this.maximizeHandler);
+  }
+
+  static init() {
+    this.initMaximize();
+    this.initDogs();
+    this.initBsod();
+    this.initIdle();
+    this.initAss();
+  }
 }
 
-function hideElement(element){
-  element.style.display = "none";
-}
-
-function addMultipleEventListeners(events, func){
-  events.forEach((event)=>{
-    window.addEventListener(event, func)
-  })
-}
-
-function removeMultipleEventListeners(events, func){
-  events.forEach((event)=>{
-    window.removeEventListener(event, func)
-  })
-}
+TyperDOM.StartTypingAll();
+MemesDOM.init();
