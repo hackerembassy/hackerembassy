@@ -4,6 +4,7 @@ class AchievementsDOM {
     dogs: "DoggyStyleOS",
     alive: "Уснул за компом",
     ass: "Ha, Gay",
+    console: "Bash-bash Baby"
   };
   
   static EarnedAchievements;

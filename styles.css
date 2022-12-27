@@ -436,9 +436,8 @@ ul.indicators {
   overflow: scroll;
 }
 
-#console p, span{
+#console p, span, pre{
   padding: 0;
-
   padding-top: 5px;
 }
 

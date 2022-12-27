@@ -238,13 +238,23 @@ export class ConsoleMeme extends Meme {
     let ctrl = event.ctrlKey ? event.ctrlKey : ((key === 17)
         ? true : false);
 
-    if (key == 67 && ctrl) {
-      this.openConsole();
-      this.initConsoleInput();
-      this.consoleInput.focus();
-      this.interpreter = new Interpreter();
-      document.body.removeEventListener("keydown", this.CtrlCHandler); 
-    }
+    if (key == 67 && ctrl)
+      this.startConsole();
+  }
+
+  startConsole(){
+    this.openConsole();
+    this.initConsoleInput();
+    this.consoleInput.focus();
+    this.interpreter = new Interpreter();
+
+    if (AchievementsDOM.earnAchievment("console"))
+    AchievementsDOM.triggerAchievmentPopup(
+      AchievementsDOM.AllAchievements["console"],
+      AchievementsDOM.DefaultShortAchievementDelay
+    );
+    
+    document.body.removeEventListener("keydown", this.CtrlCHandler); 
   }
 
   clearConsole = () => {
@@ -255,7 +265,7 @@ export class ConsoleMeme extends Meme {
 
   inputEnterHandler = (event) => {
       if (event.key !== "Enter") return;
-      
+
       let value = this.consoleInput.value;
       let preInput = this.consolePreInput.innerText;
       this.consoleInput.value = "";
