@@ -13,7 +13,7 @@
   <link rel="mask-icon" href="icons/safari-pinned-tab.svg" color="#a17070">
   <meta name="msapplication-TileColor" content="#a17070">
   <meta name="theme-color" content="#ffffff">
-  <script src="script.js" defer></script>
+  <script type="module" src="script.js" defer></script>
 </head>
 
 <body>
@@ -42,10 +42,10 @@
     <section id="about">
       <h2>О нас</h2>
       <p>
-        >Мы приехали из разных стран и городов и открыли хакспейс в Ереване.
+        > Мы приехали из разных стран и городов и открыли хакспейс в Ереване.
       </p>
       <p>
-        >Хакспейс - это пространство, где собираются единомышленники, увлеченные технологиями и творчеством.
+        > Хакспейс - это пространство, где собираются единомышленники, увлеченные технологиями и творчеством.
         Мы вместе работаем над проектами, делимся идеями и знаниями, просто общаемся.<br>
         Здесь разные люди находят себе занятие и единомышленников.
         Мы поддерживаем друг друга, договариваемся и общаемся на равных. <br>
@@ -53,7 +53,7 @@
         обмениваясь опытом и помогая друг другу.
       </p>
       <p>
-        >Хакспейс не является коммерческим проектом и существует на пожертвования участников.
+        > Хакспейс не является коммерческим проектом и существует на пожертвования участников.
         Мы вносим свой вклад в развитие хакспейса: забота о пространстве, пожертвования, помощь в приобретении
         оборудования.<br>
         Если вы находитесь в Ереване, увлечены технологиями и ищете единомышленников, заходите к нам.
@@ -124,17 +124,17 @@
     <section id="announces">
       <h2>Мероприятия</h2>
       <p>
-        >Полуоткрытые встречи каждую пятницу в 20.00
+        > Полуоткрытые встречи каждую пятницу в 20.00
       </p>
       <p>
-        >Музыкальные встречи каждый понедельник в 20.00
+        > Музыкальные встречи каждый понедельник в 20.00
       </p>
     </section>
 
     <section id="contacts">
       <h2>Как нас найти</h2>
-      <a href="https://t.me/hacker_embassy" target="_blank">>t.me/hacker_embassy</a>
-      <a href="https://www.openstreetmap.org/way/1059068105" target="_blank">>Армения, Ереван, Пушкина 38 (вход со двора)</a>
+      <a href="https://t.me/hacker_embassy" target="_blank">> t.me/hacker_embassy</a>
+      <a href="https://www.openstreetmap.org/way/1059068105" target="_blank">> Армения, Ереван, Пушкина 38 (вход со двора)</a>
       <div id="place">
         <img id="house" src="Images/britishHouse2.jpeg" loading="lazy">
 
@@ -149,6 +149,9 @@
 
       </div>
     </section>
+    <footer>
+      <p id="achievements-stats"></p>
+    </footer>
   </main>
 
   <img id="bsod" class="bsod-image" src="/Images/bsod.png" loading="lazy"/>
@@ -156,6 +159,13 @@
   <img id="site" src="/Images/site.png" loading="lazy"/>
   <img id="tab" src="/Images/tab.png" loading="lazy"/>
   <img id="screenshot" src="/Images/screenshot.jpg" loading="lazy"/>
+  <div id="achievement">
+    <div class="achievement-text">
+      <p>Achievement unlocked</p>
+      <p id="achievement-placeholder"></p>
+    </div>
+    <img src="/Images/achievement.svg" loading="lazy"/>
+  </div>
 </body>
 
 </html>
