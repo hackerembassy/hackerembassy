@@ -16,7 +16,6 @@
   scroll-behavior: smooth;
 }
 
-
 /* Scroll */
 ::-webkit-scrollbar {
   width: 2px;
@@ -397,6 +396,13 @@ ul.indicators {
   margin: 0;
   padding: 0;
   font-size: 0.7rem;
+}
+
+#achievements-stats{
+  text-align: end;
+  margin: 5px 0 0;
+  padding: 0;
+  opacity: 0.3;
 }
 
 #site {
