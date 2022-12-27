@@ -1,6 +1,7 @@
 import DOMHelpers from "./DOMHelpers.js";
 import AchievementsDOM from "./AchievementsDOM.js";
 import TyperDOM from "./TyperDOM.js";
+import Interpreter from "./Interpreter.js";
 
 class Meme {
   init() {
@@ -211,5 +212,89 @@ export class Ass extends Meme {
 
   init() {
     this.startListeningForTextSelections();
+  }
+}
+
+
+export class ConsoleMeme extends Meme {
+
+  cdCommandPattern = /^cd (.*)$/;
+
+  constructor() {
+    super();
+    this.consoleContainer = document.getElementById("console");
+    this.consoleInput = document.getElementById("console-input");
+    this.consolePreInput = document.getElementById("pre-input");
+  }
+
+  openConsole = ()=>{
+    DOMHelpers.displayElement(this.consoleContainer);
+  }
+
+  CtrlCHandler = (event)=>{
+    event = event || window.event;
+    let key = event.which || event.keyCode;
+      
+    let ctrl = event.ctrlKey ? event.ctrlKey : ((key === 17)
+        ? true : false);
+
+    if (key == 67 && ctrl) {
+      this.openConsole();
+      this.initConsoleInput();
+      this.consoleInput.focus();
+      this.interpreter = new Interpreter();
+      document.body.removeEventListener("keydown", this.CtrlCHandler); 
+    }
+  }
+
+  clearConsole = () => {
+    document.querySelectorAll(".console-output, .console-old-input").forEach((element)=>{
+      this.consoleContainer.removeChild(element);
+    })
+  }
+
+  inputEnterHandler = (event) => {
+      if (event.key !== "Enter") return;
+      
+      let value = this.consoleInput.value;
+      let preInput = this.consolePreInput.innerText;
+      this.consoleInput.value = "";
+
+      if (value==="clear"){
+        this.clearConsole();
+        return;
+      } 
+      else if (this.cdCommandPattern.test(value)){
+        preInput = this.cdCommandPattern.exec(value)[1]+">";
+      }
+
+      // Convert old input to paragraph
+      let oldInputText = this.consolePreInput.innerText+value;
+      let oldInput = document.createElement("p");
+      oldInput.classList.add("console-old-input");
+      oldInput.innerHTML = oldInputText;
+      this.consoleContainer.insertBefore(oldInput, this.consolePreInput);
+
+      //Create output paragraph
+      let output = this.interpreter.eval(value);
+      let outputNode = document.createElement("p");
+      outputNode.classList.add("console-output")
+      outputNode.innerHTML = output;
+      this.consoleContainer.insertBefore(outputNode, this.consolePreInput);
+      this.consoleContainer.scrollTop+=100;
+
+      this.consolePreInput.innerText = preInput;
+  }
+
+  initCtrlCDetection = () => {
+    document.body.addEventListener("keydown", this.CtrlCHandler);
+  }
+
+  initConsoleInput = () => {
+    this.consoleInput.addEventListener("keyup", this.inputEnterHandler);
+  }
+
+  init() {    
+    this.initCtrlCDetection()
   }
 }

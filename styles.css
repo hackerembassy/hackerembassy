@@ -13,6 +13,7 @@
   --carousel-padding: 5px;
   --accent-color: #C39E9E;
   --secondary-color: #F6F5F0;
+  --background-color: #2D2D2B;
   scroll-behavior: smooth;
 }
 
@@ -59,7 +60,7 @@ section a:hover{
 }
 
 body {
-  background-color: #2D2D2B;
+  background-color: var(--background-color);
   color: var(--secondary-color);
   font-family: 'Courier New', Courier, monospace;
 }
@@ -418,6 +419,42 @@ ul.indicators {
   width: 3vw;
   height: fit-content;
   z-index: 101;
+}
+
+#console {
+  padding-top: 80px;
+  padding-left: 20px;
+  padding-bottom: 100px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: none;
+  width: 100vw;
+  height: 90vh;
+  background-color: var(--background-color);
+  z-index: 5;
+  overflow: scroll;
+}
+
+#console p, span{
+  padding: 0;
+
+  padding-top: 5px;
+}
+
+#console span{
+  display: inline-block;
+}
+
+#console-input, #console-input:focus-visible, #console-input:active{
+  padding: 0;
+  padding-top: 5px;
+  width: 80%;
+  background: none;
+  border: none;
+  outline: none;
+  caret-color: var(--secondary-color);
+  color: var(--secondary-color);
 }
 
 @media(min-width: 950px) {
