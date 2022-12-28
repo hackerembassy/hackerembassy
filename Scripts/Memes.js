@@ -215,96 +215,111 @@ export class Ass extends Meme {
   }
 }
 
-
 export class ConsoleMeme extends Meme {
+  DefaultDirectory = `C:\\Memes\\user`;
+  CdCommandPattern = /^cd (.*)$/;
 
-  cdCommandPattern = /^cd (.*)$/;
+  commandHistory = [];
+  currentCommandIndex = 0;
 
   constructor() {
     super();
     this.consoleContainer = document.getElementById("console");
     this.consoleInput = document.getElementById("console-input");
     this.consolePreInput = document.getElementById("pre-input");
+    this.consoleInputContainer = document.getElementById(
+      "console-input-container"
+    );
   }
 
-  openConsole = ()=>{
-    DOMHelpers.displayElement(this.consoleContainer);
-  }
-
-  CtrlCHandler = (event)=>{
-    event = event || window.event;
+  CtrlCHandler = (event) => {
     let key = event.which || event.keyCode;
-      
-    let ctrl = event.ctrlKey ? event.ctrlKey : ((key === 17)
-        ? true : false);
+    let ctrl = event.ctrlKey ? event.ctrlKey : key === 17 ? true : false;
+    if (key == 67 && ctrl) this.startConsole(new Interpreter());
+  };
 
-    if (key == 67 && ctrl)
-      this.startConsole();
-  }
-
-  startConsole(){
-    this.openConsole();
-    this.initConsoleInput();
+  startConsole(interpreter) {
+    document.body.removeEventListener("keydown", this.CtrlCHandler);
+    this.consoleInput.addEventListener("keyup", this.inputEnterHandler);
+    this.consoleInput.addEventListener("keydown", this.inputArrowHandler);
+    this.interpreter = interpreter;
+    this.consolePreInput.innerText =
+      (this.interpreter.currentDirectory ?? this.DefaultDirectory)+">";
+    DOMHelpers.displayElement(this.consoleContainer);
     this.consoleInput.focus();
-    this.interpreter = new Interpreter();
 
     if (AchievementsDOM.earnAchievment("console"))
-    AchievementsDOM.triggerAchievmentPopup(
-      AchievementsDOM.AllAchievements["console"],
-      AchievementsDOM.DefaultShortAchievementDelay
-    );
-    
-    document.body.removeEventListener("keydown", this.CtrlCHandler); 
+      AchievementsDOM.triggerAchievmentPopup(
+        AchievementsDOM.AllAchievements["console"],
+        AchievementsDOM.DefaultShortAchievementDelay
+      );
   }
 
   clearConsole = () => {
-    document.querySelectorAll(".console-output, .console-old-input").forEach((element)=>{
-      this.consoleContainer.removeChild(element);
-    })
-  }
+    document
+      .querySelectorAll(".console-output, .console-old-input")
+      .forEach((element) => {
+        this.consoleContainer.removeChild(element);
+      });
+  };
 
   inputEnterHandler = (event) => {
-      if (event.key !== "Enter") return;
+    if (event.key !== "Enter") return;
 
-      let value = this.consoleInput.value;
-      let preInput = this.consolePreInput.innerText;
-      this.consoleInput.value = "";
+    let value = this.consoleInput.value;
+    this.commandHistory.push(value);
+    this.currentCommandIndex = this.commandHistory.length;
+    this.consoleInput.value = "";
 
-      if (value==="clear"){
-        this.clearConsole();
-        return;
-      } 
-      else if (this.cdCommandPattern.test(value)){
-        preInput = this.cdCommandPattern.exec(value)[1]+">";
-      }
+    // UI clear command
+    if (value === "clear") {
+      this.clearConsole();
+      return;
+    }
 
-      // Convert old input to paragraph
-      let oldInputText = this.consolePreInput.innerText+value;
-      let oldInput = document.createElement("p");
-      oldInput.classList.add("console-old-input");
-      oldInput.innerHTML = oldInputText;
-      this.consoleContainer.insertBefore(oldInput, this.consolePreInput);
+    // Convert old input to paragraph
+    let oldInputText = this.consolePreInput.innerText + value;
+    let oldInput = document.createElement("p");
+    oldInput.classList.add("console-old-input");
+    oldInput.innerHTML = oldInputText;
+    this.consoleContainer.insertBefore(oldInput, this.consoleInputContainer);
 
-      //Create output paragraph
-      let output = this.interpreter.eval(value);
-      let outputNode = document.createElement("p");
-      outputNode.classList.add("console-output")
-      outputNode.innerHTML = output;
-      this.consoleContainer.insertBefore(outputNode, this.consolePreInput);
-      this.consoleContainer.scrollTop+=100;
+    //Create output paragraph
+    let output = this.interpreter.eval(value);
+    let outputNode = document.createElement("p");
+    outputNode.classList.add("console-output");
+    outputNode.innerHTML = output;
+    this.consoleContainer.insertBefore(outputNode, this.consoleInputContainer);
+    this.consoleContainer.scrollTop += 100;
 
-      this.consolePreInput.innerText = preInput;
-  }
+    // UI cd command
+    if (this.CdCommandPattern.test(value)) {
+      let newDir = this.CdCommandPattern.exec(value)[1];
+      this.consolePreInput.innerText = newDir + ">";;
+      this.interpreter.currentDirectory = newDir;
+    }
+  };
 
-  initCtrlCDetection = () => {
+  inputArrowHandler = (event) => {
+    // up arrow
+    if (event.keyCode == "38") {
+      this.currentCommandIndex =
+        this.currentCommandIndex > 0 ? --this.currentCommandIndex : 0;
+
+      if (this.commandHistory.length > 0)
+        this.consoleInput.value = this.commandHistory[this.currentCommandIndex];
+    }
+    // down arrow
+    else if (event.keyCode == "40") {
+      this.currentCommandIndex =
+        this.currentCommandIndex < this.commandHistory.length - 1
+          ? ++this.currentCommandIndex
+          : this.commandHistory.length - 1;
+      this.consoleInput.value = this.commandHistory[this.currentCommandIndex];
+    }
+  };
+
+  init() {
     document.body.addEventListener("keydown", this.CtrlCHandler);
-  }
-
-  initConsoleInput = () => {
-    this.consoleInput.addEventListener("keyup", this.inputEnterHandler);
-  }
-
-  init() {    
-    this.initCtrlCDetection()
   }
 }

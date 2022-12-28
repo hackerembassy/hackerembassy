@@ -436,16 +436,21 @@ ul.indicators {
   overflow: scroll;
 }
 
+#console-input-container{
+  display: flex;
+}
+
 #console p, span, pre{
   padding: 0;
   padding-top: 5px;
 }
 
-#console span{
+#pre-input{
   display: inline-block;
 }
 
 #console-input, #console-input:focus-visible, #console-input:active{
+  flex-grow: 1;
   padding: 0;
   padding-top: 5px;
   width: 80%;
