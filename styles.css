@@ -55,6 +55,14 @@ section a {
   margin-bottom: 10px;
 }
 
+section ul {
+  padding: 0;
+}
+
+section ul li::before, section p::before, section a::before {
+  content: "> ";
+}
+
 section a:hover{
   color: var(--accent-color);
 }
@@ -190,9 +198,10 @@ h2 {
 }
 
 h3 {
-  font-size: 3.5rem;
-  padding-bottom: 7%;
-  padding-top: 3%;
+  color: var(--accent-color);
+  font-size: 2rem;
+  padding-bottom: 10px;
+  margin: 10px 0;
 }
 
 p {
@@ -208,8 +217,6 @@ p {
 .slider {
   margin-top: 50px;
 }
-
-
 
 .viewport {
   width: 100%;
@@ -302,6 +309,10 @@ ul.indicators {
   margin: 0;
   padding: 0;
   list-style: none;
+}
+
+.slider ul li::before {
+  content: none;
 }
 
 .indicator {
@@ -430,7 +441,7 @@ ul.indicators {
   left: 0;
   display: none;
   width: 100vw;
-  height: 90vh;
+  height: 100vh;
   background-color: var(--background-color);
   z-index: 5;
   overflow: scroll;
@@ -469,7 +480,7 @@ ul.indicators {
 }
 
 @media (max-width: 800px) {
-  section p {
+  section p, li {
     font-size: 1.4rem;
   }
 
@@ -553,12 +564,17 @@ ul.indicators {
     margin: 0;
   }
 
+  h3 {
+    font-size: 1.8rem;
+    margin: 0;
+  }
+
   #promo p,
   #promo span {
     font-size: 2rem;
   }
 
-  section p, section a {
+  section p, section a, section li {
     font-size: 1rem;
     margin-bottom: 5px;
   }
@@ -610,5 +626,3 @@ ul.indicators {
     bottom: -96px;
   }
 }
-
-
