@@ -65,9 +65,9 @@ body {
   font-family: 'Courier New', Courier, monospace;
 }
 
-/* Стили для header */
+/* Стили для nav */
 
-header {
+nav {
   display: -webkit-flex;
   display: flex;
   flex-direction: row;
@@ -84,7 +84,7 @@ header {
   padding-top: 10px;
 }
 
-header ul {
+nav ul {
   padding-left: 10px;
   display: -webkit-flex;
   display: flex;
@@ -93,23 +93,23 @@ header ul {
   flex-wrap: wrap;
 }
 
-header li {
+nav li {
   display: flex;
   cursor: pointer;
 }
 
-header a {
+nav a {
   text-decoration: none;
   color: var(--secondary-color);
   padding: 5px 10px;
 }
 
-header li:hover {
+nav li:hover {
   background-color: var(--secondary-color);
 
 }
 
-header li:hover a {
+nav li:hover a {
   color: #2D2D2B;
 }
 
@@ -147,7 +147,7 @@ header li:hover a {
   font-weight: bold;
 }
 
-/* Конец стилей header */
+/* Конец стилей nav */
 
 main {
   display: -webkit-flex;
@@ -515,7 +515,7 @@ ul.indicators {
     width: 250vw;
   }
 
-  header a {
+  nav a {
     padding: 0;
   }
   
@@ -535,12 +535,12 @@ ul.indicators {
   }
 
 
-  header {
+  nav {
     font-size: 0.9rem;
     top: 29px;
   }
 
-  header li {
+  nav li {
     padding: 2px 5px;
   }
 

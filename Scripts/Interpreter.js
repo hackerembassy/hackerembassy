@@ -12,7 +12,9 @@ export default class Interpreter {
         -clear Очистить консоль<br>\
         -huefy [russian_word] ***<br>\
         -eval [command] JavaScript код<br>\
-        -echo [text] Вывести сообщение`;
+        -echo [text] Вывести сообщение<br>\
+        -exit Выйти из консоли
+        `;
   };
 
   evalCommand = (command, input) => {
