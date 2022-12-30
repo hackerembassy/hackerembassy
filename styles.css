@@ -479,7 +479,7 @@ ul.indicators {
 }
 
 @media (max-width: 800px) {
-  section p, li {
+  section p, section li {
     font-size: 1.4rem;
   }
 
