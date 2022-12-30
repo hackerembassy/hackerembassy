@@ -1,4 +1,4 @@
-import { Maximize, Dogs, Bsod, Idle, Ass, ConsoleMeme } from "./Memes.js";
+import { Maximize, Dogs, Bsod, Idle, Ass, ConsoleMeme, SecretImage } from "./Memes.js";
 
 class MemesDOM {
   static memesCollection = [
@@ -7,7 +7,8 @@ class MemesDOM {
     new Bsod(),
     new Idle(),
     new Ass(),
-    new ConsoleMeme()
+    new ConsoleMeme(),
+    new SecretImage()
   ];
 
   static init() {
