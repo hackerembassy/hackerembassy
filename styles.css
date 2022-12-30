@@ -49,7 +49,6 @@ ul {
 }
 
 section a {
-  display: block;
   text-decoration: none;
   color: var(--secondary-color);
   margin-bottom: 10px;
@@ -59,7 +58,7 @@ section ul {
   padding: 0;
 }
 
-section ul li::before, section p::before, section a::before {
+section ul li::before, section p::before, section a.block::before {
   content: "> ";
 }
 
@@ -625,4 +624,8 @@ ul.indicators {
   100% {
     bottom: -96px;
   }
+}
+
+.block {
+  display: block;
 }

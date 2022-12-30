@@ -283,7 +283,6 @@ export class ConsoleMeme extends Meme {
     }
 
     if (value === "exit") {
-      this.clearConsole();
       this.closeConsole();
       return;
     }
