@@ -215,6 +215,23 @@ export class Ass extends Meme {
   }
 }
 
+export class SecretImage extends Meme {
+  constructor() {
+    super();
+    this.indicator = document.getElementById("scroll-indicator-secret");
+  }
+
+  init() {
+    this.indicator.addEventListener("click", ()=>{
+      if (AchievementsDOM.earnAchievment("secret"))
+      AchievementsDOM.triggerAchievmentPopup(
+        AchievementsDOM.AllAchievements["secret"],
+        AchievementsDOM.DefaultShortAchievementDelay
+      );
+    })
+  }
+}
+
 export class ConsoleMeme extends Meme {
   DefaultDirectory = `C:\\Memes\\user`;
   CdCommandPattern = /^cd (.*)$/;

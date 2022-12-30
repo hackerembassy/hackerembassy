@@ -629,3 +629,9 @@ ul.indicators {
 .block {
   display: block;
 }
+
+#scroll-indicator-secret {
+  position: absolute;
+  right: 5vw;
+  opacity: 0;
+}

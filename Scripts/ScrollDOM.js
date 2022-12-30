@@ -106,7 +106,7 @@ class ScrollDOM {
         e.preventDefault();
         e.stopPropagation();
         this.setAriaPressed(i);
-        const scrollLeft = Math.floor(this.scroller.scrollWidth * (i / 6));
+        const scrollLeft = Math.floor(this.scroller.scrollWidth * (i / 7));
         this.smoothScroll(this.scroller, scrollLeft, true);
       });
     });
@@ -115,7 +115,7 @@ class ScrollDOM {
       "scroll",
       this.debounce(() => {
         let index = Math.round(
-          (this.scroller.scrollLeft / this.scroller.scrollWidth) * 6
+          (this.scroller.scrollLeft / this.scroller.scrollWidth) * 7
         );
         this.setAriaPressed(index);
       }, 200)
