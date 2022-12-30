@@ -49,10 +49,17 @@ ul {
 }
 
 section a {
-  display: block;
   text-decoration: none;
   color: var(--secondary-color);
   margin-bottom: 10px;
+}
+
+section ul {
+  padding: 0;
+}
+
+section ul li::before, section p::before, section a.block::before {
+  content: "> ";
 }
 
 section a:hover{
@@ -65,9 +72,9 @@ body {
   font-family: 'Courier New', Courier, monospace;
 }
 
-/* Стили для header */
+/* Стили для nav */
 
-header {
+nav {
   display: -webkit-flex;
   display: flex;
   flex-direction: row;
@@ -84,7 +91,7 @@ header {
   padding-top: 10px;
 }
 
-header ul {
+nav ul {
   padding-left: 10px;
   display: -webkit-flex;
   display: flex;
@@ -93,23 +100,23 @@ header ul {
   flex-wrap: wrap;
 }
 
-header li {
+nav li {
   display: flex;
   cursor: pointer;
 }
 
-header a {
+nav a {
   text-decoration: none;
   color: var(--secondary-color);
   padding: 5px 10px;
 }
 
-header li:hover {
+nav li:hover {
   background-color: var(--secondary-color);
 
 }
 
-header li:hover a {
+nav li:hover a {
   color: #2D2D2B;
 }
 
@@ -147,7 +154,7 @@ header li:hover a {
   font-weight: bold;
 }
 
-/* Конец стилей header */
+/* Конец стилей nav */
 
 main {
   display: -webkit-flex;
@@ -190,9 +197,10 @@ h2 {
 }
 
 h3 {
-  font-size: 3.5rem;
-  padding-bottom: 7%;
-  padding-top: 3%;
+  color: var(--accent-color);
+  font-size: 2rem;
+  padding-bottom: 10px;
+  margin: 10px 0;
 }
 
 p {
@@ -208,8 +216,6 @@ p {
 .slider {
   margin-top: 50px;
 }
-
-
 
 .viewport {
   width: 100%;
@@ -302,6 +308,10 @@ ul.indicators {
   margin: 0;
   padding: 0;
   list-style: none;
+}
+
+.slider ul li::before {
+  content: none;
 }
 
 .indicator {
@@ -430,7 +440,7 @@ ul.indicators {
   left: 0;
   display: none;
   width: 100vw;
-  height: 90vh;
+  height: 100vh;
   background-color: var(--background-color);
   z-index: 5;
   overflow: scroll;
@@ -469,7 +479,7 @@ ul.indicators {
 }
 
 @media (max-width: 800px) {
-  section p {
+  section p, li {
     font-size: 1.4rem;
   }
 
@@ -515,7 +525,7 @@ ul.indicators {
     width: 250vw;
   }
 
-  header a {
+  nav a {
     padding: 0;
   }
   
@@ -535,12 +545,12 @@ ul.indicators {
   }
 
 
-  header {
+  nav {
     font-size: 0.9rem;
     top: 29px;
   }
 
-  header li {
+  nav li {
     padding: 2px 5px;
   }
 
@@ -553,12 +563,17 @@ ul.indicators {
     margin: 0;
   }
 
+  h3 {
+    font-size: 1.8rem;
+    margin: 0;
+  }
+
   #promo p,
   #promo span {
     font-size: 2rem;
   }
 
-  section p, section a {
+  section p, section a, section li {
     font-size: 1rem;
     margin-bottom: 5px;
   }
@@ -611,4 +626,6 @@ ul.indicators {
   }
 }
 
-
+.block {
+  display: block;
+}

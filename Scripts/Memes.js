@@ -263,6 +263,11 @@ export class ConsoleMeme extends Meme {
       });
   };
 
+  closeConsole = () => {
+    DOMHelpers.hideElement(this.consoleContainer);
+    this.init();    
+  }
+
   inputEnterHandler = (event) => {
     if (event.key !== "Enter") return;
 
@@ -274,6 +279,11 @@ export class ConsoleMeme extends Meme {
     // UI clear command
     if (value === "clear") {
       this.clearConsole();
+      return;
+    }
+
+    if (value === "exit") {
+      this.closeConsole();
       return;
     }
 
@@ -321,5 +331,6 @@ export class ConsoleMeme extends Meme {
 
   init() {
     document.body.addEventListener("keydown", this.CtrlCHandler);
+    document.querySelectorAll("nav a").forEach(navlink => navlink.addEventListener("click", this.closeConsole))
   }
 }
