@@ -285,7 +285,7 @@ export class ConsoleMeme extends Meme {
     this.init();    
   }
 
-  inputEnterHandler = (event) => {
+  inputEnterHandler = async (event) => {
     if (event.key !== "Enter") return;
 
     let value = this.consoleInput.value;
@@ -312,7 +312,7 @@ export class ConsoleMeme extends Meme {
     this.consoleContainer.insertBefore(oldInput, this.consoleInputContainer);
 
     //Create output paragraph
-    let output = this.interpreter.eval(value);
+    let output = await this.interpreter.eval(value);
     let outputNode = document.createElement("p");
     outputNode.classList.add("console-output");
     outputNode.innerHTML = output;

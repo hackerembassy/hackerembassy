@@ -7,6 +7,7 @@ export default class Interpreter {
   helpCommand = () => {
     console.log("help");
     return `-help Помощь<br>\
+        -status Статус спейса <br>\
         -cd [dir] Сменить директорию (WIP)<br>\
         -pwd Текущая директория<br>\
         -clear Очистить консоль<br>\
@@ -37,11 +38,22 @@ export default class Interpreter {
     return this.hueficator.huefy(command.expression.exec(input)[2]);
   }
 
+  statusCommand = async (command, input) => {
+    let res = await fetch("https://nickkiselev.me:9000/status", { mode: "cors"});
+    let data = await res.text();
+    return data;
+  }
+
   AllCommands = [
     {
       name: "help",
       expression: /^(help|помогите|че делать\?+)$/i,
       handler: this.helpCommand,
+    },
+    {
+      name: "status",
+      expression: /^status$/i,
+      handler: this.statusCommand,
     },
     {
       name: "eval",
@@ -70,10 +82,10 @@ export default class Interpreter {
     },
   ];
 
-  eval = (input) => {
+  eval = async (input) => {
     for (const command of this.AllCommands) {
       if (command.expression.test(input))
-        return command.handler(command, input);
+        return await command.handler(command, input);
     }
 
     return `No such command. Type "help".`;
