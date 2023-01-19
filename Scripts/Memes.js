@@ -241,6 +241,9 @@ export class ConsoleMeme extends Meme {
 
   constructor() {
     super();
+    this.navlist = document.getElementById("nav-list");
+    this.navlist.innerHTML += `<li><a id="console-button">Консоль</a></li>`;
+    this.consoleButton = document.getElementById("console-button");
     this.consoleContainer = document.getElementById("console");
     this.consoleInput = document.getElementById("console-input");
     this.consolePreInput = document.getElementById("pre-input");
@@ -355,5 +358,9 @@ export class ConsoleMeme extends Meme {
   init() {
     document.body.addEventListener("keydown", this.CtrlCHandler);
     document.querySelectorAll("nav a").forEach(navlink => navlink.addEventListener("click", this.closeConsole))
+    this.consoleButton.addEventListener("click", (event) => {
+      event.preventDefault();
+      this.startConsole(new Interpreter());
+    })
   }
 }

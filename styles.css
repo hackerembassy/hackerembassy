@@ -48,6 +48,11 @@ ul {
   margin: 0;
 }
 
+a.tg-link {
+  text-decoration: none;
+  color: var(--accent-color);
+}
+
 section a {
   text-decoration: none;
   color: var(--secondary-color);
@@ -64,6 +69,10 @@ section ul li::before, section p::before, section a.block::before {
 
 section a:hover{
   color: var(--accent-color);
+}
+
+a.tg-link:hover{
+  color: var(--secondary-color);
 }
 
 body {
