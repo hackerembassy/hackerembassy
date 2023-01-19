@@ -440,7 +440,7 @@ ul.indicators {
   left: 0;
   display: none;
   width: 100vw;
-  height: 100vh;
+  height: 90vh;
   background-color: var(--background-color);
   z-index: 5;
   overflow: scroll;

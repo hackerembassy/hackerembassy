@@ -255,10 +255,16 @@ export class ConsoleMeme extends Meme {
     if (key == 67 && ctrl) this.startConsole(new Interpreter());
   };
 
+  BelowFocusHandler = (event) => {
+    if (event.clientY>this.consoleInput.offsetTop)
+      this.consoleInput.focus();
+  }
+
   startConsole(interpreter) {
     document.body.removeEventListener("keydown", this.CtrlCHandler);
     this.consoleInput.addEventListener("keyup", this.inputEnterHandler);
     this.consoleInput.addEventListener("keydown", this.inputArrowHandler);
+    this.consoleContainer.addEventListener("click", this.BelowFocusHandler);
     this.interpreter = interpreter;
     this.consolePreInput.innerText =
       (this.interpreter.currentDirectory ?? this.DefaultDirectory)+">";
@@ -315,9 +321,9 @@ export class ConsoleMeme extends Meme {
     let output = await this.interpreter.eval(value);
     let outputNode = document.createElement("p");
     outputNode.classList.add("console-output");
-    outputNode.innerHTML = output;
+    outputNode.innerHTML = output.replaceAll("\n","<br>");
     this.consoleContainer.insertBefore(outputNode, this.consoleInputContainer);
-    this.consoleContainer.scrollTop += 100;
+    this.consoleContainer.scrollTop += 1000;
 
     // UI cd command
     if (this.CdCommandPattern.test(value)) {

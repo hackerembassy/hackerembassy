@@ -6,16 +6,16 @@ export default class Interpreter {
 
   helpCommand = () => {
     console.log("help");
-    return `-help Помощь<br>\
-        -status Статус спейса <br>\
-        -cd [dir] Сменить директорию (WIP)<br>\
-        -pwd Текущая директория<br>\
-        -clear Очистить консоль<br>\
-        -huefy [russian_word] ***<br>\
-        -eval [command] JavaScript код<br>\
-        -echo [text] Вывести сообщение<br>\
-        -exit Выйти из консоли
-        `;
+    return `-help Помощь
+-status Статус спейса
+-cd [dir] Сменить директорию (WIP)
+-pwd Текущая директория
+-clear Очистить консоль
+-huefy [russian_word] ***
+-eval [command] JavaScript код
+-echo [text] Вывести сообщение
+-exit Выйти из консоли
+`;
   };
 
   evalCommand = (command, input) => {
