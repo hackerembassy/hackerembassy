@@ -135,6 +135,7 @@ export class Idle extends Meme {
 
   constructor() {
     super();
+    TyperDOM.init();
     this.idleTimeout;
     this.subheading = document.getElementById("subheading");
     this.IdleTimeout = 120000;

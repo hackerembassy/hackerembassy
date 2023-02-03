@@ -9,7 +9,7 @@ class TyperDOM {
 
   static typers;
 
-  static {
+  static init() {
     let css = document.createElement("style");
     css.innerHTML = ".typed > .wrap { border-right: 0.08em solid #fff}";
     document.body.appendChild(css);
