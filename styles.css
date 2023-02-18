@@ -180,6 +180,8 @@ section {
   height: 100%;
   font-size: 2rem;
   padding: 1% 8%;
+  /* scroll to offset fix */
+  padding-top: 80px; margin-top: -80px;
 }
 
 #promo {
