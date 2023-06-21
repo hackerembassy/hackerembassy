@@ -1,20 +1,17 @@
-import Hueficator from "./Hueficator.js"
 import BotApi from "./BotApi.js"
 
 export default class Interpreter {
   currentDirectory = `C:\\Memes\\user`;
-  hueficator = new Hueficator();
 
   helpCommand = async () => {
     let botCommands = await BotApi.sendCommand("commands") ?? "";
     return `-help Помощь\
 ${botCommands}\
--cd [dir] Сменить директорию (WIP)
 -pwd Текущая директория
 -clear Очистить консоль
--huefy [russian_word] ***
 -eval [command] JavaScript код
 -echo [text] Вывести сообщение
+-secret Не набирай эту команду!
 -exit Выйти из консоли
 `;
   };
@@ -35,14 +32,16 @@ ${botCommands}\
     return "";
   };
 
-  huefyCommand = (command, input) => {
-    return this.hueficator.huefy(command.expression.exec(input)[2]);
-  }
+  secretCommand = () => {
+    window.location = "https://youtu.be/dQw4w9WgXcQ";
+  };
 
   statusCommand = async () => this.convertTelegramLinks(await BotApi.sendCommand("status"));
   joinCommand = async () => this.convertTelegramLinks(await BotApi.sendCommand("join"));
   donateCommand = async () => this.convertTelegramLinks(await BotApi.sendCommand("donate"));
   fundsCommand = async () => this.convertTelegramLinks(this.unescapeMarkdown(await BotApi.sendCommand("funds")));
+  eventsCommand = async () => await BotApi.sendCommand("events");
+  residentsCommand = async () => this.convertTelegramLinks(await BotApi.sendCommand("getresidents"));
 
   AllCommands = [
     {
@@ -71,6 +70,16 @@ ${botCommands}\
       handler: this.fundsCommand,
     },
     {
+      name: "events",
+      expression: /^events$/i,
+      handler: this.eventsCommand,
+    },
+    {
+      name: "residents",
+      expression: /^residents$/i,
+      handler: this.residentsCommand,
+    },
+    {
       name: "eval",
       expression: /^eval (.*)$/i,
       handler: this.evalCommand,
@@ -91,10 +100,10 @@ ${botCommands}\
         handler: this.emptyCommand,
     },
     {
-        name: "huefy",
-        expression: /^(huefy|хуификатор|хуифицируй) (.*)$/i,
-        handler: this.huefyCommand,
-    },
+      name: "ыускуе",
+      expression: /^secret$/i,
+      handler: this.secretCommand,
+  },
   ];
 
   eval = async (input) => {

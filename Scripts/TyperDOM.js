@@ -1,10 +1,11 @@
 class TyperDOM {
-  constructor(el, toRotate, period) {
+  constructor(el, toRotate, period, speed = 100) {
     this.toRotate = toRotate;
     this.el = el;
     this.loopNum = 0;
     this.period = parseInt(period, 10) || 2000;
     this.txt = "";
+    this.speed = speed;
   }
 
   static typers;
@@ -20,8 +21,9 @@ class TyperDOM {
     for (let i = 0; i < elements.length; i++) {
       let toRotate = elements[i].getAttribute("data-type");
       let period = elements[i].getAttribute("data-period");
+      let speed = elements[i].getAttribute("data-speed");
       if (toRotate) {
-        yield new TyperDOM(elements[i], JSON.parse(toRotate), period);
+        yield new TyperDOM(elements[i], JSON.parse(toRotate), period, speed);
       }
     }
   }
@@ -63,7 +65,7 @@ class TyperDOM {
     this.el.innerHTML = '<span class="wrap">' + this.txt + "</span>";
 
     let that = this;
-    let delta = 120 - Math.random() * 100;
+    let delta = 120 - Math.random() * this.speed;
 
     if (this.isDeleting) {
       delta /= 2;
@@ -75,7 +77,7 @@ class TyperDOM {
     } else if (this.isDeleting && this.txt === "") {
       this.isDeleting = false;
       this.loopNum++;
-      delta = 500;
+      delta = 5 * this.speed;
     }
 
     this.typingTimeout = setTimeout(function () {

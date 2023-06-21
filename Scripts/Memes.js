@@ -109,8 +109,7 @@ export class Bsod extends Meme {
   };
 
   bsodImageClickHandler = () => {
-    this.clickCount++;
-    if (this.clickCount > 2) alert("LOL!");
+    alert("LOL!");
   };
 
   init() {
@@ -243,7 +242,6 @@ export class ConsoleMeme extends Meme {
   constructor() {
     super();
     this.navlist = document.getElementById("nav-list");
-    this.navlist.innerHTML += `<li><a id="console-button">Консоль</a></li>`;
     this.consoleButton = document.getElementById("console-button");
     this.consoleContainer = document.getElementById("console");
     this.consoleInput = document.getElementById("console-input");

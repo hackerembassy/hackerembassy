@@ -31,13 +31,15 @@
       <li><a href="#announces">Мероприятия</a></li>
       <li><a href="https://wiki.hackerembassy.site/" target="_blank">Вики</a></li>
       <li><a href="#contacts">Контакты</a></li>
+      <li><a id="console-button">Консоль</a></li>
     </ul>
   </nav>
   <main>
     <section id="promo">
       <h1>Hacker Embassy</h1>
       <p id="subheading" class="typed" data-period="2000"
-        data-type='[ "Ереванский хакспейс", "С британским флагом на входе и хакерской теплотой внутри", "Скролль ниже, не стесняйся" ]'></p>
+        data-type='[ "Ереванский хакспейс", "С британским флагом на входе и хакерской теплотой внутри", "Скролль ниже, не стесняйся" ]'>
+      </p>
     </section>
     <section id="about">
       <h2>О нас</h2>
@@ -64,8 +66,8 @@
         <li>Лазерная МФУшечка</li>
         <li>Термопринтер для наклеек и чеков</li>
         <li>Паяльная станция с феном</li>
-        <li>Макетные платы, радиокомпоненты и детали</li>        
-        <li>Arduin'ки и множество разнообразных модулей к ним</li>        
+        <li>Макетные платы, радиокомпоненты и детали</li>
+        <li>Arduin'ки и множество разнообразных модулей к ним</li>
         <li>Набор ручного и электрического инструмента</li>
         <li>Много пуфиков</li>
         <li>Кухня со всем необходимым (иногда включая продукты)</li>
@@ -78,47 +80,51 @@
 
       <h3>Хочешь узнать больше?</h3>
       <ul>
-        <li><a href="https://wiki.hackerembassy.site/" target="_blank">Посмотри в нашей вики wiki.hackerembassy.site</a></li>
-        <li><a href="https://t.me/HackerEmbassyBot" target="_blank">Напиши в личку телеграм боту @HackerEmbassyBot</a></li>
+        <li><a href="https://wiki.hackerembassy.site/" target="_blank">Посмотри в нашей вики wiki.hackerembassy.site</a>
+        </li>
+        <li><a href="https://t.me/HackerEmbassyBot" target="_blank">Напиши в личку телеграм боту @HackerEmbassyBot</a>
+        </li>
         <li><a href="https://t.me/hacker_embassy" target="_blank">Спроси в чатике в телеге @hacker_embassy</a></li>
       </ul>
 
+      <h3>Фотки</h3>
+      <p id="scroll-name-placement" class="typed" data-period="999999" data-speed="500"></p>
       <div class="slider">
         <div class="viewport">
-          <div class="carousel-frame">
+          <div class="carousel-frame bordered">
             <div class="carousel">
               <ul class="scroll">
-                <li class="scroll-item-outer">
+                <li class="scroll-item-outer" data-name="picture_from_the_english_train">
                   <div class="scroll-item">
                     <img src="Images/top.jpg" />
                   </div>
                 </li>
-                <li class="scroll-item-outer">
+                <li class="scroll-item-outer" data-name="our_deck_with_instruments">
                   <div class="scroll-item">
                     <img src="Images/instruments.jpg" />
                   </div>
                 </li>
-                <li class="scroll-item-outer">
+                <li class="scroll-item-outer" data-name="anette_3d_printer">
                   <div class="scroll-item">
                     <img src="Images/3dprinter.jpg" />
                   </div>
                 </li>
-                <li class="scroll-item-outer">
+                <li class="scroll-item-outer" data-name="coworking_before_new_year">
                   <div class="scroll-item">
                     <img src="Images/blue.jpg" />
                   </div>
                 </li>
-                <li class="scroll-item-outer">
+                <li class="scroll-item-outer" data-name="cozy_second_floor">
                   <div class="scroll-item">
                     <img src="Images/sit.jpg" />
                   </div>
                 </li>
-                <li class="scroll-item-outer">
+                <li class="scroll-item-outer" data-name="music_evenings">
                   <div class="scroll-item">
                     <img src="Images/music.jpg" />
                   </div>
                 </li>
-                <li class="scroll-item-outer">
+                <li class="scroll-item-outer" data-name="the_first_our_photo">
                   <div class="scroll-item">
                     <img src="Images/we.jpg" />
                   </div>
@@ -170,7 +176,8 @@
         Музыкальные встречи каждый понедельник в 20.00. Приносим гитары, играем в Rocksmith и джемим
       </p>
       <p>
-        Мастерклассы и презентации на различные темы от 3D печати, моделирования и пайки до нейросетей, алгоритмов доказательства теорем и шибари. Время анонсируем заранее в телеграм чатике
+        Мастерклассы и презентации на различные темы от 3D печати, моделирования и пайки до нейросетей, алгоритмов
+        доказательства теорем и шибари. Время анонсируем заранее в телеграм чатике
       </p>
     </section>
 
@@ -179,20 +186,16 @@
       <a class="block" href="https://t.me/hacker_embassy" target="_blank">Основной чатик t.me/hacker_embassy</a>
       <a class="block" href="https://www.instagram.com/hackerembassy/" target="_blank">Инстаграм @hackerembassy</a>
       <a class="block" href="https://github.com/hackerembassy/" target="_blank">GitHub github.com/hackerembassy/</a>
-      <a class="block" href="https://www.openstreetmap.org/way/1059068105" target="_blank">Армения, Ереван, Пушкина 38 (вход со двора)</a>
-      <div id="place">
-        <img id="house" src="Images/britishHouse2.jpeg" loading="lazy">
-
-        <div id="map">
-          <a class="block" href="https://yandex.ru/maps/10262/yerevan/?utm_medium=mapframe&utm_source=maps"
-            style="color:#eee;font-size:12px;position:absolute;top:0px;">Ереван</a><a
-            href="https://yandex.ru/maps/10262/yerevan/house/YE0YcwZjS0ABQFpqfX15c3hkZg==/?indoorLevel=1&ll=44.513885%2C40.182452&utm_medium=mapframe&utm_source=maps&z=18.58"
-            style="color:#eee;font-size:12px;position:absolute;top:14px;">Улица Пушкина, 38 — Яндекс Карты</a>
-          <iframe src="https://yandex.ru/map-widget/v1/-/CCUrUZBH8A" frameborder="1" allowfullscreen="true"
-            style="position:relative;"></iframe>
-        </div>
-
-      </div>
+      <a class="block" href="https://www.openstreetmap.org/way/1059068105" target="_blank">Армения, Ереван, Пушкина 38
+        (вход со двора)</a>
+      <h3>Как нас найти</h3>
+      <p>display /home/user/images/british-house.png</p>
+      <img id="house" class="bordered" src="Images/britishHouse2.jpeg" loading="lazy">
+      <p>display /home/user/images/map.osm</p>
+      <div id="map" class="bordered">
+        <iframe width="425" height="350" frameborder="0" scrolling="no" marginheight="0" marginwidth="0"
+          src="https://www.openstreetmap.org/export/embed.html?bbox=44.51160997152329%2C40.18166235271537%2C44.51515048742295%2C40.18354965309218&amp;layer=mapnik&amp;marker=40.18260703405964%2C44.513380229473114"
+          style="border: 1px solid black"></iframe>
     </section>
     <footer>
       <p id="achievements-stats"></p>
@@ -200,19 +203,19 @@
   </main>
 
   <div id="memes">
-    <img id="bsod" class="bsod-image" src="/Images/bsod.png" loading="lazy"/>
-    <img id="mobile-bsod" class="bsod-image" src="/Images/mobile-bsod.png" loading="lazy"/>
-    <img id="site" src="/Images/site.png" loading="lazy"/>
-    <img id="tab" src="/Images/tab.png" loading="lazy"/>
-    <img id="screenshot" src="/Images/screenshot.jpg" loading="lazy"/>
+    <img id="bsod" class="bsod-image" src="/Images/bsod.png" loading="lazy" />
+    <img id="mobile-bsod" class="bsod-image" src="/Images/mobile-bsod.png" loading="lazy" />
+    <img id="site" src="/Images/site.png" loading="lazy" />
+    <img id="tab" src="/Images/tab.png" loading="lazy" />
+    <img id="screenshot" src="/Images/screenshot.jpg" loading="lazy" />
     <div id="achievement">
       <div class="achievement-text">
         <p>Achievement unlocked</p>
         <p id="achievement-placeholder"></p>
       </div>
-      <img src="/Images/achievement.svg" loading="lazy"/>
+      <img src="/Images/achievement.svg" loading="lazy" />
     </div>
-  
+
     <div id="console">
       <p>
         Memesoft Uwuntu [Version 10.69.420]<br>

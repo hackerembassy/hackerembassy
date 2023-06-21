@@ -1,9 +1,14 @@
+import TyperDOM from "./TyperDOM.js";
+
 class ScrollDOM {
   static hasNativeSmoothScroll = this.testSupportsSmoothScroll();
   static indicators = document.querySelectorAll(".indicator-button");
   static scroller = document.querySelector(".scroll");
   static easingOutQuint = (x, t, b, c, d) =>
     c * ((t = t / d - 1) * t * t * t * t + 1) + b;
+
+  static scrollElements = document.querySelectorAll(".scroll-item-outer");
+  static scrollNamePlacement = document.querySelector("#scroll-name-placement");
 
   static smoothScrollPolyfill(node, key, target) {
     const startTime = Date.now();
@@ -100,14 +105,23 @@ class ScrollDOM {
     });
   }
 
+  static convertToImageCommand(text){
+    return `display /home/user/images/${text}.png`;
+  }
+
   static init() {
+    this.scrollNamePlacement.dataset.type = `["${this.convertToImageCommand(this.scrollElements[0].dataset.name)}"]`;
     this.indicators.forEach((indicator, i) => {
       indicator.addEventListener("click", (e) => {
         e.preventDefault();
         e.stopPropagation();
         this.setAriaPressed(i);
-        const scrollLeft = Math.floor(this.scroller.scrollWidth * (i / 8));
-        this.smoothScroll(this.scroller, scrollLeft, true);
+        TyperDOM.StopTypingAll();
+        this.scrollNamePlacement.dataset.type = `["${this.convertToImageCommand(this.scrollElements[i].dataset.name)}"]`;
+        TyperDOM.StartTypingAll();
+        const scrollTop = (this.scroller.scrollHeight-10) * (i / 8);
+        console.log(this.scroller.scrollHeight)
+        this.smoothScroll(this.scroller, scrollTop, false);
       });
     });
 
@@ -115,7 +129,7 @@ class ScrollDOM {
       "scroll",
       this.debounce(() => {
         let index = Math.round(
-          (this.scroller.scrollLeft / this.scroller.scrollWidth) * 8
+          (this.scroller.scrollTop / this.scroller.scrollHeight) * 8
         );
         this.setAriaPressed(index);
       }, 200)
