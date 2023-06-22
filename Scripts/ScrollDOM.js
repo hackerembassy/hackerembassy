@@ -115,12 +115,13 @@ class ScrollDOM {
       indicator.addEventListener("click", (e) => {
         e.preventDefault();
         e.stopPropagation();
+        
         this.setAriaPressed(i);
         TyperDOM.StopTypingAll();
         this.scrollNamePlacement.dataset.type = `["${this.convertToImageCommand(this.scrollElements[i].dataset.name)}"]`;
         TyperDOM.StartTypingAll();
-        const scrollTop = (this.scroller.scrollHeight-10) * (i / 8);
-        console.log(this.scroller.scrollHeight)
+
+        const scrollTop = (this.scroller.scrollHeight) * (i / 8);
         this.smoothScroll(this.scroller, scrollTop, false);
       });
     });

@@ -17,10 +17,6 @@
   scroll-behavior: smooth;
 }
 
-body {
-  overflow-x: hidden;
-}
-
 /* Scroll */
 ::-webkit-scrollbar {
   width: 2px;
@@ -38,12 +34,6 @@ body {
 
 ::-webkit-scrollbar-thumb:hover {
   background: var(--secondary-color);
-}
-
-@media (max-width: 479px) {
-  :root {
-    --carousel-width: 95vw;
-  }
 }
 
 ol,
@@ -216,7 +206,7 @@ section {
 h2 {
   color: var(--accent-color);
   font-size: 4rem;
-  padding-bottom: 10px;
+  padding: 10px 0;
   margin: 10px 0;
 }
 
@@ -236,13 +226,14 @@ p {
 .slider img {
   flex: 0 0 100%;
   max-width: 100%;
+  display: block;
 }
 
 .slider {
   position: relative;
   z-index: 5;
   margin-top: 10px;
-  width: 60.2%;
+  width: 50.15vw;
 }
 
 .viewport {
@@ -281,6 +272,7 @@ ul.scroll {
 }
 
 #scroll-name-placement {
+  overflow-wrap: break-word;
   margin: 0 0 20px;
   padding: 0;
 }
@@ -339,7 +331,6 @@ ul.indicators {
   padding: 0;
   list-style: none;
   display: flex;
-  width: 100%;
   justify-content: center;
   flex-direction: column;
   left: 105%;
@@ -363,8 +354,7 @@ ul.indicators {
 
 .indicator-button:after {
   content: '○';
-  font-size: 1.4em;
-  padding: 12px 10px 17px;
+  font-size: 3.5vw;
 }
 
 .indicator-button:hover {
@@ -512,6 +502,10 @@ ul.indicators {
 }
 
 @media (max-width: 800px) {
+  p {
+    margin: 0;
+    padding: 6px 0;
+  }
   section p, section li {
     font-size: 1.4rem;
   }
@@ -527,13 +521,36 @@ ul.indicators {
   #map iframe {
     height: 500px;
   }
+
+  h3 {
+    padding-bottom: 5px;
+  }
 }
 
 @media(max-width: 600px) {
+
+  #map, #house {
+    width: 100%;
+  }
+
+  ul.indicators {
+    top: 15%;
+  }
+
   .indicator-button:after {
-    content: '○';
-    font-size: 1em;
-    padding: 12px 10px 17px;
+    font-size: 5vw;
+  }
+
+  :root {
+    --carousel-width: 80vw;
+  }
+
+  .slider {
+    width: 80.5vw;
+  }
+
+  .slider li {
+    margin-bottom: 0;
   }
 
   #tab {
@@ -577,7 +594,6 @@ ul.indicators {
     font-size: 0.8rem;
   }
 
-
   nav {
     font-size: 0.9rem;
     top: 29px;
@@ -597,7 +613,7 @@ ul.indicators {
   }
 
   h3 {
-    font-size: 1.8rem;
+    font-size: 1.3rem;
     margin: 0;
   }
 
@@ -608,11 +624,7 @@ ul.indicators {
 
   section p, section a, section li {
     font-size: 1rem;
-    margin-bottom: 5px;
-  }
-
-  .indicator {
-    padding: 0px;
+    margin-bottom: 0px;
   }
 
   #topbar {
@@ -671,4 +683,8 @@ ul.indicators {
 .bordered {
   border-radius: 3px;
   border: 1px solid var(--secondary-color);
+}
+
+.wrap {
+  overflow-wrap: break-word;
 }
