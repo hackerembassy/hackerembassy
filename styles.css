@@ -561,18 +561,13 @@ ul.indicators {
   }
 
   #screenshot{
-    left: -15vw;
-    width: 170vw;
+    left: -73vw;
+    width: 250vw;
     height: 110vh;
   }
 
   #bsod {
     display: none;
-  }
-
-  #screenshot {
-    left: -73vw;
-    width: 250vw;
   }
 
   nav a {
@@ -592,6 +587,8 @@ ul.indicators {
   #topbar span {
     margin-top: 8px;
     font-size: 0.8rem;
+    text-align: start;
+    padding: 0 10px;
   }
 
   nav {
@@ -625,11 +622,6 @@ ul.indicators {
   section p, section a, section li {
     font-size: 1rem;
     margin-bottom: 0px;
-  }
-
-  #topbar {
-    text-align: start;
-    padding: 0 10px;
   }
 
   #topbar img {

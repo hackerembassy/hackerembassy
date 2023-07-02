@@ -66,9 +66,7 @@ class AchievementsDOM {
     if (!this.EarnedAchievements)
         this.loadEarnedAchievements();
 
-    if (this.EarnedAchievements[key]) return true;
-
-    return false;
+    return !!this.EarnedAchievements[key];
   }
 
   static updateStatsString() {

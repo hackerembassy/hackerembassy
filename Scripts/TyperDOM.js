@@ -17,13 +17,13 @@ class TyperDOM {
   }
 
   static *GetAllTypers() {
-    let elements = document.getElementsByClassName("typed");
-    for (let i = 0; i < elements.length; i++) {
-      let toRotate = elements[i].getAttribute("data-type");
-      let period = elements[i].getAttribute("data-period");
-      let speed = elements[i].getAttribute("data-speed");
+    for (const element of document.getElementsByClassName("typed")) {
+      const toRotate = element.getAttribute("data-type");
+      const period = element.getAttribute("data-period");
+      const speed = element.getAttribute("data-speed");
+      
       if (toRotate) {
-        yield new TyperDOM(elements[i], JSON.parse(toRotate), period, speed);
+        yield new TyperDOM(element, JSON.parse(toRotate), period, speed);
       }
     }
   }

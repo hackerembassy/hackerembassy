@@ -135,7 +135,6 @@ export class Idle extends Meme {
   constructor() {
     TyperDOM.init();
     super();
-    this.idleTimeout;
     this.subheading = document.getElementById("subheading");
     this.IdleTimeout = 120000;
   }
@@ -253,8 +252,9 @@ export class ConsoleMeme extends Meme {
 
   CtrlCHandler = (event) => {
     let key = event.which || event.keyCode;
-    let ctrl = event.ctrlKey ? event.ctrlKey : key === 17 ? true : false;
-    if (key == 67 && ctrl) this.startConsole(new Interpreter());
+    let isCtrlPressed = event.ctrlKey || key === 17;
+    if (key == 67 && isCtrlPressed) 
+      this.startConsole(new Interpreter());
   };
 
   BelowFocusHandler = (event) => {

@@ -4,11 +4,13 @@ class ScrollDOM {
   static hasNativeSmoothScroll = this.testSupportsSmoothScroll();
   static indicators = document.querySelectorAll(".indicator-button");
   static scroller = document.querySelector(".scroll");
-  static easingOutQuint = (x, t, b, c, d) =>
-    c * ((t = t / d - 1) * t * t * t * t + 1) + b;
-
   static scrollElements = document.querySelectorAll(".scroll-item-outer");
   static scrollNamePlacement = document.querySelector("#scroll-name-placement");
+
+  static easingOutQuint = (elapsed, offset, gap, duration) =>{
+    elapsed = elapsed / duration - 1;
+    return gap * (Math.pow(elapsed, 5) + 1) + offset;
+  }
 
   static smoothScrollPolyfill(node, key, target) {
     const startTime = Date.now();
@@ -30,7 +32,7 @@ class ScrollDOM {
         return;
       }
 
-      node[key] = this.easingOutQuint(0, elapsed, offset, gap, duration);
+      node[key] = this.easingOutQuint(elapsed, offset, gap, duration);
       requestAnimationFrame(step);
     };
 
@@ -101,7 +103,7 @@ class ScrollDOM {
 
   static setAriaPressed(index) {
     this.indicators.forEach((indicator, i) => {
-      indicator.setAttribute("aria-pressed", !!(i === index));
+      indicator.setAttribute("aria-pressed", i === index);
     });
   }
 
