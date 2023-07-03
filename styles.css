@@ -437,6 +437,9 @@ ul.indicators {
   margin: 5px 0 0;
   padding: 0;
   opacity: 0.3;
+  position: relative;
+  right: 0;
+  display: inline-block;
 }
 
 #site {
@@ -492,6 +495,26 @@ ul.indicators {
   outline: none;
   caret-color: var(--secondary-color);
   color: var(--secondary-color);
+}
+
+#additional-info {
+  float: right;
+}
+
+#refresh-button{
+  padding: 5px 15px;
+  cursor: pointer;
+}
+
+#refresh-button:hover{
+  filter: invert();
+}
+
+#refresh-button img{
+  width: 12px;
+  position: relative;
+  opacity: 0.3;
+  top: 1px;
 }
 
 @media(min-width: 950px) {
@@ -679,4 +702,8 @@ ul.indicators {
 
 .wrap {
   overflow-wrap: break-word;
+}
+
+.rotated-180 {
+  transform: rotate(180deg);
 }

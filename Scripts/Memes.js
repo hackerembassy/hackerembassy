@@ -363,3 +363,29 @@ export class ConsoleMeme extends Meme {
     })
   }
 }
+
+export class Rotate extends Meme {
+  constructor() {
+    super();
+    this.rotateButton = document.getElementById("refresh-button");
+  }
+
+  rotateHandler = () => {
+    document.documentElement.classList.toggle("rotated-180");
+    document.documentElement.scroll({
+      top: 0,
+      left: 0,
+      behavior: "instant",
+    });
+
+    if (AchievementsDOM.earnAchievment("refresh"))
+    AchievementsDOM.triggerAchievmentPopup(
+      AchievementsDOM.AllAchievements["refresh"],
+      AchievementsDOM.DefaultMediumAchievementDelay
+    );
+  };
+
+  init() {
+    this.rotateButton.addEventListener("click", this.rotateHandler);
+  }
+}
