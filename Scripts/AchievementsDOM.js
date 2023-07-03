@@ -1,11 +1,12 @@
 class AchievementsDOM {
   static AllAchievements = {
-    bsod: "Я сломаль :O",
+    bsod: "Oh no :O",
     dogs: "DoggyStyleOS",
-    alive: "Уснул за компом",
+    alive: "You need more sleep",
     ass: "Ha, Gay",
     console: "Bash-bash Baby",
-    secret: "Oh myyyy"
+    secret: "Oh myyyy",
+    refresh: "Wrong arrows"
   };
   
   static EarnedAchievements;
