@@ -110,6 +110,9 @@ export class Bsod extends Meme {
 
   bsodImageClickHandler = () => {
     alert("LOL!");
+    setTimeout(()=>{
+      window.location.reload();
+    }, 3000)
   };
 
   init() {

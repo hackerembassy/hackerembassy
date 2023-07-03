@@ -74,7 +74,7 @@ class AchievementsDOM {
     if (!this.EarnedAchievements)
         this.loadEarnedAchievements();
 
-    this.AchievementsStatsPlaceholder.innerHTML = `Найдено пасхалок: ${Object.keys(this.EarnedAchievements).length} из ${Object.keys(this.AllAchievements).length}`;
+    this.AchievementsStatsPlaceholder.innerHTML = `Найдено пасхалок: ${Object.keys(this.EarnedAchievements).length} из ${Object.keys(this.AllAchievements).length - 1}`;
   }
 }
 
