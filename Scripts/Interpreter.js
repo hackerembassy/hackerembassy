@@ -1,10 +1,10 @@
-import BotApi from "./BotApi.js"
+import BotApi from "./BotApi.js";
 
 export default class Interpreter {
   currentDirectory = `C:\\Memes\\user`;
 
   helpCommand = async () => {
-    let botCommands = await BotApi.sendCommand("commands") ?? "";
+    let botCommands = (await BotApi.sendTextCommand("commands")) ?? "";
     return `-help Помощь\
 ${botCommands}\
 -pwd Текущая директория
@@ -36,12 +36,19 @@ ${botCommands}\
     window.location = "https://youtu.be/dQw4w9WgXcQ";
   };
 
-  statusCommand = async () => this.convertTelegramLinks(await BotApi.sendCommand("status"));
-  joinCommand = async () => this.convertTelegramLinks(await BotApi.sendCommand("join"));
-  donateCommand = async () => this.convertTelegramLinks(await BotApi.sendCommand("donate"));
-  fundsCommand = async () => this.convertTelegramLinks(this.unescapeMarkdown(await BotApi.sendCommand("funds")));
-  eventsCommand = async () => await BotApi.sendCommand("events");
-  residentsCommand = async () => this.convertTelegramLinks(await BotApi.sendCommand("getresidents"));
+  statusCommand = async () =>
+    this.convertTelegramLinks(await BotApi.sendTextCommand("status"));
+  joinCommand = async () =>
+    this.convertTelegramLinks(await BotApi.sendTextCommand("join"));
+  donateCommand = async () =>
+    this.convertTelegramLinks(await BotApi.sendTextCommand("donate"));
+  fundsCommand = async () =>
+    this.convertTelegramLinks(
+      this.unescapeMarkdown(await BotApi.sendTextCommand("funds"))
+    );
+  eventsCommand = async () => await BotApi.sendTextCommand("events");
+  residentsCommand = async () =>
+    this.convertTelegramLinks(await BotApi.sendTextCommand("getresidents"));
 
   AllCommands = [
     {
@@ -95,15 +102,15 @@ ${botCommands}\
       handler: this.pwdCommand,
     },
     {
-        name: "cd",
-        expression: /^cd (.*)$/i,
-        handler: this.emptyCommand,
+      name: "cd",
+      expression: /^cd (.*)$/i,
+      handler: this.emptyCommand,
     },
     {
       name: "ыускуе",
       expression: /^secret$/i,
       handler: this.secretCommand,
-  },
+    },
   ];
 
   eval = async (input) => {
@@ -115,11 +122,15 @@ ${botCommands}\
     return `No such command. Type "help".`;
   };
 
-  unescapeMarkdown(text){
-    return text.replaceAll("\\_","_").replaceAll("\\[","[");
+  unescapeMarkdown(text) {
+    return text.replaceAll("\\_", "_").replaceAll("\\[", "[");
   }
 
-  convertTelegramLinks(text){
-    return text.replaceAll(/@(\S+)/g , (_,match) => `<a class="tg-link" href="https://t.me/${match}" target="_blank">${match}</a>`);
+  convertTelegramLinks(text) {
+    return text.replaceAll(
+      /@(\S+)/g,
+      (_, match) =>
+        `<a class="tg-link" href="https://t.me/${match}" target="_blank">${match}</a>`
+    );
   }
 }
