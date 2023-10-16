@@ -55,47 +55,47 @@ ${botCommands}\
   AllCommands = [
     {
       name: "help",
-      expression: /^(help|помогите|че делать\?+)$/i,
+      expression: /^\/?(help|помогите|че делать\?+)$/i,
       handler: this.helpCommand,
     },
     {
       name: "status",
-      expression: /^status$/i,
+      expression: /^\/?status$/i,
       handler: this.statusCommand,
     },
     {
       name: "join",
-      expression: /^join$/i,
+      expression: /^\/?join$/i,
       handler: this.joinCommand,
     },
     {
       name: "donate",
-      expression: /^donate$/i,
+      expression: /^\/?donate$/i,
       handler: this.donateCommand,
     },
     {
       name: "funds",
-      expression: /^funds$/i,
+      expression: /^\/?funds$/i,
       handler: this.fundsCommand,
     },
     {
       name: "events",
-      expression: /^events$/i,
+      expression: /^\/?events$/i,
       handler: this.eventsCommand,
     },
     {
       name: "upcoming",
-      expression: /^upcoming$/i,
+      expression: /^\/?upcoming$/i,
       handler: this.upcomingCommand,
     },
     {
       name: "today",
-      expression: /^today$/i,
+      expression: /^\/?today$/i,
       handler: this.todayCommand,
     },
     {
       name: "residents",
-      expression: /^residents$/i,
+      expression: /^\/?residents$/i,
       handler: this.residentsCommand,
     },
     {
@@ -119,7 +119,7 @@ ${botCommands}\
       handler: this.emptyCommand,
     },
     {
-      name: "ыускуе",
+      name: "secret",
       expression: /^secret$/i,
       handler: this.secretCommand,
     },
