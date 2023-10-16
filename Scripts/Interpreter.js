@@ -47,6 +47,8 @@ ${botCommands}\
       this.unescapeMarkdown(await BotApi.sendTextCommand("funds"))
     );
   eventsCommand = async () => await BotApi.sendTextCommand("events");
+  upcomingCommand = async () => await BotApi.sendTextCommand("upcoming");
+  todayCommand = async () => await BotApi.sendTextCommand("today");
   residentsCommand = async () =>
     this.convertTelegramLinks(await BotApi.sendTextCommand("getresidents"));
 
@@ -80,6 +82,16 @@ ${botCommands}\
       name: "events",
       expression: /^events$/i,
       handler: this.eventsCommand,
+    },
+    {
+      name: "upcoming",
+      expression: /^upcoming$/i,
+      handler: this.upcomingCommand,
+    },
+    {
+      name: "today",
+      expression: /^today$/i,
+      handler: this.todayCommand,
     },
     {
       name: "residents",
