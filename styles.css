@@ -291,7 +291,7 @@ ul.scroll {
   display: none;
 }
 
-img {
+.scroll-item img {
   width: 100%;
   height: 100%;
 }
