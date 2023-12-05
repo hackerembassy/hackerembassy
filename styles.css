@@ -291,11 +291,6 @@ ul.scroll {
   display: none;
 }
 
-img {
-  width: 100%;
-  height: 100%;
-}
-
 @supports (scroll-snap-align: start) {
 
   /* modern scroll snap points */
