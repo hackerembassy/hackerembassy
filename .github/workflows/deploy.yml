@@ -3,7 +3,8 @@ name: Deploy static content to Pages
 on:
   workflow_dispatch:
   push:
-    branches: [$default-branch]
+    branches:
+      - main
 
 permissions:
   contents: read
@@ -33,3 +34,9 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v3
+      - uses: appleboy/telegram-action@master
+        with:
+          to: ${{ vars.alerts_chat_id }}
+          token: ${{ secrets.NOTIFICATION_BOT_TOKEN }}
+          message: |
+            🖥 New hackerembassy.site version ${{ github.sha }} was successfully deployed to github pages!
