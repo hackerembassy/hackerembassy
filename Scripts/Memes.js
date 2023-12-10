@@ -240,6 +240,7 @@ export class ConsoleMeme extends Meme {
 
   commandHistory = [];
   currentCommandIndex = 0;
+  locked = false;
 
   constructor() {
     super();
@@ -295,14 +296,16 @@ export class ConsoleMeme extends Meme {
   };
 
   inputEnterHandler = async (event) => {
-    if (event.key !== "Enter") return;
+    if (event.key !== "Enter" || this.locked) return;
 
     let value = this.consoleInput.value;
     this.commandHistory.push(value);
     this.currentCommandIndex = this.commandHistory.length;
 
+    this.locked = true;
     let output = value ? await this.interpreter.eval(value) : "";
     this.consoleInput.value = "";
+    this.locked = false;
 
     // UI clear command
     if (value === "clear") {
