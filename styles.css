@@ -160,10 +160,16 @@ nav li:hover a {
 }
 
 
-#topbar span {
+#topbar a {
   display: inline-block;
   margin-top: 10px;
   font-weight: bold;
+  text-decoration: none;
+  color: var(--secondary-color);
+}
+
+#topbar a:hover {
+  color: gray;
 }
 
 /* Конец стилей nav */
@@ -458,13 +464,14 @@ ul.indicators {
 }
 
 #console {
+  box-sizing: border-box;
   padding: 80px 20px 100px;
   position: fixed;
   top: 0;
   left: 0;
   display: none;
-  width: 95vw;
-  height: 90vh;
+  width: 100vw;
+  height: 100vh;
   background-color: var(--background-color);
   z-index: 5;
   overflow: scroll;
@@ -606,7 +613,7 @@ ul.indicators {
     height: 20px;
   }
   
-  #topbar span {
+  #topbar a {
     margin-top: 8px;
     font-size: 0.8rem;
     text-align: start;

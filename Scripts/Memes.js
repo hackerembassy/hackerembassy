@@ -303,7 +303,7 @@ export class ConsoleMeme extends Meme {
     this.currentCommandIndex = this.commandHistory.length;
 
     this.locked = true;
-    let output = value ? await this.interpreter.eval(value) : "";
+    const output = value ? await this.interpreter.eval(value.trim()) : "";
     this.consoleInput.value = "";
     this.locked = false;
 
