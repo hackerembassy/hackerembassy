@@ -458,14 +458,12 @@ ul.indicators {
 }
 
 #console {
-  padding-top: 80px;
-  padding-left: 20px;
-  padding-bottom: 100px;
+  padding: 80px 20px 100px;
   position: fixed;
   top: 0;
   left: 0;
   display: none;
-  width: 100vw;
+  width: 95vw;
   height: 90vh;
   background-color: var(--background-color);
   z-index: 5;
@@ -479,6 +477,7 @@ ul.indicators {
 #console p, span, pre{
   padding: 0;
   padding-top: 5px;
+  overflow-wrap: break-word;
 }
 
 #pre-input{

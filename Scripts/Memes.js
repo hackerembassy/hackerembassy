@@ -110,9 +110,9 @@ export class Bsod extends Meme {
 
   bsodImageClickHandler = () => {
     alert("LOL!");
-    setTimeout(()=>{
+    setTimeout(() => {
       window.location.reload();
-    }, 3000)
+    }, 3000);
   };
 
   init() {
@@ -224,13 +224,13 @@ export class SecretImage extends Meme {
   }
 
   init() {
-    this.indicator.addEventListener("click", ()=>{
+    this.indicator.addEventListener("click", () => {
       if (AchievementsDOM.earnAchievment("secret"))
-      AchievementsDOM.triggerAchievmentPopup(
-        AchievementsDOM.AllAchievements["secret"],
-        AchievementsDOM.DefaultShortAchievementDelay
-      );
-    })
+        AchievementsDOM.triggerAchievmentPopup(
+          AchievementsDOM.AllAchievements["secret"],
+          AchievementsDOM.DefaultShortAchievementDelay
+        );
+    });
   }
 }
 
@@ -256,14 +256,12 @@ export class ConsoleMeme extends Meme {
   CtrlCHandler = (event) => {
     let key = event.which || event.keyCode;
     let isCtrlPressed = event.ctrlKey || key === 17;
-    if (key == 67 && isCtrlPressed) 
-      this.startConsole(new Interpreter());
+    if (key == 67 && isCtrlPressed) this.startConsole(new Interpreter());
   };
 
   BelowFocusHandler = (event) => {
-    if (event.clientY>this.consoleInput.offsetTop)
-      this.consoleInput.focus();
-  }
+    if (window.getSelection()?.type !== "Range") this.consoleInput.focus();
+  };
 
   startConsole(interpreter) {
     document.body.removeEventListener("keydown", this.CtrlCHandler);
@@ -272,7 +270,7 @@ export class ConsoleMeme extends Meme {
     this.consoleContainer.addEventListener("click", this.BelowFocusHandler);
     this.interpreter = interpreter;
     this.consolePreInput.innerText =
-      (this.interpreter.currentDirectory ?? this.DefaultDirectory)+">";
+      (this.interpreter.currentDirectory ?? this.DefaultDirectory) + ">";
     DOMHelpers.displayElement(this.consoleContainer);
     this.consoleInput.focus();
 
@@ -293,8 +291,8 @@ export class ConsoleMeme extends Meme {
 
   closeConsole = () => {
     DOMHelpers.hideElement(this.consoleContainer);
-    this.init();    
-  }
+    this.init();
+  };
 
   inputEnterHandler = async (event) => {
     if (event.key !== "Enter") return;
@@ -302,6 +300,8 @@ export class ConsoleMeme extends Meme {
     let value = this.consoleInput.value;
     this.commandHistory.push(value);
     this.currentCommandIndex = this.commandHistory.length;
+
+    let output = value ? await this.interpreter.eval(value) : "";
     this.consoleInput.value = "";
 
     // UI clear command
@@ -323,17 +323,16 @@ export class ConsoleMeme extends Meme {
     this.consoleContainer.insertBefore(oldInput, this.consoleInputContainer);
 
     //Create output paragraph
-    let output = await this.interpreter.eval(value);
     let outputNode = document.createElement("p");
     outputNode.classList.add("console-output");
-    outputNode.innerHTML = output.replaceAll("\n","<br>");
+    outputNode.innerHTML = output.replaceAll("\n", "<br>");
     this.consoleContainer.insertBefore(outputNode, this.consoleInputContainer);
     this.consoleContainer.scrollTop += 1000;
 
     // UI cd command
     if (this.CdCommandPattern.test(value)) {
       let newDir = this.CdCommandPattern.exec(value)[1];
-      this.consolePreInput.innerText = newDir + ">";;
+      this.consolePreInput.innerText = newDir + ">";
       this.interpreter.currentDirectory = newDir;
     }
   };
@@ -359,11 +358,15 @@ export class ConsoleMeme extends Meme {
 
   init() {
     document.body.addEventListener("keydown", this.CtrlCHandler);
-    document.querySelectorAll("nav a").forEach(navlink => navlink.addEventListener("click", this.closeConsole))
+    document
+      .querySelectorAll("nav a")
+      .forEach((navlink) =>
+        navlink.addEventListener("click", this.closeConsole)
+      );
     this.consoleButton.addEventListener("click", (event) => {
       event.preventDefault();
       this.startConsole(new Interpreter());
-    })
+    });
   }
 }
 
@@ -382,10 +385,10 @@ export class Rotate extends Meme {
     });
 
     if (AchievementsDOM.earnAchievment("refresh"))
-    AchievementsDOM.triggerAchievmentPopup(
-      AchievementsDOM.AllAchievements["refresh"],
-      AchievementsDOM.DefaultMediumAchievementDelay
-    );
+      AchievementsDOM.triggerAchievmentPopup(
+        AchievementsDOM.AllAchievements["refresh"],
+        AchievementsDOM.DefaultMediumAchievementDelay
+      );
   };
 
   init() {

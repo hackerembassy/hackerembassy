@@ -3,17 +3,77 @@ import BotApi from "./BotApi.js";
 export default class Interpreter {
   currentDirectory = `C:\\Memes\\user`;
 
+  constructor() {
+    /**
+     * @type {{name: string, expression: RegExp, handler: function, description: string}[]}
+     */
+    this.allCommands = [
+      {
+        name: "help",
+        expression: /^\/?(help|помогите|че делать\?+)$/i,
+        handler: this.helpCommand,
+        description: "Помощь",
+      },
+      {
+        name: "eval",
+        expression: /^eval (.*)$/i,
+        handler: this.evalCommand,
+        description: "[command] JavaScript код",
+      },
+      {
+        name: "echo",
+        expression: /^echo (.*)$/i,
+        handler: this.echoCommand,
+        description: "[text] Вывести сообщение",
+      },
+      {
+        name: "pwd",
+        expression: /^pwd$/i,
+        handler: this.pwdCommand,
+        description: "Текущая директория",
+      },
+      {
+        name: "cd",
+        expression: /^cd (.*)$/i,
+        handler: this.emptyCommand,
+        description: "Cменить директорию",
+      },
+      {
+        name: "secret",
+        expression: /^secret$/i,
+        handler: this.secretCommand,
+        description: "Не набирай эту команду!",
+      },
+      {
+        name: "clear",
+        expression: /^clear$/i,
+        handler: this.emptyCommand,
+        description: "Очистить консоль",
+      },
+      {
+        name: "exit",
+        expression: /^exit$/i,
+        handler: this.emptyCommand,
+        description: "Выйти из консоли",
+      },
+    ];
+
+    BotApi.getAvailableCommands().then((commands) => {
+      this.allCommands.splice(
+        1,
+        0,
+        ...commands.map((c) => ({
+          name: c.command,
+          expression: new RegExp(c.regex, "i"),
+          description: c.description,
+          handler: this.botCommand.bind(this, c.command),
+        }))
+      );
+    });
+  }
+
   helpCommand = async () => {
-    let botCommands = (await BotApi.sendTextCommand("commands")) ?? "";
-    return `-help Помощь\
-${botCommands}\
--pwd Текущая директория
--clear Очистить консоль
--eval [command] JavaScript код
--echo [text] Вывести сообщение
--secret Не набирай эту команду!
--exit Выйти из консоли
-`;
+    return this.allCommands.map((c) => `${c.name} ${c.description}`).join("\n");
   };
 
   evalCommand = (command, input) => {
@@ -36,99 +96,18 @@ ${botCommands}\
     window.location = "https://youtu.be/dQw4w9WgXcQ";
   };
 
-  statusCommand = async () =>
-    this.convertTelegramLinks(await BotApi.sendTextCommand("status"));
-  joinCommand = async () =>
-    this.convertTelegramLinks(await BotApi.sendTextCommand("join"));
-  donateCommand = async () =>
-    this.convertTelegramLinks(await BotApi.sendTextCommand("donate"));
-  fundsCommand = async () =>
-    this.convertTelegramLinks(
-      this.unescapeMarkdown(await BotApi.sendTextCommand("funds"))
-    );
-  eventsCommand = async () => await BotApi.sendTextCommand("events");
-  upcomingCommand = async () => await BotApi.sendTextCommand("upcoming");
-  todayCommand = async () => await BotApi.sendTextCommand("today");
-  residentsCommand = async () =>
-    this.convertTelegramLinks(await BotApi.sendTextCommand("getresidents"));
+  botCommand = async (command) =>
+    this.convertTelegramLinks(await BotApi.sendTextCommand(command));
 
-  AllCommands = [
-    {
-      name: "help",
-      expression: /^\/?(help|помогите|че делать\?+)$/i,
-      handler: this.helpCommand,
-    },
-    {
-      name: "status",
-      expression: /^\/?status$/i,
-      handler: this.statusCommand,
-    },
-    {
-      name: "join",
-      expression: /^\/?join$/i,
-      handler: this.joinCommand,
-    },
-    {
-      name: "donate",
-      expression: /^\/?donate$/i,
-      handler: this.donateCommand,
-    },
-    {
-      name: "funds",
-      expression: /^\/?funds$/i,
-      handler: this.fundsCommand,
-    },
-    {
-      name: "events",
-      expression: /^\/?events$/i,
-      handler: this.eventsCommand,
-    },
-    {
-      name: "upcoming",
-      expression: /^\/?upcoming$/i,
-      handler: this.upcomingCommand,
-    },
-    {
-      name: "today",
-      expression: /^\/?today$/i,
-      handler: this.todayCommand,
-    },
-    {
-      name: "residents",
-      expression: /^\/?residents$/i,
-      handler: this.residentsCommand,
-    },
-    {
-      name: "eval",
-      expression: /^eval (.*)$/i,
-      handler: this.evalCommand,
-    },
-    {
-      name: "echo",
-      expression: /^echo (.*)$/i,
-      handler: this.echoCommand,
-    },
-    {
-      name: "pwd",
-      expression: /^pwd$/i,
-      handler: this.pwdCommand,
-    },
-    {
-      name: "cd",
-      expression: /^cd (.*)$/i,
-      handler: this.emptyCommand,
-    },
-    {
-      name: "secret",
-      expression: /^secret$/i,
-      handler: this.secretCommand,
-    },
-  ];
-
+  /**
+   * Evaluates the command
+   * @param {string} input
+   * @returns {Promise<string>}
+   */
   eval = async (input) => {
-    for (const command of this.AllCommands) {
+    for (const command of this.allCommands) {
       if (command.expression.test(input))
-        return await command.handler(command, input);
+        return command.handler(command, input);
     }
 
     return `No such command. Type "help".`;
@@ -139,10 +118,10 @@ ${botCommands}\
   }
 
   convertTelegramLinks(text) {
-    return text.replaceAll(
-      /@(\S+)/g,
-      (_, match) =>
-        `<a class="tg-link" href="https://t.me/${match}" target="_blank">${match}</a>`
+    return text.replaceAll(/@(\S+)/g, (_, match) =>
+      !match.startsWith("group.calendar.google.com")
+        ? `<a class="tg-link" href="https://t.me/${match}" target="_blank">${match}</a>`
+        : match
     );
   }
 }
