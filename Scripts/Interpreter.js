@@ -112,45 +112,68 @@ export default class Interpreter {
     return "";
   };
 
-  displayCommand = async (command, input) => {
-    const fileName = command.expression.exec(input)[1]?.replace(".md", "");
-    if (!fileName) return "";
+  getParentDirectoryNode(directory) {
+    let temporaryNode = this.currentWikiNode;
 
-    if (!fileName.includes("\\")) {
-      const wikiNode = this.currentWikiNode.children.find(
-        (node) => node.segment === fileName
-      );
+    if (directory?.length > 0) {
+      console.log(directory);
+      const fullDirectory = this.getFullDirectory(directory);
+      console.log(fullDirectory);
 
-      if (!wikiNode) return `No such file: ${fileName}`;
+      if (!fullDirectory.startsWith(this.defaultDirectory)) return null;
 
-      const wikiPage = await BotApi.getWikiPage(wikiNode.id);
+      const wikiPath = fullDirectory.replace(this.defaultDirectory, "");
+      const wikiPathSegments = wikiPath !== "" ? wikiPath.split("\\") : [];
 
-      if (!wikiPage) return `Cannot read file: ${fileName}`;
+      temporaryNode = { children: this.wikiTree };
 
-      return wikiPage.content;
+      console.log(wikiPathSegments);
+
+      for (const segment of wikiPathSegments) {
+        temporaryNode = temporaryNode.children.find(
+          (node) => node.segment === segment && node.children.length > 0
+        );
+
+        if (!temporaryNode) return null;
+      }
     }
+
+    return temporaryNode;
+  }
+
+  displayCommand = async (command, input) => {
+    const filePath = command.expression.exec(input)[1]?.replace(".md", "");
+    if (!filePath) return "";
+
+    const fileSegments = filePath.split("\\");
+    const directory = fileSegments.slice(0, -1).join("\\");
+    const fileName = fileSegments[fileSegments.length - 1];
+
+    const NOT_FOUND = `No such file: ${fileName}`;
+    const CANNOT_READ = `Cannot read file: ${fileName}`;
+
+    const folderNode = this.getParentDirectoryNode(directory);
+
+    if (!folderNode) return NOT_FOUND;
+
+    const wikiNode = folderNode.children.find(
+      (node) => node.segment === fileName
+    );
+
+    if (!wikiNode) return NOT_FOUND;
+
+    const wikiPage = await BotApi.getWikiPage(wikiNode.id);
+
+    if (!wikiPage) return CANNOT_READ;
+
+    return wikiPage.content;
   };
 
   changeDirectoryCommand = async (command, input) => {
     const newDirectory = command.expression.exec(input)[1];
     if (!newDirectory) return "";
 
-    let fullDirectory = newDirectory;
-
-    if (!newDirectory.startsWith("C:\\")) {
-      if (newDirectory.startsWith("..")) {
-        fullDirectory = newDirectory.replace(
-          "..",
-          this.currentDirectory.slice(0, -1).split("\\").slice(0, -1).join("\\")
-        );
-      } else if (newDirectory.startsWith(".")) {
-        fullDirectory = newDirectory.replace(".", this.currentDirectory);
-      } else if (newDirectory.startsWith("~")) {
-        fullDirectory = newDirectory.replace("~", this.defaultDirectory);
-      } else {
-        fullDirectory = `${this.currentDirectory}\\${newDirectory}`;
-      }
-    }
+    let fullDirectory = this.getFullDirectory(newDirectory);
 
     if (!fullDirectory.startsWith(this.defaultDirectory))
       return `Permission denied: ${newDirectory}`;
@@ -216,6 +239,26 @@ export default class Interpreter {
 
     return `No such command. Type "help".`;
   };
+
+  getFullDirectory(newDirectory) {
+    let fullDirectory = newDirectory;
+
+    if (!newDirectory.startsWith("C:\\")) {
+      if (newDirectory.startsWith("..")) {
+        fullDirectory = newDirectory.replace(
+          "..",
+          this.currentDirectory.slice(0, -1).split("\\").slice(0, -1).join("\\")
+        );
+      } else if (newDirectory.startsWith(".")) {
+        fullDirectory = newDirectory.replace(".", this.currentDirectory);
+      } else if (newDirectory.startsWith("~")) {
+        fullDirectory = newDirectory.replace("~", this.defaultDirectory);
+      } else {
+        fullDirectory = `${this.currentDirectory}\\${newDirectory}`;
+      }
+    }
+    return fullDirectory;
+  }
 
   unescapeMarkdown(text) {
     return text.replaceAll("\\_", "_").replaceAll("\\[", "[");
