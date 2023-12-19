@@ -1,7 +1,10 @@
 import BotApi from "./BotApi.js";
 
 export default class Interpreter {
-  currentDirectory = `C:\\Memes\\user`;
+  defaultDirectory = `C:\\Memes\\user`;
+  currentDirectory = this.defaultDirectory;
+  wikiTree = null;
+  currentWikiNode = null;
 
   constructor() {
     /**
@@ -34,9 +37,21 @@ export default class Interpreter {
       },
       {
         name: "cd",
-        expression: /^cd (.*)$/i,
-        handler: this.emptyCommand,
+        expression: /^cd(?: (.*))?$/i,
+        handler: this.changeDirectoryCommand,
         description: "Cменить директорию",
+      },
+      {
+        name: "cat",
+        expression: /^cat(?: (.*))?$/i,
+        handler: this.displayCommand,
+        description: "Прочесть файл",
+      },
+      {
+        name: "ls",
+        expression: /^ls$/i,
+        handler: this.listCommand,
+        description: "Просмотреть директорию",
       },
       {
         name: "secret",
@@ -70,6 +85,11 @@ export default class Interpreter {
         }))
       );
     });
+
+    BotApi.getWikiTree().then((tree) => {
+      this.wikiTree = tree;
+      this.currentWikiNode = { children: tree };
+    });
   }
 
   helpCommand = async () => {
@@ -90,6 +110,90 @@ export default class Interpreter {
 
   emptyCommand = () => {
     return "";
+  };
+
+  displayCommand = async (command, input) => {
+    const fileName = command.expression.exec(input)[1]?.replace(".md", "");
+    if (!fileName) return "";
+
+    if (!fileName.includes("\\")) {
+      const wikiNode = this.currentWikiNode.children.find(
+        (node) => node.segment === fileName
+      );
+
+      if (!wikiNode) return `No such file: ${fileName}`;
+
+      const wikiPage = await BotApi.getWikiPage(wikiNode.id);
+
+      if (!wikiPage) return `Cannot read file: ${fileName}`;
+
+      return wikiPage.content;
+    }
+  };
+
+  changeDirectoryCommand = async (command, input) => {
+    const newDirectory = command.expression.exec(input)[1];
+    if (!newDirectory) return "";
+
+    let fullDirectory = newDirectory;
+
+    if (!newDirectory.startsWith("C:\\")) {
+      if (newDirectory.startsWith("..")) {
+        fullDirectory = newDirectory.replace(
+          "..",
+          this.currentDirectory.slice(0, -1).split("\\").slice(0, -1).join("\\")
+        );
+      } else if (newDirectory.startsWith(".")) {
+        fullDirectory = newDirectory.replace(".", this.currentDirectory);
+      } else if (newDirectory.startsWith("~")) {
+        fullDirectory = newDirectory.replace("~", this.defaultDirectory);
+      } else {
+        fullDirectory = `${this.currentDirectory}\\${newDirectory}`;
+      }
+    }
+
+    if (!fullDirectory.startsWith(this.defaultDirectory))
+      return `Permission denied: ${newDirectory}`;
+
+    if (fullDirectory === this.currentDirectory) return "";
+
+    if (fullDirectory === this.defaultDirectory) {
+      this.currentDirectory = fullDirectory;
+      this.currentWikiNode = this.wikiTree ? { children: this.wikiTree } : null;
+      return "";
+    }
+
+    const wikiPath = fullDirectory.replace(this.defaultDirectory + "\\", "");
+    const wikiPathSegments = wikiPath.split("\\");
+
+    if (this.wikiTree) {
+      const previusWikiNode = this.currentWikiNode;
+      this.currentWikiNode = { children: this.wikiTree };
+
+      for (const segment of wikiPathSegments) {
+        this.currentWikiNode = this.currentWikiNode.children.find(
+          (node) => node.segment === segment && node.children.length > 0
+        );
+
+        if (!this.currentWikiNode) {
+          this.currentWikiNode = previusWikiNode;
+          return `No such directory: ${newDirectory}`;
+        }
+      }
+    }
+
+    this.currentDirectory = fullDirectory;
+    return "";
+  };
+
+  listCommand = async () => {
+    if (this.currentWikiNode) {
+      return this.currentWikiNode.children
+        .map((node) =>
+          node.children.length > 0 ? node.segment : node.segment + ".md"
+        )
+        .join("&nbsp;&nbsp;");
+    }
   };
 
   secretCommand = () => {

@@ -304,6 +304,7 @@ export class ConsoleMeme extends Meme {
 
     this.locked = true;
     const output = value ? await this.interpreter.eval(value.trim()) : "";
+
     this.consoleInput.value = "";
     this.locked = false;
 
@@ -334,9 +335,8 @@ export class ConsoleMeme extends Meme {
 
     // UI cd command
     if (this.CdCommandPattern.test(value)) {
-      let newDir = this.CdCommandPattern.exec(value)[1];
-      this.consolePreInput.innerText = newDir + ">";
-      this.interpreter.currentDirectory = newDir;
+      this.interpreter.currentDirectory;
+      this.consolePreInput.innerText = this.interpreter.currentDirectory + ">";
     }
   };
 

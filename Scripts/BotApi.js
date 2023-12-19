@@ -25,4 +25,33 @@ export default class BotApi {
       .then((res) => res.json())
       .catch(() => []);
   }
+
+  /**
+   * @typedef {{segment: string, id: number, title:string, children:WikiPageTreeNode[]}} WikiPageTreeNode
+   * @typedef {{path: string, id: number, title:string, content:string}} WikiPage
+   */
+
+  /**
+   * Returns a list of available wiki pages in a tree format
+   * @returns {Promise<WikiPageTreeNode[]>}
+   */
+  static async getWikiTree() {
+    return fetch(`${this.APIEndpoint}/api/wiki/tree`, {
+      mode: "cors",
+    })
+      .then((res) => res.json())
+      .catch(() => null);
+  }
+
+  /**
+   * Returns a list of available wiki pages in a tree format
+   * @returns {Promise<WikiPage>}
+   */
+  static async getWikiPage(id) {
+    return fetch(`${this.APIEndpoint}/api/wiki/page/${id}`, {
+      mode: "cors",
+    })
+      .then((res) => res.json())
+      .catch(() => null);
+  }
 }
