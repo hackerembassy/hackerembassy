@@ -3,7 +3,7 @@ import BotApi from "./BotApi.js";
 export default class Interpreter {
   defaultDirectory = `C:\\Memes\\user`;
   currentDirectory = this.defaultDirectory;
-  wikiTree = null;
+  wikiForest = null;
   currentWikiNode = null;
 
   constructor() {
@@ -86,9 +86,9 @@ export default class Interpreter {
       );
     });
 
-    BotApi.getWikiTree().then((tree) => {
-      this.wikiTree = tree;
-      this.currentWikiNode = { children: tree };
+    BotApi.getWikiTree().then((forest) => {
+      this.wikiForest = forest;
+      this.currentWikiNode = { children: forest };
     });
   }
 
@@ -123,7 +123,7 @@ export default class Interpreter {
       const wikiPath = fullDirectory.replace(this.defaultDirectory, "");
       const wikiPathSegments = wikiPath.split("\\").filter((s) => s.length > 0);
 
-      temporaryNode = { children: this.wikiTree };
+      temporaryNode = { children: this.wikiForest };
 
       for (const segment of wikiPathSegments) {
         temporaryNode = temporaryNode.children.find(
@@ -180,16 +180,18 @@ export default class Interpreter {
 
     if (fullDirectory === this.defaultDirectory) {
       this.currentDirectory = fullDirectory;
-      this.currentWikiNode = this.wikiTree ? { children: this.wikiTree } : null;
+      this.currentWikiNode = this.wikiForest
+        ? { children: this.wikiForest }
+        : null;
       return "";
     }
 
     const wikiPath = fullDirectory.replace(this.defaultDirectory, "");
     const wikiPathSegments = wikiPath.split("\\").filter((s) => s.length > 0);
 
-    if (this.wikiTree) {
+    if (this.wikiForest) {
       const previusWikiNode = this.currentWikiNode;
-      this.currentWikiNode = { children: this.wikiTree };
+      this.currentWikiNode = { children: this.wikiForest };
 
       for (const segment of wikiPathSegments) {
         this.currentWikiNode = this.currentWikiNode.children.find(
