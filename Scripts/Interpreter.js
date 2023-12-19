@@ -55,7 +55,7 @@ export default class Interpreter {
       },
       {
         name: "secret",
-        expression: /^secret$/i,
+        expression: /^(secret|sudo su)$/i,
         handler: this.secretCommand,
         description: "Не набирай эту команду!",
       },
