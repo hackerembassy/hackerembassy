@@ -116,18 +116,14 @@ export default class Interpreter {
     let temporaryNode = this.currentWikiNode;
 
     if (directory?.length > 0) {
-      console.log(directory);
       const fullDirectory = this.getFullDirectory(directory);
-      console.log(fullDirectory);
 
       if (!fullDirectory.startsWith(this.defaultDirectory)) return null;
 
       const wikiPath = fullDirectory.replace(this.defaultDirectory, "");
-      const wikiPathSegments = wikiPath !== "" ? wikiPath.split("\\") : [];
+      const wikiPathSegments = wikiPath.split("\\").filter((s) => s.length > 0);
 
       temporaryNode = { children: this.wikiTree };
-
-      console.log(wikiPathSegments);
 
       for (const segment of wikiPathSegments) {
         temporaryNode = temporaryNode.children.find(
@@ -145,7 +141,7 @@ export default class Interpreter {
     const filePath = command.expression.exec(input)[1]?.replace(".md", "");
     if (!filePath) return "";
 
-    const fileSegments = filePath.split("\\");
+    const fileSegments = this.toWindowsFormat(filePath).split("\\");
     const directory = fileSegments.slice(0, -1).join("\\");
     const fileName = fileSegments[fileSegments.length - 1];
 
@@ -173,7 +169,9 @@ export default class Interpreter {
     const newDirectory = command.expression.exec(input)[1];
     if (!newDirectory) return "";
 
-    let fullDirectory = this.getFullDirectory(newDirectory);
+    let fullDirectory = this.getFullDirectory(
+      this.toWindowsFormat(newDirectory)
+    );
 
     if (!fullDirectory.startsWith(this.defaultDirectory))
       return `Permission denied: ${newDirectory}`;
@@ -186,8 +184,8 @@ export default class Interpreter {
       return "";
     }
 
-    const wikiPath = fullDirectory.replace(this.defaultDirectory + "\\", "");
-    const wikiPathSegments = wikiPath.split("\\");
+    const wikiPath = fullDirectory.replace(this.defaultDirectory, "");
+    const wikiPathSegments = wikiPath.split("\\").filter((s) => s.length > 0);
 
     if (this.wikiTree) {
       const previusWikiNode = this.currentWikiNode;
@@ -239,6 +237,14 @@ export default class Interpreter {
 
     return `No such command. Type "help".`;
   };
+
+  toWindowsFormat(newDirectory) {
+    return (
+      newDirectory.startsWith("/")
+        ? newDirectory.replace("/", "C:\\")
+        : newDirectory
+    ).replaceAll("/", "\\");
+  }
 
   getFullDirectory(newDirectory) {
     let fullDirectory = newDirectory;
