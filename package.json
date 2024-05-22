@@ -5,9 +5,10 @@
   "main": "index.js",
   "scripts": {
     "start": "live-server .",
+    "start:ci": "live-server . --port=8080 --no-browser",
     "cy:open": "cypress open",
     "cy:run": "cypress run",
-    "test": "start-server-and-test start http://localhost:8080 cy:run",
+    "test": "start-server-and-test start:ci http://localhost:8080 cy:run",
     "prepare": "husky"
   },
   "repository": {

@@ -11,4 +11,6 @@ jobs:
       - name: Cypress run
         uses: cypress-io/github-action@v6
         with:
+          start: npm run start:ci
+          wait-on: "http://localhost:8080"
           browser: chrome
