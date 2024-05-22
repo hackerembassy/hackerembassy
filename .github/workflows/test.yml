@@ -1,0 +1,14 @@
+name: E2E Tests
+
+on: push
+
+jobs:
+  e2e-tests:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Cypress run
+        uses: cypress-io/github-action@v6
+        with:
+          browser: chrome
