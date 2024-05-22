@@ -323,12 +323,14 @@ export class ConsoleMeme extends Meme {
     let oldInputText = this.consolePreInput.innerText + value;
     let oldInput = document.createElement("p");
     oldInput.classList.add("console-old-input");
+    oldInput.setAttribute("data-cy", "console-old-input");
     oldInput.innerHTML = oldInputText;
     this.consoleContainer.insertBefore(oldInput, this.consoleInputContainer);
 
     //Create output paragraph
     let outputNode = document.createElement("p");
     outputNode.classList.add("console-output");
+    outputNode.setAttribute("data-cy", "console-output");
     outputNode.innerHTML = output.replaceAll("\n", "<br>");
     this.consoleContainer.insertBefore(outputNode, this.consoleInputContainer);
     this.consoleContainer.scrollTop += 1000;

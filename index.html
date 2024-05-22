@@ -30,7 +30,7 @@
       <li><a href="#announces">Мероприятия</a></li>
       <li><a href="#contacts">Контакты</a></li>
       <li><a href="https://wiki.hackerembassy.site/" target="_blank">Вики</a></li>
-      <li><a id="console-button" title="Консоль внутри консоли? Вы серьезно?">Консоль</a></li>
+      <li><a id="console-button" data-cy="console-button" title="Консоль внутри консоли? Вы серьезно?">Консоль</a></li>
     </ul>
   </nav>
   <main>
@@ -92,7 +92,7 @@
         <div class="viewport">
           <div class="carousel-frame bordered">
             <div class="carousel">
-              <ul class="scroll">
+              <ul class="scroll" data-cy="scroll-list">
                 <li class="scroll-item-outer" data-name="picture_from_the_english_train">
                   <div class="scroll-item">
                     <img src="Images/top.jpg" alt="picture_from_the_english_train"/>
@@ -137,7 +137,7 @@
             </div>
           </div>
         </div>
-        <ul class="indicators">
+        <ul class="indicators" data-cy="indicators-list">
           <li class="indicator">
             <button class="indicator-button" aria-pressed="true"></button>
           </li>
@@ -217,13 +217,13 @@
       <img src="/Images/achievement.svg" loading="lazy" alt="achievement"/>
     </div>
 
-    <div id="console">
+    <div id="console" data-cy="console-wrapper">
       <p>
         Memesoft Uwuntu [Version 10.69.420]<br>
         (c) Hacker Embassy. All rights reserved.
       </p>
       <div id="console-input-container">
-        <span id="pre-input"></span><input id="console-input" type="text" autocomplete="off">
+        <span id="pre-input" data-cy="pre-input"></span><input id="console-input" data-cy="console-input" type="text" autocomplete="off">
       </div>
     </div>
   </div>
