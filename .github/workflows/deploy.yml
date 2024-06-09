@@ -39,4 +39,4 @@ jobs:
           to: ${{ vars.alerts_chat_id }}
           token: ${{ secrets.NOTIFICATION_BOT_TOKEN }}
           message: |
-            🖥 New hackerembassy.site version ${{ github.sha }} was successfully deployed to github pages!
+            🖥 New hackem.cc version ${{ github.sha }} was successfully deployed to github pages!
