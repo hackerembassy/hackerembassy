@@ -8,5 +8,5 @@
 Have you discovered all of the Easter eggs yet?  
 If yes, add more to this repository.
 
-Hosted at https://hackerembassy.site/
+Hosted at https://hackem.cc/
 
