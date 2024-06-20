@@ -4,7 +4,7 @@ describe("Console page", () => {
   beforeEach(() => {
     cy.visit("/");
 
-    cy.intercept("GET", `${BotApiEndpoint}/api/text`).as("getCommands");
+    cy.intercept("GET", `${BotApiEndpoint}/text`).as("getCommands");
 
     cy.getCy("console-button").click();
   });

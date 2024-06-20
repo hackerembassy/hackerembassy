@@ -19,7 +19,7 @@ export default class BotApi {
    * @returns {Promise<{command: string, description:string, regex: string}[]}>}
    */
   static async getAvailableCommands() {
-    return fetch(`${this.APIEndpoint}/api/text`, {
+    return fetch(`${this.APIEndpoint}/text`, {
       mode: "cors",
     })
       .then((res) => res.json())
