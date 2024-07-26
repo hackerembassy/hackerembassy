@@ -13,7 +13,7 @@ describe("Main page", () => {
       cy.get("a").eq(0).should("have.attr", "href", "#about");
       cy.get("a").eq(1).should("have.attr", "href", "#announces");
       cy.get("a").eq(2).should("have.attr", "href", "#contacts");
-      cy.get("a").eq(3).should("have.attr", "href", "https://wiki.hackem.cc/");
+      cy.get("a").eq(3).should("have.attr", "href", "https://lore.hackem.cc/");
       cy.get("a").eq(3).should("have.attr", "target", "_blank");
 
       cy.get("#console-button").should("exist");
