@@ -337,7 +337,6 @@ export class ConsoleMeme extends Meme {
 
     // UI cd command
     if (this.CdCommandPattern.test(value)) {
-      this.interpreter.currentDirectory;
       this.consolePreInput.innerText = this.interpreter.currentDirectory + ">";
     }
   };

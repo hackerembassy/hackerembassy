@@ -40,9 +40,9 @@ describe("Console page", () => {
       .should("contain.text", "eval")
       .should("contain.text", "echo")
       .should("contain.text", "pwd")
-      // .should("contain.text", "cd")
-      // .should("contain.text", "cat")
-      // .should("contain.text", "ls")
+      .should("contain.text", "cd")
+      .should("contain.text", "cat")
+      .should("contain.text", "ls")
       .should("contain.text", "secret")
       .should("contain.text", "clear")
       .should("contain.text", "exit");

@@ -28,7 +28,7 @@ export default class BotApi {
 
   /**
    * @typedef {{segment: string, id: number, title:string, children:WikiPageTreeNode[]}} WikiPageTreeNode
-   * @typedef {{path: string, id: number, title:string, content:string}} WikiPage
+   * @typedef {{id: number, content:string}} WikiPage
    */
 
   /**

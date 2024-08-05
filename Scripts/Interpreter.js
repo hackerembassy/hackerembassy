@@ -35,24 +35,24 @@ export default class Interpreter {
         handler: this.pwdCommand,
         description: "Текущая директория",
       },
-      // {
-      //   name: "cd",
-      //   expression: /^cd(?: (.*))?$/i,
-      //   handler: this.changeDirectoryCommand,
-      //   description: "Cменить директорию",
-      // },
-      // {
-      //   name: "cat",
-      //   expression: /^cat(?: (.*))?$/i,
-      //   handler: this.displayCommand,
-      //   description: "Прочесть файл",
-      // },
-      // {
-      //   name: "ls",
-      //   expression: /^ls$/i,
-      //   handler: this.listCommand,
-      //   description: "Просмотреть директорию",
-      // },
+      {
+        name: "cd",
+        expression: /^cd(?: (.*))?$/i,
+        handler: this.changeDirectoryCommand,
+        description: "Cменить директорию",
+      },
+      {
+        name: "cat",
+        expression: /^cat(?: (.*))?$/i,
+        handler: this.displayCommand,
+        description: "Прочесть файл",
+      },
+      {
+        name: "ls",
+        expression: /^ls$/i,
+        handler: this.listCommand,
+        description: "Просмотреть директорию",
+      },
       {
         name: "secret",
         expression: /^(secret|sudo su)$/i,
