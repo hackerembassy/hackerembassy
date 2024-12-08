@@ -9,6 +9,11 @@ class Meme {
   }
 }
 
+// helper functions
+function sleep(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
 // Not technically a meme now, but I have some plans for it :)
 export class Maximize extends Meme {
   constructor() {
@@ -236,7 +241,7 @@ export class SecretImage extends Meme {
 
 export class ConsoleMeme extends Meme {
   DefaultDirectory = `C:\\Memes\\user`;
-  CdCommandPattern = /^cd (.*)$/;
+  CdCommandPattern = /^cd (.*)$/i;
 
   commandHistory = [];
   currentCommandIndex = 0;
@@ -246,6 +251,9 @@ export class ConsoleMeme extends Meme {
     super();
     this.navlist = document.getElementById("nav-list");
     this.consoleButton = document.getElementById("console-button");
+    this.calendarInConsoleButton = document.getElementById(
+      "console-button-calendar"
+    );
     this.consoleContainer = document.getElementById("console");
     this.consoleInput = document.getElementById("console-input");
     this.consolePreInput = document.getElementById("pre-input");
@@ -292,7 +300,6 @@ export class ConsoleMeme extends Meme {
 
   closeConsole = () => {
     DOMHelpers.hideElement(this.consoleContainer);
-    this.init();
   };
 
   inputEnterHandler = async (event) => {
@@ -309,12 +316,12 @@ export class ConsoleMeme extends Meme {
     this.locked = false;
 
     // UI clear command
-    if (value === "clear") {
+    if (/^clear$/i.test(value)) {
       this.clearConsole();
       return;
     }
 
-    if (value === "exit") {
+    if (/^exit$/i.test(value)) {
       this.closeConsole();
       return;
     }
@@ -367,9 +374,29 @@ export class ConsoleMeme extends Meme {
       .forEach((navlink) =>
         navlink.addEventListener("click", this.closeConsole)
       );
+
     this.consoleButton.addEventListener("click", (event) => {
       event.preventDefault();
       this.startConsole(new Interpreter());
+    });
+
+    this.calendarInConsoleButton.addEventListener("click", async (event) => {
+      event.preventDefault();
+      this.startConsole(new Interpreter());
+
+      // Show 'em how to type like a pro
+      await sleep(500);
+
+      for (let letter of "calendar") {
+        this.consoleInput.value += letter;
+        await sleep(100);
+      }
+
+      await sleep(200);
+
+      this.consoleInput.dispatchEvent(
+        new KeyboardEvent("keyup", { key: "Enter" })
+      );
     });
   }
 }

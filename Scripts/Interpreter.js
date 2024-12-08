@@ -3,6 +3,8 @@ import BotApi from "./BotApi.js";
 export default class Interpreter {
   defaultDirectory = `C:\\Memes\\user`;
   currentDirectory = this.defaultDirectory;
+  calendarUrl =
+    "https://calendar.google.com/calendar/embed?src=9cdc565d78854a899cbbc7cb6dfcb8fa411001437ae0f66bce0a82b5e7679d5e%40group.calendar.google.com&ctz=Asia%2FYerevan";
   wikiForest = null;
   currentWikiNode = null;
 
@@ -16,6 +18,12 @@ export default class Interpreter {
         expression: /^\/?(help|помогите|че делать\?+)$/i,
         handler: this.helpCommand,
         description: "Помощь",
+      },
+      {
+        name: "calendar",
+        expression: /^\/?(calendar|cal|gcal\?+)$/i,
+        handler: this.calendarCommand,
+        description: "Календарь публичных мероприятий",
       },
       {
         name: "eval",
@@ -94,6 +102,10 @@ export default class Interpreter {
 
   helpCommand = async () => {
     return this.allCommands.map((c) => `${c.name} ${c.description}`).join("\n");
+  };
+
+  calendarCommand = () => {
+    return `<iframe class="gcal" src="${this.calendarUrl}" frameborder="0" scrolling="no"></iframe>`;
   };
 
   evalCommand = (command, input) => {

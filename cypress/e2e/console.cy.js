@@ -37,6 +37,7 @@ describe("Console page", () => {
 
     cy.getCy("console-output")
       .should("contain.text", "help")
+      .should("contain.text", "calendar")
       .should("contain.text", "eval")
       .should("contain.text", "echo")
       .should("contain.text", "pwd")

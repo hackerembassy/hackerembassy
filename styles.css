@@ -11,6 +11,7 @@
   --carousel-width: 50vw;
   --carousel-height: calc(0.7 * var(--carousel-width));
   --carousel-padding: 5px;
+  --topbar-height: 40px;
   --accent-color: #C39E9E;
   --secondary-color: #F6F5F0;
   --background-color: #2D2D2B;
@@ -53,12 +54,12 @@ section a {
   margin-bottom: 10px;
 }
 
-.console-output a{
+.console-output a {
   text-decoration: none;
   color: var(--accent-color);
 }
 
-.console-output a:hover{
+.console-output a:hover {
   color: var(--secondary-color);
 }
 
@@ -66,15 +67,17 @@ section ul {
   padding: 0;
 }
 
-section ul li::before, section p::before, section a.block::before {
+section ul li::before,
+section p::before,
+section a.block::before {
   content: "> ";
 }
 
-section a:hover{
+section a:hover {
   color: var(--accent-color);
 }
 
-a.tg-link:hover{
+a.tg-link:hover {
   color: var(--secondary-color);
 }
 
@@ -95,7 +98,7 @@ nav {
   position: fixed;
   left: 0;
   right: 0;
-  top: 40px;
+  top: var(--topbar-height);
   opacity: 1;
   z-index: 10;
   background-color: #373737;
@@ -133,7 +136,7 @@ nav li:hover a {
 }
 
 #topbar {
-  height: 40px;
+  height: var(--topbar-height);
   width: 100%;
   position: fixed;
   top: 0;
@@ -155,7 +158,7 @@ nav li:hover a {
   height: 25px;
 }
 
-#topbuttons img:hover{
+#topbuttons img:hover {
   filter: brightness(180%);
 }
 
@@ -188,9 +191,8 @@ section {
   max-width: 100%;
   height: 100%;
   font-size: 2rem;
-  padding: 1% 8%;
-  /* scroll to offset fix */
-  padding-top: 80px; margin-top: -80px;
+  margin: 1% 8%;
+  scroll-margin-top: calc(var(--topbar-height) * 2);
 }
 
 #promo {
@@ -297,7 +299,8 @@ ul.scroll {
   display: none;
 }
 
-.scroll-item img, .full-width-height {
+.scroll-item img,
+.full-width-height {
   width: 100%;
   height: 100%;
 }
@@ -395,7 +398,10 @@ ul.indicators {
   height: 100%;
 }
 
-#bsod, #screenshot, #site, #mobile-bsod {
+#bsod,
+#screenshot,
+#site,
+#mobile-bsod {
   display: none;
   z-index: 100;
   position: fixed;
@@ -410,7 +416,7 @@ ul.indicators {
   right: 0;
   width: 250px;
   height: 95.5px;
-  bottom:-100px;
+  bottom: -100px;
   z-index: 200;
 }
 
@@ -432,13 +438,13 @@ ul.indicators {
 }
 
 
-#achievement .achievement-text p{
+#achievement .achievement-text p {
   margin: 0;
   padding: 0;
   font-size: 0.7rem;
 }
 
-#achievements-stats{
+#achievements-stats {
   text-align: end;
   margin: 5px 0 0;
   padding: 0;
@@ -477,21 +483,25 @@ ul.indicators {
   overflow: scroll;
 }
 
-#console-input-container{
+#console-input-container {
   display: flex;
 }
 
-#console p, span, pre{
+#console p,
+span,
+pre {
   padding: 0;
   padding-top: 5px;
   overflow-wrap: break-word;
 }
 
-#pre-input{
+#pre-input {
   display: inline-block;
 }
 
-#console-input, #console-input:focus-visible, #console-input:active{
+#console-input,
+#console-input:focus-visible,
+#console-input:active {
   flex-grow: 1;
   padding: 0;
   padding-top: 5px;
@@ -507,16 +517,16 @@ ul.indicators {
   float: right;
 }
 
-#refresh-button{
+#refresh-button {
   padding: 5px 15px;
   cursor: pointer;
 }
 
-#refresh-button:hover{
+#refresh-button:hover {
   filter: invert();
 }
 
-#refresh-button img{
+#refresh-button img {
   width: 12px;
   position: relative;
   opacity: 0.3;
@@ -535,7 +545,9 @@ ul.indicators {
     margin: 0;
     padding: 6px 0;
   }
-  section p, section li {
+
+  section p,
+  section li {
     font-size: 1.4rem;
   }
 
@@ -558,7 +570,8 @@ ul.indicators {
 
 @media(max-width: 600px) {
 
-  #map, #house {
+  #map,
+  #house {
     width: 100%;
   }
 
@@ -589,7 +602,7 @@ ul.indicators {
     z-index: 101;
   }
 
-  #screenshot{
+  #screenshot {
     left: -73vw;
     width: 250vw;
     height: 110vh;
@@ -602,17 +615,17 @@ ul.indicators {
   nav a {
     padding: 0;
   }
-  
+
   #topbar {
     height: 30px;
   }
-  
+
   #topbuttons {
     right: 5%;
     width: 60px;
     height: 20px;
   }
-  
+
   #topbar a {
     margin-top: 8px;
     font-size: 0.8rem;
@@ -648,7 +661,9 @@ ul.indicators {
     font-size: 2rem;
   }
 
-  section p, section a, section li {
+  section p,
+  section a,
+  section li {
     font-size: 1rem;
     margin-bottom: 0px;
   }
@@ -683,7 +698,7 @@ ul.indicators {
     bottom: 0;
   }
 
-  75%{
+  75% {
     bottom: 0;
   }
 
@@ -712,4 +727,14 @@ ul.indicators {
 
 .rotated-180 {
   transform: rotate(180deg);
+}
+
+.gcal {
+  border: 0;
+  width: 100%;
+  height: 65vh;
+}
+
+#console-button-calendar {
+  cursor: pointer;
 }
