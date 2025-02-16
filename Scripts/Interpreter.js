@@ -280,15 +280,12 @@ export default class Interpreter {
     return fullDirectory;
   }
 
-  unescapeMarkdown(text) {
-    return text.replaceAll("\\_", "_").replaceAll("\\[", "[");
-  }
-
   convertTelegramLinks(text) {
-    return text.replaceAll(/@(\S+)/g, (_, match) =>
-      !match.startsWith("group.calendar.google.com")
-        ? `<a class="tg-link" href="https://t.me/${match}" target="_blank">${match}</a>`
-        : match
-    );
+    return text.replaceAll(/@(\S+)/g, (_, match) => {
+      if (match.startsWith("group.calendar.google.com")) return match;
+
+      const unescapedMatch = match.replace("\\_", "_");
+      return `<a class="tg-link" href="https://t.me/${unescapedMatch}" target="_blank">${unescapedMatch}</a>`;
+    });
   }
 }
