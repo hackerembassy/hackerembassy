@@ -14,10 +14,10 @@
   <meta name="msapplication-TileColor" content="#a17070">
   <meta name="theme-color" content="#ffffff">
   <script type="text/javascript">
-    (function(c,l,a,r,i,t,y){
-        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    (function (c, l, a, r, i, t, y) {
+      c[a] = c[a] || function () { (c[a].q = c[a].q || []).push(arguments) };
+      t = l.createElement(r); t.async = 1; t.src = "https://www.clarity.ms/tag/" + i;
+      y = l.getElementsByTagName(r)[0]; y.parentNode.insertBefore(t, y);
     })(window, document, "clarity", "script", "pqc46k8s18");
   </script>
   <script type="module" src="script.js" defer></script>
@@ -44,7 +44,7 @@
     <section id="promo">
       <h1>Hacker Embassy</h1>
       <p id="subheading" class="typed" data-period="2000"
-        data-type='[ "Ереванский хакспейс", "С британским флагом на входе и хакерской теплотой внутри", "Скролль ниже, не стесняйся" ]'>
+        data-type='[ "Ереванский хакспейс", "Без британского флага на входе, но всё ещё с хакерской теплотой внутри", "Скролль ниже, не стесняйся" ]'>
       </p>
     </section>
     <section id="about">
@@ -92,8 +92,10 @@
         </li>
         <li><a href="https://t.me/hacker_embassy" target="_blank">Спроси в чатике в телеге @hacker_embassy</a></li>
       </ul>
+    </section>
 
-      <h3>Фотки</h3>
+    <section id="photos">
+      <h2>Фотки</h2>
       <p id="scroll-name-placement" class="typed" data-period="999999" data-speed="500"></p>
       <div class="slider">
         <div class="viewport">
@@ -102,42 +104,42 @@
               <ul class="scroll" data-cy="scroll-list">
                 <li class="scroll-item-outer" data-name="picture_from_the_english_train">
                   <div class="scroll-item">
-                    <img src="Images/top.jpg" alt="picture_from_the_english_train"/>
+                    <img src="Images/top.jpg" alt="picture_from_the_english_train" />
                   </div>
                 </li>
                 <li class="scroll-item-outer" data-name="our_deck_with_instruments">
                   <div class="scroll-item">
-                    <img src="Images/instruments.jpg" alt="our_deck_with_instruments"/>
+                    <img src="Images/instruments.jpg" alt="our_deck_with_instruments" />
                   </div>
                 </li>
                 <li class="scroll-item-outer" data-name="anette_3d_printer">
                   <div class="scroll-item">
-                    <img src="Images/3dprinter.jpg" alt="anette_3d_printer"/>
+                    <img src="Images/3dprinter.jpg" alt="anette_3d_printer" />
                   </div>
                 </li>
                 <li class="scroll-item-outer" data-name="coworking_before_new_year">
                   <div class="scroll-item">
-                    <img src="Images/blue.jpg" alt="coworking_before_new_year"/>
+                    <img src="Images/blue.jpg" alt="coworking_before_new_year" />
                   </div>
                 </li>
                 <li class="scroll-item-outer" data-name="cozy_second_floor">
                   <div class="scroll-item">
-                    <img src="Images/sit.jpg" alt="cozy_second_floor"/>
+                    <img src="Images/sit.jpg" alt="cozy_second_floor" />
                   </div>
                 </li>
                 <li class="scroll-item-outer" data-name="music_evenings">
                   <div class="scroll-item">
-                    <img src="Images/music.jpg" alt="music_evenings"/>
+                    <img src="Images/music.jpg" alt="music_evenings" />
                   </div>
                 </li>
                 <li class="scroll-item-outer" data-name="the_first_our_photo">
                   <div class="scroll-item">
-                    <img src="Images/we.jpg" alt="the_first_our_photo"/>
+                    <img src="Images/we.jpg" alt="the_first_our_photo" />
                   </div>
                 </li>
                 <li class="scroll-item-outer">
                   <div class="scroll-item">
-                    <img src="Images/secret.jpg" alt="secret"/>
+                    <img src="Images/secret.jpg" alt="secret" />
                   </div>
                 </li>
               </ul>
@@ -183,7 +185,8 @@
         доказательства теорем и шибари. Время анонсируем заранее в телеграм чатике
       </p>
       <p>
-        Посмотреть расписание можно в нашем <a id="console-button-calendar" data-cy="console-button-calendar">[календарике]</a>
+        Посмотреть расписание можно в нашем <a id="console-button-calendar"
+          data-cy="console-button-calendar">[календарике]</a>
       </p>
     </section>
 
@@ -192,15 +195,16 @@
       <a class="block" href="https://t.me/hacker_embassy" target="_blank">Основной чатик t.me/hacker_embassy</a>
       <a class="block" href="https://www.instagram.com/hackerembassy/" target="_blank">Инстаграм @hackerembassy</a>
       <a class="block" href="https://github.com/hackerembassy/" target="_blank">GitHub github.com/hackerembassy/</a>
-      <a class="block" href="https://www.openstreetmap.org/way/1059068105" target="_blank">Армения, Ереван, Пушкина 38
+      <a class="block" href="https://www.openstreetmap.org/?mlat=40.194239&mlon=44.497708#map=19/40.194239/44.497708"
+        target="_blank">Армения, Ереван, Баграмяна 60
         (вход со двора)</a>
       <h3>Как нас найти</h3>
-      <p>display /home/user/images/british-house.png</p>
-      <img id="house" class="bordered" src="Images/britishHouse2.jpeg" loading="lazy" alt="hackerspace house">
+      <p>display /home/user/images/house.jpg</p>
+      <img id="house" class="bordered" src="Images/house.jpg" loading="lazy" alt="hackerspace house">
       <p>display /home/user/images/map.osm</p>
       <div id="map" class="bordered">
         <iframe width="425" height="350"
-          src="https://www.openstreetmap.org/export/embed.html?bbox=44.51160997152329%2C40.18166235271537%2C44.51515048742295%2C40.18354965309218&amp;layer=mapnik&amp;marker=40.18260703405964%2C44.513380229473114"
+          src="https://www.openstreetmap.org/export/embed.html?bbox=44.49648499488831%2C40.19349758361708%2C44.498931169509895%2C40.194980939903544&amp;layer=mapnik&amp;marker=40.194239265816144%2C44.4977080821991"
           style="border: 1px solid black"></iframe>
     </section>
     <footer>
@@ -211,17 +215,18 @@
   </main>
 
   <div id="memes">
-    <img id="bsod" class="bsod-image full-width-height" src="/Images/bsod.png" loading="lazy" alt="bsod"/>
-    <img id="mobile-bsod" class="bsod-image full-width-height" src="/Images/mobile-bsod.png" loading="lazy" alt="mobile-bsod"/>
-    <img id="site" src="/Images/site.png" loading="lazy" alt="site"/>
-    <img id="tab" src="/Images/tab.png" loading="lazy" alt="tab"/>
-    <img id="screenshot" class="full-width-height" src="/Images/screenshot.jpg" loading="lazy" alt="screenshot"/>
+    <img id="bsod" class="bsod-image full-width-height" src="/Images/bsod.png" loading="lazy" alt="bsod" />
+    <img id="mobile-bsod" class="bsod-image full-width-height" src="/Images/mobile-bsod.png" loading="lazy"
+      alt="mobile-bsod" />
+    <img id="site" src="/Images/site.png" loading="lazy" alt="site" />
+    <img id="tab" src="/Images/tab.png" loading="lazy" alt="tab" />
+    <img id="screenshot" class="full-width-height" src="/Images/screenshot.jpg" loading="lazy" alt="screenshot" />
     <div id="achievement">
       <div class="achievement-text">
         <p>Achievement unlocked</p>
         <p id="achievement-placeholder"></p>
       </div>
-      <img src="/Images/achievement.svg" loading="lazy" alt="achievement"/>
+      <img src="/Images/achievement.svg" loading="lazy" alt="achievement" />
     </div>
 
     <div id="console" data-cy="console-wrapper">
@@ -230,7 +235,8 @@
         (c) Hacker Embassy. All rights reserved.
       </p>
       <div id="console-input-container">
-        <span id="pre-input" data-cy="pre-input"></span><input id="console-input" data-cy="console-input" type="text" autocomplete="off">
+        <span id="pre-input" data-cy="pre-input"></span><input id="console-input" data-cy="console-input" type="text"
+          autocomplete="off">
       </div>
     </div>
   </div>

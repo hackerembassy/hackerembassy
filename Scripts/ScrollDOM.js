@@ -7,10 +7,10 @@ class ScrollDOM {
   static scrollElements = document.querySelectorAll(".scroll-item-outer");
   static scrollNamePlacement = document.querySelector("#scroll-name-placement");
 
-  static easingOutQuint = (elapsed, offset, gap, duration) =>{
+  static easingOutQuint = (elapsed, offset, gap, duration) => {
     elapsed = elapsed / duration - 1;
     return gap * (Math.pow(elapsed, 5) + 1) + offset;
-  }
+  };
 
   static smoothScrollPolyfill(node, key, target) {
     const startTime = Date.now();
@@ -107,23 +107,27 @@ class ScrollDOM {
     });
   }
 
-  static convertToImageCommand(text){
+  static convertToImageCommand(text) {
     return `display /home/user/images/${text}.png`;
   }
 
   static init() {
-    this.scrollNamePlacement.dataset.type = `["${this.convertToImageCommand(this.scrollElements[0].dataset.name)}"]`;
+    this.scrollNamePlacement.dataset.type = `["${this.convertToImageCommand(
+      this.scrollElements[0].dataset.name
+    )}"]`;
     this.indicators.forEach((indicator, i) => {
       indicator.addEventListener("click", (e) => {
         e.preventDefault();
         e.stopPropagation();
-        
+
         this.setAriaPressed(i);
         TyperDOM.StopTypingAll();
-        this.scrollNamePlacement.dataset.type = `["${this.convertToImageCommand(this.scrollElements[i].dataset.name)}"]`;
+        this.scrollNamePlacement.dataset.type = `["${this.convertToImageCommand(
+          this.scrollElements[i].dataset.name
+        )}"]`;
         TyperDOM.StartTypingAll();
 
-        const scrollTop = (this.scroller.scrollHeight) * (i / 8);
+        const scrollTop = this.scroller.scrollHeight * (i / 8);
         this.smoothScroll(this.scroller, scrollTop, false);
       });
     });
