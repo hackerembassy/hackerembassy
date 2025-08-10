@@ -20,10 +20,13 @@
       y = l.getElementsByTagName(r)[0]; y.parentNode.insertBefore(t, y);
     })(window, document, "clarity", "script", "pqc46k8s18");
   </script>
-  <script type="module" src="script.js" defer></script>
+  <link href="https://unpkg.com/maplibre-gl/dist/maplibre-gl.css" rel="stylesheet" />
 </head>
 
 <body>
+  <script type="module" src="script.js"></script>
+  <script src="https://unpkg.com/maplibre-gl/dist/maplibre-gl.js"></script>
+
   <div id="topbar"><a href="#">user@hackem.cc: ~</a>
     <div id="topbuttons">
       <img id="minimize" src="/icons/minimize.svg" alt="minimize button">
@@ -203,9 +206,35 @@
       <img id="house" class="bordered" src="Images/house.jpg" loading="lazy" alt="hackerspace house">
       <p>display /home/user/images/map.osm</p>
       <div id="map" class="bordered">
-        <iframe width="425" height="350"
-          src="https://www.openstreetmap.org/export/embed.html?bbox=44.49648499488831%2C40.19349758361708%2C44.498931169509895%2C40.194980939903544&amp;layer=mapnik&amp;marker=40.194239265816144%2C44.4977080821991"
-          style="border: 1px solid black"></iframe>
+        <div id="ofm" style="width: 100%; height: 500px"></div>
+        <script>
+          const pos = [44.4977080821991, 40.194239265816144];
+
+          const map = new maplibregl.Map({
+            style: 'https://tiles.openfreemap.org/styles/liberty',
+            center: pos,
+            zoom: 13,
+            container: 'ofm',
+            attributionControl: false,
+          });
+
+          map.addControl(new maplibregl.AttributionControl({ compact: true }), 'top-right');
+
+          new maplibregl.Marker()
+            .setLngLat(pos)
+            .addTo(map)
+            .getElement()
+            .addEventListener('click', () => {
+              map.flyTo({
+                center: pos,
+                zoom: 18,
+                speed: 1.45,
+                curve: 2,
+                essential: true,
+              });
+            });
+        </script>
+      </div>
     </section>
     <footer>
       <div id="additional-info">
