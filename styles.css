@@ -265,30 +265,49 @@ p {
   max-width: 90vw;
   width: var(--carousel-width);
   height: var(--carousel-height);
+  overflow: hidden;
 }
 
 .scroll {
   display: flex;
   flex-direction: column;
   align-items: center;
-  overflow-x: auto;
-  overflow-y: hidden;
   width: 100%;
   height: 100%;
-  -webkit-overflow-scrolling: touch;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .scroll {
+    transition: transform 1s cubic-bezier(0.22, 1, 0.36, 1);
+  }
 }
 
 ul.scroll {
   margin: 0;
   padding: 0;
   list-style: none;
-  overflow: hidden;
 }
 
-#scroll-name-placement {
-  overflow-wrap: break-word;
+/* The hidden full caption shares the grid cell, so the box is sized for the finished text and the photo below never moves while it types */
+.scroll-name {
+  display: grid;
   margin: 0 0 20px;
+}
+
+.scroll-name > p {
+  grid-area: 1 / 1;
+  overflow-wrap: break-word;
+  margin: 0;
   padding: 0;
+}
+
+#scroll-name-sizer {
+  visibility: hidden;
+}
+
+/* Matches the typing cursor width so both copies wrap at the same point */
+#scroll-name-sizer > .wrap {
+  border-right: 0.08em solid transparent;
 }
 
 .scroll-item-outer {
@@ -315,18 +334,6 @@ ul.scroll {
 .scroll-item img {
   display: block;
   object-fit: cover;
-}
-
-@supports (scroll-snap-align: start) {
-
-  /* modern scroll snap points */
-  .scroll {
-    scroll-snap-type: x mandatory;
-  }
-
-  .scroll-item-outer {
-    scroll-snap-align: center;
-  }
 }
 
 ul.indicators {

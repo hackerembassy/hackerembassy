@@ -35,4 +35,56 @@ describe("Main page", () => {
       cy.get(".maplibregl-marker").should("exist");
     });
   });
+
+  it("has one carousel indicator per photo", () => {
+    cy.getCy("scroll-list")
+      .find(".scroll-item-outer")
+      .its("length")
+      .then((slides) => {
+        cy.getCy("indicators-list").find(".indicator-button").should("have.length", slides);
+      });
+    cy.get("#scroll-indicator-secret").should("exist");
+  });
+
+  it("keeps the carousel in place while the photo caption types", () => {
+    cy.viewport(390, 844);
+    cy.getCy("indicators-list").find(".indicator-button").eq(4).click();
+    cy.getCy("scroll-list")
+      .parent()
+      .then(($frame) => {
+        const top = $frame[0].getBoundingClientRect().top;
+        cy.get("#scroll-name-placement").should("contain.text", "open_doors.png");
+        cy.getCy("scroll-list")
+          .parent()
+          .should(($after) => {
+            expect($after[0].getBoundingClientRect().top).to.equal(top);
+          });
+      });
+  });
+
+  it("keeps the selected carousel photo aligned after rotation", () => {
+    const expectSlideAligned = (index) => {
+      cy.getCy("scroll-list").should(($list) => {
+        const frame = $list[0].parentElement;
+        const slide = $list[0].querySelectorAll(".scroll-item-outer")[index];
+        const offset =
+          slide.getBoundingClientRect().top - frame.getBoundingClientRect().top;
+        expect(Math.abs(offset)).to.be.lessThan(1);
+      });
+    };
+
+    cy.viewport(390, 844);
+    cy.getCy("indicators-list").find(".indicator-button").eq(3).click();
+    expectSlideAligned(3);
+
+    cy.viewport(844, 390);
+    expectSlideAligned(3);
+
+    cy.viewport(390, 844);
+    expectSlideAligned(3);
+
+    cy.viewport(1280, 800);
+    cy.getCy("indicators-list").find(".indicator-button").eq(6).click();
+    expectSlideAligned(6);
+  });
 });

@@ -1,106 +1,26 @@
 import TyperDOM from "./TyperDOM.js";
 
 class ScrollDOM {
-  static hasNativeSmoothScroll = this.testSupportsSmoothScroll();
-  static indicators = document.querySelectorAll(".indicator-button");
+  static indicatorList = document.querySelector(".indicators");
   static scroller = document.querySelector(".scroll");
   static scrollElements = document.querySelectorAll(".scroll-item-outer");
   static scrollNamePlacement = document.querySelector("#scroll-name-placement");
+  static scrollNameSizer = document.querySelector("#scroll-name-sizer");
 
-  static easingOutQuint = (elapsed, offset, gap, duration) => {
-    elapsed = elapsed / duration - 1;
-    return gap * (Math.pow(elapsed, 5) + 1) + offset;
-  };
-
-  static smoothScrollPolyfill(node, key, target) {
-    const startTime = Date.now();
-    const offset = node[key];
-    const gap = target - offset;
-    const duration = 1000;
-    let interrupt = false;
-
-    const step = () => {
-      const elapsed = Date.now() - startTime;
-      const percentage = elapsed / duration;
-
-      if (interrupt) {
-        return;
-      }
-
-      if (percentage > 1) {
-        cleanup();
-        return;
-      }
-
-      node[key] = this.easingOutQuint(elapsed, offset, gap, duration);
-      requestAnimationFrame(step);
-    };
-
-    const cancel = () => {
-      interrupt = true;
-      cleanup();
-    };
-
-    const cleanup = () => {
-      node.removeEventListener("wheel", cancel);
-      node.removeEventListener("touchstart", cancel);
-    };
-
-    node.addEventListener("wheel", cancel, { passive: true });
-    node.addEventListener("touchstart", cancel, { passive: true });
-
-    step();
-
-    return cancel;
-  }
-
-  static testSupportsSmoothScroll() {
-    let supports = false;
-    try {
-      let div = document.createElement("div");
-      div.scrollTo({
-        top: 0,
-        get behavior() {
-          supports = true;
-          return "smooth";
-        },
-      });
-    } catch {
-      // Old Edge throws on the options object, which means no smooth scroll support
-    }
-    return supports;
-  }
-
-  static smoothScroll(node, topOrLeft, horizontal) {
-    if (this.hasNativeSmoothScroll) {
-      return node.scrollTo({
-        [horizontal ? "left" : "top"]: topOrLeft,
-        behavior: "smooth",
-      });
-    } else {
-      return smoothScrollPolyfill(
-        node,
-        horizontal ? "scrollLeft" : "scrollTop",
-        topOrLeft
-      );
-    }
-  }
-
-  static debounce(func, ms) {
-    let timeout;
-    return () => {
-      clearTimeout(timeout);
-      timeout = setTimeout(() => {
-        timeout = null;
-        func();
-      }, ms);
-    };
-  }
-
-  static setAriaLabels() {
-    this.indicators.forEach((indicator, i) => {
-      indicator.setAttribute("aria-label", `Scroll to item #${i + 1}`);
+  // One indicator per slide, so adding or removing a photo only touches the slide markup
+  static createIndicators() {
+    this.indicators = Array.from(this.scrollElements, (slide, i) => {
+      const item = document.createElement("li");
+      item.className = "indicator";
+      const button = document.createElement("button");
+      button.className = "indicator-button";
+      button.setAttribute("aria-label", `Scroll to item #${i + 1}`);
+      if ("secret" in slide.dataset) button.id = "scroll-indicator-secret";
+      item.append(button);
+      this.indicatorList.append(item);
+      return button;
     });
+    this.setAriaPressed(0);
   }
 
   static setAriaPressed(index) {
@@ -113,10 +33,21 @@ class ScrollDOM {
     return `display /home/user/images/${text}.png`;
   }
 
+  static setCaption(index) {
+    const caption = this.convertToImageCommand(this.scrollElements[index].dataset.name);
+    this.scrollNamePlacement.dataset.type = JSON.stringify([caption]);
+    // Same markup as the typer renders, so both copies wrap identically
+    this.scrollNameSizer.innerHTML = `<span class="wrap">${caption}</span>`;
+  }
+
+  // Slides are offset in percent of the carousel height, so the position stays exact on resize and rotation
+  static showSlide(index) {
+    this.scroller.style.transform = `translateY(-${index * 100}%)`;
+  }
+
   static init() {
-    this.scrollNamePlacement.dataset.type = `["${this.convertToImageCommand(
-      this.scrollElements[0].dataset.name
-    )}"]`;
+    this.createIndicators();
+    this.setCaption(0);
     this.indicators.forEach((indicator, i) => {
       indicator.addEventListener("click", (e) => {
         e.preventDefault();
@@ -124,27 +55,12 @@ class ScrollDOM {
 
         this.setAriaPressed(i);
         TyperDOM.StopTypingAll();
-        this.scrollNamePlacement.dataset.type = `["${this.convertToImageCommand(
-          this.scrollElements[i].dataset.name
-        )}"]`;
+        this.setCaption(i);
         TyperDOM.StartTypingAll();
 
-        const scrollTop = this.scroller.scrollHeight * (i / 8);
-        this.smoothScroll(this.scroller, scrollTop, false);
+        this.showSlide(i);
       });
     });
-
-    this.scroller.addEventListener(
-      "scroll",
-      this.debounce(() => {
-        let index = Math.round(
-          (this.scroller.scrollTop / this.scroller.scrollHeight) * 8
-        );
-        this.setAriaPressed(index);
-      }, 200)
-    );
-
-    this.setAriaLabels();
   }
 }
 

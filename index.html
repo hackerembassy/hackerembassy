@@ -102,7 +102,10 @@
 
     <section id="photos">
       <h2>Фотки</h2>
-      <p id="scroll-name-placement" class="typed" data-period="999999" data-speed="500"></p>
+      <div class="scroll-name">
+        <p id="scroll-name-placement" class="typed" data-period="999999" data-speed="500"></p>
+        <p id="scroll-name-sizer" aria-hidden="true"></p>
+      </div>
       <div class="slider">
         <div class="viewport">
           <div class="carousel-frame bordered">
@@ -143,7 +146,7 @@
                     <img src="Images/firstfloor.jpg" alt="workshop" />
                   </div>
                 </li>
-                <li class="scroll-item-outer">
+                <li class="scroll-item-outer" data-name="secret" data-secret>
                   <div class="scroll-item">
                     <img src="Images/secret.jpg" alt="secret" />
                   </div>
@@ -152,32 +155,7 @@
             </div>
           </div>
         </div>
-        <ul class="indicators" data-cy="indicators-list">
-          <li class="indicator">
-            <button class="indicator-button" aria-pressed="true"></button>
-          </li>
-          <li class="indicator">
-            <button class="indicator-button"></button>
-          </li>
-          <li class="indicator">
-            <button class="indicator-button"></button>
-          </li>
-          <li class="indicator">
-            <button class="indicator-button"></button>
-          </li>
-          <li class="indicator">
-            <button class="indicator-button"></button>
-          </li>
-          <li class="indicator">
-            <button class="indicator-button"></button>
-          </li>
-          <li class="indicator">
-            <button class="indicator-button"></button>
-          </li>
-          <li class="indicator">
-            <button id="scroll-indicator-secret" class="indicator-button"></button>
-          </li>
-        </ul>
+        <ul class="indicators" data-cy="indicators-list"></ul>
       </div>
     </section>
 
