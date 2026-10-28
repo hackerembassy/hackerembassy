@@ -6,8 +6,8 @@ module.exports = defineConfig({
       // implement node event listeners here
     },
     baseUrl: "http://localhost:8080",
-    env: {
-      api: "https://gateway.hackem.cc:9000",
+    expose: {
+      api: "https://gateway.hackem.cc",
     },
   },
 });

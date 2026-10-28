@@ -79,3 +79,7 @@ web_modules/
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+# Cypress run artifacts
+cypress/screenshots/
+cypress/videos/
+cypress/downloads/

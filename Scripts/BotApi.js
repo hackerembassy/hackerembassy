@@ -1,5 +1,5 @@
 export default class BotApi {
-  static APIEndpoint = "https://gateway.hackem.cc:9000";
+  static APIEndpoint = "https://gateway.hackem.cc";
 
   /**
    * Asks the bot server to execute a command
