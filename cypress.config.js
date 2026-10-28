@@ -7,7 +7,7 @@ module.exports = defineConfig({
     },
     baseUrl: "http://localhost:8080",
     expose: {
-      api: "https://gateway.hackem.cc:9000",
+      api: "https://gateway.hackem.cc",
     },
   },
 });
