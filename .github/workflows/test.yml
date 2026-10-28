@@ -17,7 +17,7 @@ jobs:
         with:
           node-version-file: .nvmrc
       - name: Cypress run
-        uses: cypress-io/github-action@v7
+        uses: cypress-io/github-action@4ce68f262a3888d22cf3175d62010a145ba737ee # v7.4.8
         with:
           start: npm run start:ci
           wait-on: "http://localhost:8080"

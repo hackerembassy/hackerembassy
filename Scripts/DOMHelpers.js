@@ -31,7 +31,7 @@ class DOMHelpers {
 
   static openFullscreen(elem = document.documentElement) {
     if (elem.requestFullscreen) {
-      elem.requestFullscreen();
+      elem.requestFullscreen().catch(() => {});
     } else if (elem.webkitRequestFullscreen) {
       /* Safari */
       elem.webkitRequestFullscreen();

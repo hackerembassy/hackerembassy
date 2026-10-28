@@ -323,23 +323,6 @@ ul.scroll {
   }
 }
 
-@supports not (scroll-snap-align: start) {
-
-  /* old scroll snap points spec */
-  .scroll {
-    -webkit-scroll-snap-type: mandatory;
-    scroll-snap-type: mandatory;
-    -webkit-scroll-snap-destination: 0 50%;
-    scroll-snap-destination: 0 50%;
-    -webkit-scroll-snap-points-x: repeat(100%);
-    scroll-snap-points-x: repeat(100%);
-  }
-
-  .scroll-item-outer {
-    scroll-snap-coordinate: 0 0;
-  }
-}
-
 ul.indicators {
   position: absolute;
   margin: 0;

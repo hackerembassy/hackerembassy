@@ -34,7 +34,7 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v5
-      - uses: appleboy/telegram-action@v1.1.1
+      - uses: appleboy/telegram-action@214f06cfa3d3a588c1472116889437e7c6fd29b1 # v1.1.1
         with:
           to: ${{ vars.alerts_chat_id }}
           token: ${{ secrets.NOTIFICATION_BOT_TOKEN }}

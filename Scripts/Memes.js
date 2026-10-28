@@ -26,7 +26,8 @@ export class Maximize extends Meme {
     if (!this.fullscreenMode) {
       DOMHelpers.openFullscreen();
     } else {
-      document.exitFullscreen();
+      // Rejects if the user already left fullscreen another way (e.g. Esc)
+      document.exitFullscreen().catch(() => {});
     }
     this.fullscreenMode = !this.fullscreenMode;
   };
@@ -70,7 +71,7 @@ export class Dogs extends Meme {
   };
 
   desktopClickHandler = () => {
-    this.barkAudio.play();
+    this.barkAudio.play().catch(() => {});
     setTimeout(
       () =>
         alert("NO! You shouldn't fuck around here! Unminimize the console!"),
@@ -278,6 +279,7 @@ export class ConsoleMeme extends Meme {
     this.consoleInput.addEventListener("keydown", this.inputArrowHandler);
     this.consoleContainer.addEventListener("click", this.BelowFocusHandler);
     this.interpreter = interpreter;
+    this.interpreter.loadRemoteData();
     this.consolePreInput.innerText =
       (this.interpreter.currentDirectory ?? this.DefaultDirectory) + ">";
     DOMHelpers.displayElement(this.consoleContainer);

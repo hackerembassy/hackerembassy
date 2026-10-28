@@ -7,6 +7,7 @@ export default class Interpreter {
     "https://calendar.google.com/calendar/embed?src=9cdc565d78854a899cbbc7cb6dfcb8fa411001437ae0f66bce0a82b5e7679d5e%40group.calendar.google.com&ctz=Asia%2FYerevan";
   wikiForest = null;
   currentWikiNode = null;
+  botCommandsLoaded = Promise.resolve();
 
   constructor() {
     /**
@@ -80,27 +81,38 @@ export default class Interpreter {
         description: "Выйти из консоли",
       },
     ];
+  }
 
-    BotApi.getAvailableCommands().then((commands) => {
-      this.allCommands.splice(
-        1,
-        0,
-        ...commands.map((c) => ({
-          name: c.command,
-          expression: new RegExp(c.regex, "i"),
-          description: c.description,
-          handler: this.botCommand.bind(this, c.command),
-        }))
-      );
-    });
+  /**
+   * Loads bot commands and the wiki tree from the bot API in the background
+   */
+  loadRemoteData() {
+    this.botCommandsLoaded = BotApi.getAvailableCommands()
+      .then((commands) => {
+        this.allCommands.splice(
+          1,
+          0,
+          ...commands.map((c) => ({
+            name: c.command,
+            expression: new RegExp(c.regex, "i"),
+            description: c.description,
+            handler: this.botCommand.bind(this, c.command),
+          }))
+        );
+      })
+      .catch(console.error);
 
-    BotApi.getWikiTree().then((forest) => {
-      this.wikiForest = forest;
-      this.currentWikiNode = { children: forest };
-    });
+    BotApi.getWikiTree()
+      .then((forest) => {
+        this.wikiForest = forest;
+        this.currentWikiNode = { children: forest };
+      })
+      .catch(console.error);
   }
 
   helpCommand = async () => {
+    // Typing "help" right after opening the console shouldn't miss the bot commands
+    await this.botCommandsLoaded;
     return this.allCommands.map((c) => `${c.name} ${c.description}`).join("\n");
   };
 
