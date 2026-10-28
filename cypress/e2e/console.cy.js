@@ -50,7 +50,10 @@ describe("Console page", () => {
   });
 
   it("typing help shows help with bot commands if api call is successful", () => {
-    cy.wait("@getCommands");
+    cy.wait("@getCommands").then(({ error, response }) => {
+      expect(error, "bot API request error").to.be.undefined;
+      expect(response.statusCode, "bot API status").to.eq(200);
+    });
 
     cy.getCy("console-input").type("help{enter}");
 
