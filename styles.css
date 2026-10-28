@@ -5,6 +5,7 @@
 @font-face {
   font-family: "Courier New";
   src: url("/Fonts/СourierNew.ttf");
+  font-display: swap;
 }
 
 :root {
@@ -15,7 +16,12 @@
   --accent-color: #C39E9E;
   --secondary-color: #F6F5F0;
   --background-color: #2D2D2B;
-  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  :root {
+    scroll-behavior: smooth;
+  }
 }
 
 /* Scroll */
@@ -413,6 +419,12 @@ ul.indicators {
   animation: up-down-steam 8s both;
 }
 
+@media (prefers-reduced-motion: reduce) {
+  #achievement.triggered {
+    animation-name: fade-steam;
+  }
+}
+
 #achievement .achievement-text {
   position: absolute;
   display: flex;
@@ -674,6 +686,28 @@ pre {
 
   100% {
     transform: translateY(51vh) scale(0.01);
+    opacity: 0;
+  }
+}
+
+@keyframes fade-steam {
+  0% {
+    bottom: 0;
+    opacity: 0;
+  }
+
+  15%,
+  75% {
+    opacity: 1;
+  }
+
+  99.9% {
+    bottom: 0;
+    opacity: 0;
+  }
+
+  100% {
+    bottom: -96px;
     opacity: 0;
   }
 }

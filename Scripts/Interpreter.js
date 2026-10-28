@@ -1,7 +1,7 @@
 import BotApi from "./BotApi.js";
 
 export default class Interpreter {
-  defaultDirectory = `C:\\Memes\\user`;
+  defaultDirectory = String.raw`C:\Memes\user`;
   currentDirectory = this.defaultDirectory;
   calendarUrl =
     "https://calendar.google.com/calendar/embed?src=9cdc565d78854a899cbbc7cb6dfcb8fa411001437ae0f66bce0a82b5e7679d5e%40group.calendar.google.com&ctz=Asia%2FYerevan";
@@ -296,7 +296,7 @@ export default class Interpreter {
     return text.replaceAll(/@(\S+)/g, (_, match) => {
       if (match.startsWith("group.calendar.google.com")) return match;
 
-      const unescapedMatch = match.replace("\\_", "_");
+      const unescapedMatch = match.replace(String.raw`\_`, "_");
       return `<a class="tg-link" href="https://t.me/${unescapedMatch}" target="_blank">${unescapedMatch}</a>`;
     });
   }

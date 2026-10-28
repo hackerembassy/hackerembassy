@@ -65,7 +65,9 @@ class ScrollDOM {
           return "smooth";
         },
       });
-    } catch (err) {} // Edge throws an error
+    } catch {
+      // Old Edge throws on the options object, which means no smooth scroll support
+    }
     return supports;
   }
 

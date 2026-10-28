@@ -18,9 +18,9 @@ class TyperDOM {
 
   static *GetAllTypers() {
     for (const element of document.getElementsByClassName("typed")) {
-      const toRotate = element.getAttribute("data-type");
-      const period = element.getAttribute("data-period");
-      const speed = element.getAttribute("data-speed");
+      const toRotate = element.dataset.type;
+      const period = element.dataset.period;
+      const speed = element.dataset.speed;
       
       if (toRotate) {
         yield new TyperDOM(element, JSON.parse(toRotate), period, speed);
@@ -64,7 +64,6 @@ class TyperDOM {
 
     this.el.innerHTML = '<span class="wrap">' + this.txt + "</span>";
 
-    let that = this;
     let delta = 120 - Math.random() * this.speed;
 
     if (this.isDeleting) {
@@ -80,9 +79,7 @@ class TyperDOM {
       delta = 5 * this.speed;
     }
 
-    this.typingTimeout = setTimeout(function () {
-      that.tick();
-    }, delta);
+    this.typingTimeout = setTimeout(() => this.tick(), delta);
   }
 }
 

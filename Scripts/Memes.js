@@ -241,7 +241,7 @@ export class SecretImage extends Meme {
 }
 
 export class ConsoleMeme extends Meme {
-  DefaultDirectory = `C:\\Memes\\user`;
+  DefaultDirectory = String.raw`C:\Memes\user`;
   CdCommandPattern = /^cd (.*)$/i;
 
   commandHistory = [];
@@ -295,9 +295,7 @@ export class ConsoleMeme extends Meme {
   clearConsole = () => {
     document
       .querySelectorAll(".console-output, .console-old-input")
-      .forEach((element) => {
-        this.consoleContainer.removeChild(element);
-      });
+      .forEach((element) => element.remove());
   };
 
   closeConsole = () => {
@@ -332,14 +330,14 @@ export class ConsoleMeme extends Meme {
     let oldInputText = this.consolePreInput.innerText + value;
     let oldInput = document.createElement("p");
     oldInput.classList.add("console-old-input");
-    oldInput.setAttribute("data-cy", "console-old-input");
+    oldInput.dataset.cy = "console-old-input";
     oldInput.innerHTML = oldInputText;
     this.consoleContainer.insertBefore(oldInput, this.consoleInputContainer);
 
     //Create output paragraph
     let outputNode = document.createElement("p");
     outputNode.classList.add("console-output");
-    outputNode.setAttribute("data-cy", "console-output");
+    outputNode.dataset.cy = "console-output";
     outputNode.innerHTML = output.replaceAll("\n", "<br>");
     this.consoleContainer.insertBefore(outputNode, this.consoleInputContainer);
     this.consoleContainer.scrollTop += 1000;
