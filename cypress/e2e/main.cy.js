@@ -28,4 +28,11 @@ describe("Main page", () => {
       cy.get("#close").should("have.attr", "src", "/icons/close.svg");
     });
   });
+
+  it("has a map with a marker", () => {
+    cy.get("#ofm").within(() => {
+      cy.get("canvas.maplibregl-canvas").should("exist");
+      cy.get(".maplibregl-marker").should("exist");
+    });
+  });
 });
