@@ -4,8 +4,8 @@
   "description": "Hacker Embassy Site",
   "main": "index.js",
   "scripts": {
-    "start": "live-server .",
-    "start:ci": "live-server . --port=8080 --no-browser",
+    "start": "servor . index.html 8080 --reload --browse",
+    "start:ci": "servor . index.html 8080",
     "cy:open": "cypress open",
     "cy:run": "cypress run",
     "test": "start-server-and-test start:ci http://localhost:8080 cy:run",
@@ -22,11 +22,12 @@
   },
   "homepage": "https://github.com/hackerembassy/hackerembassy#readme",
   "devDependencies": {
-    "cypress": "^13.10.0",
-    "husky": "^9.0.11",
-    "start-server-and-test": "^2.0.3"
+    "cypress": "^16.2.0",
+    "husky": "^9.1.7",
+    "servor": "^4.0.2",
+    "start-server-and-test": "^3.0.13"
   },
-  "dependencies": {
-    "live-server": "^1.2.2"
+  "allowScripts": {
+    "cypress": true
   }
 }

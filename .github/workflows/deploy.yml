@@ -23,18 +23,18 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
       - name: Setup Pages
-        uses: actions/configure-pages@v4
+        uses: actions/configure-pages@v6
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v5
         with:
           # Upload entire repository
           path: "."
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v4
-      - uses: appleboy/telegram-action@master
+        uses: actions/deploy-pages@v5
+      - uses: appleboy/telegram-action@v1.1.1
         with:
           to: ${{ vars.alerts_chat_id }}
           token: ${{ secrets.NOTIFICATION_BOT_TOKEN }}

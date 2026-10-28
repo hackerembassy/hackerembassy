@@ -1,5 +1,5 @@
 describe("Console page", () => {
-  const BotApiEndpoint = Cypress.env("api");
+  const BotApiEndpoint = Cypress.expose("api");
 
   beforeEach(() => {
     cy.visit("/");
