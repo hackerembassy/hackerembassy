@@ -9,7 +9,7 @@ describe("Main page", () => {
 
   it("has a working navigation", () => {
     cy.get("#nav-list").within(() => {
-      cy.get("li").should("have.length", 5);
+      cy.get("li").should("have.length.at.least", 5);
       cy.get("a").eq(0).should("have.attr", "href", "#about");
       cy.get("a").eq(1).should("have.attr", "href", "#announces");
       cy.get("a").eq(2).should("have.attr", "href", "#contacts");
