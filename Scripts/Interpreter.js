@@ -199,6 +199,20 @@ export default class Interpreter {
         description: "Завершить процесс",
       },
       {
+        name: "sensors",
+        category: "Спейс",
+        expression: /^sensors(?: .*)?$/i,
+        handler: this.sensorsCommand,
+        description: "Температура в спейсе",
+      },
+      {
+        name: "lpstat",
+        category: "Спейс",
+        expression: /^(lpstat|lpq)(?: .*)?$/i,
+        handler: this.lpstatCommand,
+        description: "3D принтеры",
+      },
+      {
         name: "ps",
         category: "Система",
         expression: /^ps(?: .*)?$/i,
@@ -744,6 +758,53 @@ export default class Interpreter {
     const page = command.expression.exec(input)[1];
     this.runEffect("man");
     return page ? `No manual entry for ${page}` : "What manual page do you want?";
+  };
+
+  sensorsCommand = async () => {
+    const climate = await BotApi.getClimate();
+    if (!climate) return "No sensors found! (the space is not answering)";
+
+    const value = (raw, format) => (Number.isFinite(Number(raw)) ? format(Number(raw)) : "N/A");
+    const row = (label, text) => `${`${label}:`.padEnd(13, " ")} ${text}`;
+    const chip = (name, floor) =>
+      [
+        `hackem-${name}-isa-0000`,
+        "Adapter: Memesoft Uwuntu",
+        row("temp1", value(floor.temperature, (t) => `${t >= 0 ? "+" : ""}${t.toFixed(1)}°C`)),
+        row("humidity", value(floor.humidity, (h) => `${Math.round(h)} %`)),
+        ...(floor.co2 === undefined ? [] : [row("co2", value(floor.co2, (c) => `${Math.round(c)} ppm`))]),
+      ].join("\n");
+
+    return `<pre class="neofetch">${chip("firstfloor", climate.firstFloor)}\n\n${chip("secondfloor", climate.secondFloor)}</pre>`;
+  };
+
+  lpstatCommand = async () => {
+    const printers = await BotApi.getPrinters();
+    if (!printers) return "lpstat: Unable to connect to server: the space is not answering";
+    if (printers.length === 0) return "lpstat: No destinations added.";
+
+    const duration = (seconds) => {
+      const pad = (n) => String(n).padStart(2, "0");
+      return `${pad(Math.floor(seconds / 3600))}:${pad(Math.floor(seconds / 60) % 60)}:${pad(seconds % 60)}`;
+    };
+
+    const lines = printers.map((printer) => {
+      const temps = `\n        extruder ${Math.round(printer.extruderTemperature ?? 0)}°C, bed ${Math.round(printer.bedTemperature ?? 0)}°C`;
+
+      switch (printer.state) {
+        case "printing":
+        case "paused":
+          return `printer ${printer.name} is ${printer.state} ${printer.filename ?? "something"}. ${printer.progress}% done, ${duration(printer.printDuration ?? 0)} elapsed${temps}`;
+        case "offline":
+          return `printer ${printer.name} disabled - not responding`;
+        case "error":
+          return `printer ${printer.name} is in error state. Someone call a resident${temps}`;
+        default:
+          return `printer ${printer.name} is idle. enabled${printer.filename ? `, last job: ${printer.filename}` : ""}`;
+      }
+    });
+
+    return `<pre class="neofetch">${lines.join("\n")}</pre>`;
   };
 
   whoamiCommand = () => {

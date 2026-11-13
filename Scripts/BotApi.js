@@ -61,6 +61,35 @@ export default class BotApi {
   }
 
   /**
+   * @typedef {{temperature: string, humidity: string, co2?: string}} FloorClimate
+   * @typedef {{name: string, state: string, filename?: string|null, progress?: number, printDuration?: number, extruderTemperature?: number, bedTemperature?: number}} Printer
+   */
+
+  /**
+   * Returns the climate on both floors of the space
+   * @returns {Promise<{firstFloor: FloorClimate, secondFloor: FloorClimate}|null>}
+   */
+  static async getClimate() {
+    return fetch(`${this.APIEndpoint}/api/climate`, {
+      mode: "cors",
+    })
+      .then((res) => (res.ok ? res.json() : null))
+      .catch(() => null);
+  }
+
+  /**
+   * Returns the status of 3D printers in the space
+   * @returns {Promise<Printer[]|null>}
+   */
+  static async getPrinters() {
+    return fetch(`${this.APIEndpoint}/api/printers`, {
+      mode: "cors",
+    })
+      .then((res) => (res.ok ? res.json() : null))
+      .catch(() => null);
+  }
+
+  /**
    * Measures a round trip to the bot API
    * @returns {Promise<number|null>} milliseconds or null on failure
    */
