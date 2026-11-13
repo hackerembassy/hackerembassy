@@ -385,7 +385,27 @@ export class ConsoleMeme extends Meme {
     this.consoleInput.setSelectionRange(value.length, value.length);
   };
 
+  // Mobile keyboards shrink the visual viewport but not 100vh, so the console follows the visible area
+  trackVisualViewport() {
+    const viewport = window.visualViewport;
+    if (!viewport) return;
+
+    const update = () => {
+      const root = document.documentElement.style;
+      root.setProperty("--viewport-height", `${viewport.height}px`);
+      root.setProperty("--viewport-top", `${viewport.offsetTop}px`);
+
+      if (document.activeElement === this.consoleInput)
+        this.consoleInputContainer.scrollIntoView({ block: "nearest" });
+    };
+
+    viewport.addEventListener("resize", update);
+    viewport.addEventListener("scroll", update);
+    update();
+  }
+
   init() {
+    this.trackVisualViewport();
     document.body.addEventListener("keydown", this.CtrlCHandler);
     document
       .querySelectorAll("nav a")
