@@ -492,9 +492,11 @@ export default class Interpreter {
   neofetchCommand = async () => {
     const status = await BotApi.getStatus();
     const accent = (text) => `<span class="neofetch-accent">${text}</span>`;
-    const stateText = status
-      ? `${status.open ? "open" : "closed"} for ${this.formatDuration(Date.now() - status.dateChanged)}`
-      : "unknown (bot is sleeping)";
+    let stateText = "unknown (bot is sleeping)";
+    if (status) {
+      const state = status.open ? "open" : "closed";
+      stateText = `${state} for ${this.formatDuration(Date.now() - status.dateChanged)}`;
+    }
 
     const info = [
       `${accent("guest")}@${accent("hackem")}`,
@@ -698,7 +700,7 @@ export default class Interpreter {
 
     const lines = [
       `Filesystem      ${col("Size")} ${col("Used")} ${col("Avail")} Use% Mounted on`,
-      `/dev/rent       ${col(size)} ${col(used)} ${col(avail)} ${`${percent}%`.padStart(4, " ")} /${name}`,
+      `/dev/rent       ${col(size)} ${col(used)} ${col(avail)} ${(percent + "%").padStart(4, " ")} /${name}`,
       "",
       `[${"#".repeat(Math.min(30, Math.round(percent * 0.3))).padEnd(30, ".")}] ${target_currency}`,
       percent < 100 ? "Чтобы освободить место - набери donate" : "Аренда собрана, спасибо!",
@@ -715,7 +717,8 @@ export default class Interpreter {
     const times = [];
 
     for (let seq = 0; seq < 4; seq++) {
-      const time = isOwnHost ? await BotApi.ping() : null;
+      // Pings go one after another, like the real ping
+      const time = isOwnHost ? await BotApi.ping() : null; // NOSONAR
 
       if (time === null) {
         lines.push(`Request timeout for icmp_seq ${seq}`);
@@ -744,7 +747,7 @@ export default class Interpreter {
   }
 
   effectCommand = (name, output) => {
-    this.runEffect(name);
+    void this.runEffect(name);
     return output;
   };
 
@@ -756,7 +759,7 @@ export default class Interpreter {
 
   manCommand = (command, input) => {
     const page = command.expression.exec(input)[1];
-    this.runEffect("man");
+    void this.runEffect("man");
     return page ? `No manual entry for ${page}` : "What manual page do you want?";
   };
 
@@ -765,7 +768,7 @@ export default class Interpreter {
     if (!climate) return "No sensors found! (the space is not answering)";
 
     const value = (raw, format) => (Number.isFinite(Number(raw)) ? format(Number(raw)) : "N/A");
-    const row = (label, text) => `${`${label}:`.padEnd(13, " ")} ${text}`;
+    const row = (label, text) => `${(label + ":").padEnd(13, " ")} ${text}`;
     const chip = (name, floor) =>
       [
         `hackem-${name}-isa-0000`,
@@ -799,8 +802,10 @@ export default class Interpreter {
           return `printer ${printer.name} disabled - not responding`;
         case "error":
           return `printer ${printer.name} is in error state. Someone call a resident${temps}`;
-        default:
-          return `printer ${printer.name} is idle. enabled${printer.filename ? `, last job: ${printer.filename}` : ""}`;
+        default: {
+          const lastJob = printer.filename ? ", last job: " + printer.filename : "";
+          return `printer ${printer.name} is idle. enabled${lastJob}`;
+        }
       }
     });
 

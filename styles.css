@@ -100,7 +100,7 @@ section a {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: #0078d7;
+  background: #0063b1; /* darker Windows blue, keeps white text readable */
   color: #fff;
   font-family: "Segoe UI", sans-serif;
   font-size: 1.5rem;
@@ -550,7 +550,8 @@ ul.indicators {
   height: 100vh;
   background-color: var(--background-color);
   z-index: 5;
-  overflow: scroll;
+  /* Vertical only: "scroll" always drew an empty horizontal scrollbar, wide pre blocks scroll on their own */
+  overflow: hidden auto;
 }
 
 #console-input-container {
@@ -963,7 +964,9 @@ pre {
   }
 }
 
-.effect-kill,
-.effect-kill * {
-  cursor: crosshair !important;
+.effect-kill {
+  position: fixed;
+  inset: 0;
+  z-index: 250;
+  cursor: crosshair;
 }

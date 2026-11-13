@@ -84,4 +84,72 @@ describe("Console page", () => {
 
     cy.getCy("console-wrapper").should("not.be.visible");
   });
+
+  it("help groups commands by category and hides easter eggs", () => {
+    cy.getCy("console-input").type("help{enter}");
+
+    cy.getCy("console-output")
+      .should("contain.text", "[Файлы]")
+      .should("contain.text", "vim")
+      .should("contain.text", "kill")
+      .should("not.contain.text", "format");
+  });
+
+  it("history recall puts the caret at the end and skips empty input", () => {
+    cy.getCy("console-input").type("echo test{enter}");
+    cy.getCy("console-input").type("{enter}");
+    cy.getCy("console-input").type("{uparrow}");
+
+    cy.getCy("console-input")
+      .should("have.value", "echo test")
+      .and(($input) => expect($input[0].selectionStart).to.eq("echo test".length));
+  });
+
+  it("rm without sudo asks for sudo", () => {
+    cy.getCy("console-input").type("rm -rf /{enter}");
+
+    cy.getCy("console-output").should("contain.text", "Permission denied").and("contain.text", "sudo rm -rf /");
+  });
+
+  it("vim only lets you out with :q!", () => {
+    cy.getCy("console-input").type("vim{enter}");
+    cy.get(".vim").should("be.visible");
+
+    cy.get(".vim-input").type(":q{enter}", { force: true });
+    cy.get(".vim-status").should("contain.text", "E37");
+
+    cy.get(".vim-input").type(":q!{enter}", { force: true });
+    cy.get(".vim").should("not.exist");
+  });
+
+  it("kill removes clicked elements until Esc", () => {
+    cy.getCy("console-input").type("echo victim{enter}");
+    cy.getCy("console-input").type("kill{enter}");
+    cy.getCy("console-output").should("have.length", 2);
+
+    cy.getCy("console-output")
+      .first()
+      .then(($output) => {
+        const rect = $output[0].getBoundingClientRect();
+        cy.get(".effect-kill").click(rect.left + 5, rect.top + rect.height / 2);
+      });
+    cy.getCy("console-output").first().should("have.css", "visibility", "hidden");
+
+    cy.getCy("console-input").type("{esc}", { force: true });
+    cy.get(".effect-kill").should("not.exist");
+  });
+
+  it("ps lists people inside from the bot API", () => {
+    cy.intercept("GET", `${BotApiEndpoint}/api/status`, {
+      open: 1,
+      dateChanged: Date.now(),
+      changedBy: "tectonic",
+      inside: [{ username: "tectonic", dateChanged: Date.now() }],
+      planningToGo: [],
+    });
+
+    cy.getCy("console-input").type("ps{enter}");
+
+    cy.getCy("console-output").should("contain.text", "PID").and("contain.text", "tectonic");
+  });
 });

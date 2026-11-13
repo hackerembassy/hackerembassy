@@ -411,10 +411,19 @@ export class Shutdown extends Meme {
     screen.innerHTML = `<div class="update-spinner"></div><p><span class="update-percent"></span><br>Don't turn off your computer</p>`;
     const percentText = screen.querySelector(".update-percent");
 
-    for (let percent = 0; percent <= 100; percent++) {
-      percentText.textContent = `Working on updates ${percent}%`;
-      await sleep(this.UpdateStepDelay * (percent === 99 ? 20 : 1));
-    }
+    // Counts to 100%, hanging at 99% for a while like the real thing
+    await new Promise((resolve) => {
+      let percent = 0;
+      const step = () => {
+        percentText.textContent = `Working on updates ${percent}%`;
+        if (percent === 100) return resolve();
+
+        const delay = this.UpdateStepDelay * (percent === 99 ? 20 : 1);
+        percent++;
+        setTimeout(step, delay);
+      };
+      step();
+    });
 
     if (action === "reboot") {
       window.location.reload();

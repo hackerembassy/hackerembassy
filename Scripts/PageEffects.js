@@ -13,7 +13,7 @@ export default class PageEffects {
     // Only the console text scales, so the console still covers the site behind it
     const console = document.getElementById("console");
     console.style.fontSize = "";
-    const baseSize = parseFloat(getComputedStyle(console).fontSize);
+    const baseSize = Number.parseFloat(getComputedStyle(console).fontSize);
     console.style.fontSize = this.zoom === 1 ? "" : `${baseSize * this.zoom}px`;
   }
 
@@ -58,14 +58,16 @@ export default class PageEffects {
     walker.addEventListener("animationend", () => walker.remove());
   }
 
-  // Every click removes whatever was clicked (except the console itself) until Esc
+  // Every click removes whatever was clicked (except the console itself) until Esc.
+  // A transparent overlay catches clicks and shows the crosshair over everything.
   kill() {
-    if (document.documentElement.classList.contains("effect-kill")) return;
-    document.documentElement.classList.add("effect-kill");
+    if (document.querySelector(".effect-kill")) return;
+
+    const overlay = document.createElement("div");
+    overlay.classList.add("effect-kill");
 
     const cleanup = () => {
-      document.documentElement.classList.remove("effect-kill");
-      document.removeEventListener("click", onClick, true);
+      overlay.remove();
       document.removeEventListener("keydown", onKey, true);
     };
 
@@ -74,17 +76,15 @@ export default class PageEffects {
     };
 
     const onClick = (event) => {
-      const target = event.target;
+      const target = document.elementsFromPoint(event.clientX, event.clientY).find((element) => element !== overlay);
       const isProtected =
+        !target ||
         target === document.body ||
         target === document.documentElement ||
         target.id === "console" ||
         target.closest("#console-input-container");
 
       if (isProtected) return;
-
-      event.preventDefault();
-      event.stopPropagation();
 
       if (AchievementsDOM.earnAchievment("kill"))
         AchievementsDOM.triggerAchievmentPopup(
@@ -104,11 +104,9 @@ export default class PageEffects {
         .finished.then(() => (target.style.visibility = "hidden"));
     };
 
-    // Let the Enter that ran the command finish before listening
-    setTimeout(() => {
-      document.addEventListener("click", onClick, true);
-      document.addEventListener("keydown", onKey, true);
-    });
+    overlay.addEventListener("click", onClick);
+    document.addEventListener("keydown", onKey, true);
+    document.body.appendChild(overlay);
   }
 
   handle = (event) => {
@@ -122,7 +120,7 @@ export default class PageEffects {
     else if (name === "man") this.man();
     else if (name === "kill") this.kill();
 
-    Promise.resolve(result).then(done);
+    Promise.resolve(result).then(done, done);
   };
 
   init() {

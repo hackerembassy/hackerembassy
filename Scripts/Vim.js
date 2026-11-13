@@ -185,27 +185,27 @@ export default class Vim {
     }
   }
 
+  // Keys that switch to insert mode, with where the cursor goes
+  insertKeys = {
+    i: () => this.col,
+    a: () => Math.min(this.col + 1, this.line.length),
+    I: () => 0,
+    A: () => this.line.length,
+    o: () => {
+      this.lines.splice(this.row + 1, 0, "");
+      this.row++;
+      return 0;
+    },
+  };
+
   handleNormalKey(key) {
     const combo = this.pendingKey + key;
     this.pendingKey = "";
 
     if (this.move(key)) return;
 
-    if (key === "i") {
-      this.enterInsert();
-    } else if (key === "a") {
-      this.enterInsert();
-      this.col = Math.min(this.col + 1, this.line.length);
-    } else if (key === "I") {
-      this.enterInsert();
-      this.col = 0;
-    } else if (key === "A") {
-      this.enterInsert();
-      this.col = this.line.length;
-    } else if (key === "o") {
-      this.lines.splice(this.row + 1, 0, "");
-      this.row++;
-      this.col = 0;
+    if (this.insertKeys[key]) {
+      this.col = this.insertKeys[key]();
       this.enterInsert();
     } else if (key === "0") {
       this.col = 0;
@@ -280,16 +280,17 @@ export default class Vim {
       () => `<div class="vim-line vim-tilde">~</div>`,
     );
     const splash = isEmpty
-      ? `<div class="vim-splash">${SPLASH.map((line) => `<div>${line || "&nbsp;"}</div>`).join("")}</div>`
+      ? `<div class="vim-splash">${SPLASH.map((line) => "<div>" + (line || "&nbsp;") + "</div>").join("")}</div>`
       : "";
 
     this.root.querySelector(".vim-buffer").innerHTML =
       textLines.join("") + tildes.join("") + splash;
 
+    const messageClass = this.isError ? "vim-error" : "";
     const status =
       this.mode === "command"
         ? `:${escapeHtml(this.command)}<span class="vim-cursor">&nbsp;</span>`
-        : `<span class="${this.isError ? "vim-error" : ""}">${escapeHtml(this.message)}</span>`;
+        : `<span class="${messageClass}">${escapeHtml(this.message)}</span>`;
     const position = `<span>${this.row + 1},${this.col + 1}</span>`;
 
     this.root.querySelector(".vim-status").innerHTML =
