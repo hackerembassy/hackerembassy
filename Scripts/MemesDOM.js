@@ -1,4 +1,6 @@
-import { Maximize, Dogs, Bsod, Idle, Ass, ConsoleMeme, SecretImage, Rotate } from "./Memes.js";
+import { Maximize, Dogs, Bsod, Idle, Ass, ConsoleMeme, SecretImage, Rotate, Shutdown } from "./Memes.js";
+import Vim from "./Vim.js";
+import PageEffects from "./PageEffects.js";
 
 class MemesDOM {
   static memesCollection = [
@@ -9,7 +11,10 @@ class MemesDOM {
     new Ass(),
     new ConsoleMeme(),
     new SecretImage(),
-    new Rotate()
+    new Rotate(),
+    new Shutdown(),
+    new Vim(),
+    new PageEffects()
   ];
 
   static init() {

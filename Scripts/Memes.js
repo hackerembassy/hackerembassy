@@ -57,7 +57,7 @@ export class Dogs extends Meme {
     if (AchievementsDOM.earnAchievment("dogs"))
       AchievementsDOM.triggerAchievmentPopup(
         AchievementsDOM.AllAchievements["dogs"],
-        AchievementsDOM.DefaultMediumAchievementDelay
+        AchievementsDOM.DefaultMediumAchievementDelay,
       );
   };
 
@@ -75,7 +75,7 @@ export class Dogs extends Meme {
     setTimeout(
       () =>
         alert("NO! You shouldn't fuck around here! Unminimize the console!"),
-      500
+      500,
     );
   };
 
@@ -106,7 +106,7 @@ export class Bsod extends Meme {
     if (AchievementsDOM.earnAchievment("bsod"))
       AchievementsDOM.triggerAchievmentPopup(
         AchievementsDOM.AllAchievements["bsod"],
-        AchievementsDOM.DefaultLongAchievementDelay
+        AchievementsDOM.DefaultLongAchievementDelay,
       );
   };
 
@@ -123,6 +123,7 @@ export class Bsod extends Meme {
 
   init() {
     this.closeButton.addEventListener("click", this.closeHandler);
+    window.addEventListener("bsod", this.closeHandler);
 
     document
       .querySelectorAll(".bsod-image")
@@ -158,11 +159,11 @@ export class Idle extends Meme {
   idleHandler = () => {
     DOMHelpers.removeMultipleEventListeners(
       this.ActivityEvents,
-      this.resetIdleTimer
+      this.resetIdleTimer,
     );
     DOMHelpers.addMultipleEventListeners(
       this.ActivityEvents,
-      this.heIsAliveHandler
+      this.heIsAliveHandler,
     );
 
     TyperDOM.StopTypingAll();
@@ -174,7 +175,7 @@ export class Idle extends Meme {
   heIsAliveHandler = () => {
     DOMHelpers.removeMultipleEventListeners(
       this.ActivityEvents,
-      this.heIsAliveHandler
+      this.heIsAliveHandler,
     );
     TyperDOM.StopTypingAll();
     this.subheading.dataset.type =
@@ -184,14 +185,14 @@ export class Idle extends Meme {
     if (AchievementsDOM.earnAchievment("alive"))
       AchievementsDOM.triggerAchievmentPopup(
         AchievementsDOM.AllAchievements["alive"],
-        AchievementsDOM.DefaultMediumAchievementDelay
+        AchievementsDOM.DefaultMediumAchievementDelay,
       );
   };
 
   init() {
     if (!AchievementsDOM.hasAchievment("alive")) {
       DOMHelpers.addMultipleEventListeners(this.ActivityEvents, () =>
-        this.resetIdleTimer()
+        this.resetIdleTimer(),
       );
 
       this.resetIdleTimer();
@@ -212,7 +213,7 @@ export class Ass extends Meme {
         if (AchievementsDOM.earnAchievment("ass"))
           AchievementsDOM.triggerAchievmentPopup(
             AchievementsDOM.AllAchievements["ass"],
-            AchievementsDOM.DefaultShortAchievementDelay
+            AchievementsDOM.DefaultShortAchievementDelay,
           );
       }
     }, 500);
@@ -231,7 +232,7 @@ export class SecretImage extends Meme {
       if (AchievementsDOM.earnAchievment("secret"))
         AchievementsDOM.triggerAchievmentPopup(
           AchievementsDOM.AllAchievements["secret"],
-          AchievementsDOM.DefaultShortAchievementDelay
+          AchievementsDOM.DefaultShortAchievementDelay,
         );
     });
   }
@@ -239,7 +240,6 @@ export class SecretImage extends Meme {
 
 export class ConsoleMeme extends Meme {
   DefaultDirectory = String.raw`C:\Memes\user`;
-  CdCommandPattern = /^cd (.*)$/i;
 
   commandHistory = [];
   currentCommandIndex = 0;
@@ -250,13 +250,13 @@ export class ConsoleMeme extends Meme {
     this.navlist = document.getElementById("nav-list");
     this.consoleButton = document.getElementById("console-button");
     this.calendarInConsoleButton = document.getElementById(
-      "console-button-calendar"
+      "console-button-calendar",
     );
     this.consoleContainer = document.getElementById("console");
     this.consoleInput = document.getElementById("console-input");
     this.consolePreInput = document.getElementById("pre-input");
     this.consoleInputContainer = document.getElementById(
-      "console-input-container"
+      "console-input-container",
     );
   }
 
@@ -267,7 +267,8 @@ export class ConsoleMeme extends Meme {
   };
 
   BelowFocusHandler = (event) => {
-    if (window.getSelection()?.type !== "Range") this.consoleInput.focus();
+    if (window.getSelection()?.type !== "Range")
+      this.consoleInput.focus({ preventScroll: true });
   };
 
   startConsole(interpreter) {
@@ -276,6 +277,7 @@ export class ConsoleMeme extends Meme {
     this.consoleInput.addEventListener("keydown", this.inputArrowHandler);
     this.consoleContainer.addEventListener("click", this.BelowFocusHandler);
     this.interpreter = interpreter;
+    this.interpreter.commandHistory = this.commandHistory;
     this.interpreter.loadRemoteData();
     this.consolePreInput.innerText =
       (this.interpreter.currentDirectory ?? this.DefaultDirectory) + ">";
@@ -285,7 +287,7 @@ export class ConsoleMeme extends Meme {
     if (AchievementsDOM.earnAchievment("console"))
       AchievementsDOM.triggerAchievmentPopup(
         AchievementsDOM.AllAchievements["console"],
-        AchievementsDOM.DefaultShortAchievementDelay
+        AchievementsDOM.DefaultShortAchievementDelay,
       );
   }
 
@@ -303,7 +305,7 @@ export class ConsoleMeme extends Meme {
     if (event.key !== "Enter" || this.locked) return;
 
     let value = this.consoleInput.value;
-    this.commandHistory.push(value);
+    if (value.trim()) this.commandHistory.push(value);
     this.currentCommandIndex = this.commandHistory.length;
 
     this.locked = true;
@@ -337,31 +339,30 @@ export class ConsoleMeme extends Meme {
     outputNode.dataset.cy = "console-output";
     outputNode.innerHTML = output.replaceAll("\n", "<br>");
     this.consoleContainer.insertBefore(outputNode, this.consoleInputContainer);
-    this.consoleContainer.scrollTop += 1000;
+    this.consoleInputContainer.scrollIntoView({ block: "nearest" });
 
-    // UI cd command
-    if (this.CdCommandPattern.test(value)) {
-      this.consolePreInput.innerText = this.interpreter.currentDirectory + ">";
-    }
+    this.consolePreInput.innerText = this.interpreter.prompt;
   };
 
   inputArrowHandler = (event) => {
-    // up arrow
-    if (event.keyCode == "38") {
-      this.currentCommandIndex =
-        this.currentCommandIndex > 0 ? --this.currentCommandIndex : 0;
+    const isUp = event.keyCode == "38";
+    const isDown = event.keyCode == "40";
+    if ((!isUp && !isDown) || this.commandHistory.length === 0) return;
 
-      if (this.commandHistory.length > 0)
-        this.consoleInput.value = this.commandHistory[this.currentCommandIndex];
-    }
-    // down arrow
-    else if (event.keyCode == "40") {
-      this.currentCommandIndex =
-        this.currentCommandIndex < this.commandHistory.length - 1
-          ? ++this.currentCommandIndex
-          : this.commandHistory.length - 1;
-      this.consoleInput.value = this.commandHistory[this.currentCommandIndex];
-    }
+    // Default up/down would move the caret to the start of the input
+    event.preventDefault();
+
+    if (isUp)
+      this.currentCommandIndex = Math.max(0, this.currentCommandIndex - 1);
+    else
+      this.currentCommandIndex = Math.min(
+        this.commandHistory.length - 1,
+        this.currentCommandIndex + 1,
+      );
+
+    const value = this.commandHistory[this.currentCommandIndex];
+    this.consoleInput.value = value;
+    this.consoleInput.setSelectionRange(value.length, value.length);
   };
 
   init() {
@@ -369,7 +370,7 @@ export class ConsoleMeme extends Meme {
     document
       .querySelectorAll("nav a")
       .forEach((navlink) =>
-        navlink.addEventListener("click", this.closeConsole)
+        navlink.addEventListener("click", this.closeConsole),
       );
 
     this.consoleButton.addEventListener("click", (event) => {
@@ -392,9 +393,44 @@ export class ConsoleMeme extends Meme {
       await sleep(200);
 
       this.consoleInput.dispatchEvent(
-        new KeyboardEvent("keyup", { key: "Enter" })
+        new KeyboardEvent("keyup", { key: "Enter" }),
       );
     });
+  }
+}
+
+export class Shutdown extends Meme {
+  UpdateStepDelay = 120;
+
+  showUpdateScreen = async (action) => {
+    const screen = document.createElement("div");
+    screen.classList.add("update-screen");
+    document.body.appendChild(screen);
+    DOMHelpers.openFullscreen();
+
+    screen.innerHTML = `<div class="update-spinner"></div><p><span class="update-percent"></span><br>Don't turn off your computer</p>`;
+    const percentText = screen.querySelector(".update-percent");
+
+    for (let percent = 0; percent <= 100; percent++) {
+      percentText.textContent = `Working on updates ${percent}%`;
+      await sleep(this.UpdateStepDelay * (percent === 99 ? 20 : 1));
+    }
+
+    if (action === "reboot") {
+      window.location.reload();
+      return;
+    }
+
+    screen.classList.add("safe-to-turn-off");
+    screen.innerHTML = "<p>It's now safe to turn off<br>your computer.</p>";
+    screen.addEventListener("click", () => window.location.reload());
+  };
+
+  init() {
+    window.addEventListener("shutdown", () =>
+      this.showUpdateScreen("shutdown"),
+    );
+    window.addEventListener("reboot", () => this.showUpdateScreen("reboot"));
   }
 }
 
@@ -415,7 +451,7 @@ export class Rotate extends Meme {
     if (AchievementsDOM.earnAchievment("refresh"))
       AchievementsDOM.triggerAchievmentPopup(
         AchievementsDOM.AllAchievements["refresh"],
-        AchievementsDOM.DefaultMediumAchievementDelay
+        AchievementsDOM.DefaultMediumAchievementDelay,
       );
   };
 

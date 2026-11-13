@@ -27,6 +27,55 @@ export default class BotApi {
   }
 
   /**
+   * @typedef {{username: string, dateChanged: number}} UserState
+   * @typedef {{open: number, dateChanged: number, changedBy: string, inside: UserState[], planningToGo: UserState[]}} SpaceStatus
+   */
+
+  /**
+   * Returns the current space status
+   * @returns {Promise<SpaceStatus|null>}
+   */
+  static async getStatus() {
+    return fetch(`${this.APIEndpoint}/api/status`, {
+      mode: "cors",
+    })
+      .then((res) => res.json())
+      .catch(() => null);
+  }
+
+  /**
+   * @typedef {{name: string, target_value: string, collected_value: string, target_currency: string}} Fund
+   * @typedef {{fund: Fund, donations: {rank: number, username: string, combined_value: string}[]}} FundDonations
+   */
+
+  /**
+   * Returns the current costs fund with its donations
+   * @returns {Promise<FundDonations|null>}
+   */
+  static async getDonations() {
+    return fetch(`${this.APIEndpoint}/api/donations`, {
+      mode: "cors",
+    })
+      .then((res) => res.json())
+      .catch(() => null);
+  }
+
+  /**
+   * Measures a round trip to the bot API
+   * @returns {Promise<number|null>} milliseconds or null on failure
+   */
+  static async ping() {
+    const start = performance.now();
+
+    return fetch(`${this.APIEndpoint}/api/insidecount`, {
+      mode: "cors",
+      cache: "no-store",
+    })
+      .then(() => Math.round(performance.now() - start))
+      .catch(() => null);
+  }
+
+  /**
    * @typedef {{segment: string, id: number, title:string, children:WikiPageTreeNode[]}} WikiPageTreeNode
    * @typedef {{id: number, content:string}} WikiPage
    */

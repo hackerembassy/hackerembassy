@@ -6,7 +6,9 @@ class AchievementsDOM {
     ass: "Ha, Gay",
     console: "Bash-bash Baby",
     secret: "Oh myyyy",
-    refresh: "Wrong arrows"
+    refresh: "Wrong arrows",
+    vim: "I can quit anytime",
+    kill: "Agent 47"
   };
   
   static EarnedAchievements;
@@ -61,6 +63,12 @@ class AchievementsDOM {
     this.updateStatsString();
 
     return true;
+  }
+
+  static resetAchievements() {
+    this.EarnedAchievements = {};
+    localStorage.removeItem(this.AchievementStorageKey);
+    this.updateStatsString();
   }
 
   static hasAchievment(key) {

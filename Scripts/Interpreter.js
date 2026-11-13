@@ -1,4 +1,5 @@
 import BotApi from "./BotApi.js";
+import AchievementsDOM from "./AchievementsDOM.js";
 
 export default class Interpreter {
   defaultDirectory = String.raw`C:\Memes\user`;
@@ -8,6 +9,7 @@ export default class Interpreter {
   wikiForest = null;
   currentWikiNode = null;
   botCommandsLoaded = Promise.resolve();
+  commandHistory = [];
 
   constructor() {
     /**
@@ -16,66 +18,245 @@ export default class Interpreter {
     this.allCommands = [
       {
         name: "help",
+        category: "Консоль",
         expression: /^\/?(help|помогите|че делать\?+)$/i,
         handler: this.helpCommand,
         description: "Помощь",
       },
       {
         name: "calendar",
+        category: "Спейс",
         expression: /^\/?(calendar|cal|gcal\?+)$/i,
         handler: this.calendarCommand,
         description: "Календарь публичных мероприятий",
       },
       {
         name: "eval",
+        category: "Консоль",
         expression: /^eval (.*)$/i,
         handler: this.evalCommand,
         description: "[command] JavaScript код",
       },
       {
         name: "echo",
+        category: "Консоль",
         expression: /^echo (.*)$/i,
         handler: this.echoCommand,
         description: "[text] Вывести сообщение",
       },
       {
         name: "pwd",
+        category: "Файлы",
         expression: /^pwd$/i,
         handler: this.pwdCommand,
         description: "Текущая директория",
       },
       {
         name: "cd",
+        category: "Файлы",
         expression: /^cd(?: (.*))?$/i,
         handler: this.changeDirectoryCommand,
         description: "Cменить директорию",
       },
       {
         name: "cat",
+        category: "Файлы",
         expression: /^cat(?: (.*))?$/i,
         handler: this.displayCommand,
         description: "Прочесть файл",
       },
       {
+        name: "vim",
+        category: "Файлы",
+        expression: /^n?vim?(?: (.*))?$/i,
+        handler: this.vimCommand,
+        description: "[file] Редактор",
+      },
+      {
+        name: "rm",
+        category: "Файлы",
+        expression: /^(sudo )?rm(?: (.*))?$/i,
+        handler: this.rmCommand,
+        description: "Удалить файл",
+      },
+      {
         name: "ls",
+        category: "Файлы",
         expression: /^ls$/i,
         handler: this.listCommand,
         description: "Просмотреть директорию",
       },
       {
+        name: "neofetch",
+        category: "Система",
+        expression: /^neofetch$/i,
+        handler: this.neofetchCommand,
+        description: "Информация о системе",
+      },
+      {
+        name: "uptime",
+        category: "Спейс",
+        expression: /^uptime$/i,
+        handler: this.uptimeCommand,
+        description: "Сколько спейс уже открыт",
+      },
+      {
+        name: "git blame",
+        category: "Прочее",
+        expression: /^git blame(?: (.*))?$/i,
+        handler: this.gitBlameCommand,
+        description: "[file] Найти виноватого",
+      },
+      {
+        name: "history",
+        category: "Консоль",
+        expression: /^history$/i,
+        handler: this.historyCommand,
+        description: "История команд",
+      },
+      {
+        name: "coffee",
+        category: "Прочее",
+        expression: /^(make |brew )?coffee$/i,
+        handler: this.coffeeCommand,
+        description: "Сварить кофе",
+      },
+      {
+        name: "whoami",
+        category: "Система",
+        expression: /^whoami$/i,
+        handler: this.whoamiCommand,
+        description: "Кто я",
+      },
+      {
+        name: "who",
+        category: "Спейс",
+        expression: /^who$/i,
+        handler: this.whoCommand,
+        description: "Кто сейчас в спейсе",
+      },
+      {
+        name: "last",
+        category: "Спейс",
+        expression: /^last$/i,
+        handler: this.lastCommand,
+        description: "Последние входы",
+      },
+      {
+        name: "df",
+        category: "Спейс",
+        expression: /^df(?: .*)?$/i,
+        handler: this.dfCommand,
+        description: "Свободное место (в фонде аренды)",
+      },
+      {
+        name: "ping",
+        category: "Спейс",
+        expression: /^ping(?: (\S+))?$/i,
+        handler: this.pingCommand,
+        description: "[host] Проверить связь со спейсом",
+      },
+      {
+        name: "less",
+        category: "Система",
+        expression: /^less(?: .*)?$/i,
+        handler: this.effectCommand.bind(this, "less", ""),
+        description: "Поменьше",
+      },
+      {
+        name: "more",
+        category: "Система",
+        expression: /^more(?: .*)?$/i,
+        handler: this.effectCommand.bind(this, "more", ""),
+        description: "Побольше",
+      },
+      {
+        name: "free",
+        category: "Система",
+        expression: /^free(?: .*)?$/i,
+        handler: this.effectCommand.bind(this, "free", ""),
+        description: "Освободить память",
+      },
+      {
+        name: "sleep",
+        category: "Система",
+        expression: /^sleep(?: (\d+))?$/i,
+        handler: this.sleepCommand,
+        description: "[seconds] Поспать",
+      },
+      {
+        name: "man",
+        category: "Система",
+        expression: /^man(?: (\S+))?$/i,
+        handler: this.manCommand,
+        description: "[command] Мануал",
+      },
+      {
+        name: "kill",
+        category: "Система",
+        expression: /^kill(?: .*)?$/i,
+        handler: this.effectCommand.bind(this, "kill", "kill: click anything to terminate it, press Esc to stop killing\nType reboot to bring everything back"),
+        description: "Завершить процесс",
+      },
+      {
+        name: "ps",
+        category: "Система",
+        expression: /^ps(?: .*)?$/i,
+        handler: this.psCommand,
+        description: "Запущенные процессы",
+      },
+      {
+        name: "shutdown",
+        category: "Система",
+        expression: /^shutdown(?: .*)?$/i,
+        handler: this.powerCommand.bind(this, "shutdown"),
+        description: "Выключить компьютер",
+      },
+      {
+        name: "reboot",
+        category: "Система",
+        expression: /^(reboot|reload)$/i,
+        handler: this.powerCommand.bind(this, "reboot"),
+        description: "Перезагрузить компьютер",
+      },
+      {
+        name: "format",
+        expression: /^format c:?$/i,
+        handler: this.wipeCommand,
+        description: "",
+        hidden: true,
+      },
+      {
+        name: "reset",
+        category: "Консоль",
+        expression: /^reset$/i,
+        handler: this.resetAchievementsCommand,
+        description: "Сбросить найденные пасхалки",
+      },
+      {
         name: "secret",
+        category: "Прочее",
         expression: /^(secret|sudo su)$/i,
         handler: this.secretCommand,
-        description: "Не набирай эту команду!",
+        description: "...",
+      },
+      {
+        name: "sudo",
+        expression: /^sudo(?: .*)?$/i,
+        handler: this.sudoCommand,
+        description: "",
+        hidden: true,
       },
       {
         name: "clear",
+        category: "Консоль",
         expression: /^clear$/i,
         handler: this.emptyCommand,
         description: "Очистить консоль",
       },
       {
         name: "exit",
+        category: "Консоль",
         expression: /^exit$/i,
         handler: this.emptyCommand,
         description: "Выйти из консоли",
@@ -96,8 +277,9 @@ export default class Interpreter {
             name: c.command,
             expression: new RegExp(c.regex, "i"),
             description: c.description,
+            category: "Спейс",
             handler: this.botCommand.bind(this, c.command),
-          }))
+          })),
         );
       })
       .catch(console.error);
@@ -110,10 +292,26 @@ export default class Interpreter {
       .catch(console.error);
   }
 
+  static HelpCategories = ["Спейс", "Файлы", "Система", "Консоль", "Прочее"];
+
   helpCommand = async () => {
     // Typing "help" right after opening the console shouldn't miss the bot commands
     await this.botCommandsLoaded;
-    return this.allCommands.map((c) => `${c.name} ${c.description}`).join("\n");
+    const visible = this.allCommands.filter((c) => !c.hidden);
+    const categories = [...new Set(Interpreter.HelpCategories.concat(visible.map((c) => c.category ?? "Прочее")))];
+
+    const groups = categories
+      .map((category) => {
+        const commands = visible.filter((c) => (c.category ?? "Прочее") === category);
+        if (commands.length === 0) return "";
+
+        const lines = commands.map((c) => `${c.name} ${c.description}`);
+        return `<div class="help-group"><span class="neofetch-accent">[${category}]</span>\n${lines.join("\n")}</div>`;
+      })
+      .join("");
+
+    // Two columns on wide screens, see .help-columns
+    return `<div class="help-columns">${groups}</div>`;
   };
 
   calendarCommand = () => {
@@ -151,7 +349,7 @@ export default class Interpreter {
 
       for (const segment of wikiPathSegments) {
         temporaryNode = temporaryNode.children.find(
-          (node) => node.segment === segment && node.children.length > 0
+          (node) => node.segment === segment && node.children.length > 0,
         );
 
         if (!temporaryNode) return null;
@@ -163,7 +361,7 @@ export default class Interpreter {
 
   displayCommand = async (command, input) => {
     const filePath = command.expression.exec(input)[1]?.replace(".md", "");
-    if (!filePath) return "";
+    if (!filePath) return this.catArt();
 
     const fileSegments = this.toWindowsFormat(filePath).split("\\");
     const directory = fileSegments.slice(0, -1).join("\\");
@@ -177,7 +375,7 @@ export default class Interpreter {
     if (!folderNode) return NOT_FOUND;
 
     const wikiNode = folderNode.children.find(
-      (node) => node.segment === fileName
+      (node) => node.segment === fileName,
     );
 
     if (!wikiNode) return NOT_FOUND;
@@ -194,7 +392,7 @@ export default class Interpreter {
     if (!newDirectory) return "";
 
     let fullDirectory = this.getFullDirectory(
-      this.toWindowsFormat(newDirectory)
+      this.toWindowsFormat(newDirectory),
     );
 
     if (!fullDirectory.startsWith(this.defaultDirectory))
@@ -219,7 +417,7 @@ export default class Interpreter {
 
       for (const segment of wikiPathSegments) {
         this.currentWikiNode = this.currentWikiNode.children.find(
-          (node) => node.segment === segment && node.children.length > 0
+          (node) => node.segment === segment && node.children.length > 0,
         );
 
         if (!this.currentWikiNode) {
@@ -237,10 +435,352 @@ export default class Interpreter {
     if (this.currentWikiNode) {
       return this.currentWikiNode.children
         .map((node) =>
-          node.children.length > 0 ? node.segment : node.segment + ".md"
+          node.children.length > 0 ? node.segment : node.segment + ".md",
         )
         .join("&nbsp;&nbsp;");
     }
+  };
+
+  static GliderLogo = [
+    "+---+---+---+",
+    "|   | o |   |",
+    "+---+---+---+",
+    "|   |   | o |",
+    "+---+---+---+",
+    "| o | o | o |",
+    "+---+---+---+",
+  ];
+
+  formatDuration(ms) {
+    const totalMinutes = Math.max(0, Math.floor(ms / 60000));
+    const days = Math.floor(totalMinutes / 1440);
+    const hours = Math.floor((totalMinutes % 1440) / 60);
+    const minutes = String(totalMinutes % 60).padStart(2, "0");
+    const daysPart = days > 0 ? `${this.plural(days, "day")}, ` : "";
+
+    return `${daysPart}${hours}:${minutes}`;
+  }
+
+  plural(count, word) {
+    if (count === undefined) return `? ${word}s`;
+    return `${count} ${word}${count === 1 ? "" : "s"}`;
+  }
+
+  countWikiPages(nodes) {
+    return (nodes ?? []).reduce(
+      (count, node) =>
+        count +
+        (node.children.length > 0 ? this.countWikiPages(node.children) : 1),
+      0,
+    );
+  }
+
+  neofetchCommand = async () => {
+    const status = await BotApi.getStatus();
+    const accent = (text) => `<span class="neofetch-accent">${text}</span>`;
+    const stateText = status
+      ? `${status.open ? "open" : "closed"} for ${this.formatDuration(Date.now() - status.dateChanged)}`
+      : "unknown (bot is sleeping)";
+
+    const info = [
+      `${accent("guest")}@${accent("hackem")}`,
+      "------------",
+      `${accent("OS")}: Memesoft Uwuntu 10.69.420`,
+      `${accent("Host")}: Hacker Embassy, Yerevan`,
+      `${accent("Kernel")}: hackem-5.0.0-tectonic`,
+      `${accent("Uptime")}: ${stateText}`,
+      `${accent("Packages")}: ${this.countWikiPages(this.wikiForest)} (wiki)`,
+      `${accent("Shell")}: memesh`,
+      `${accent("Inside")}: ${this.plural(status?.inside.length, "hacker")}`,
+      `${accent("Going")}: ${this.plural(status?.planningToGo.length, "hacker")}`,
+      "",
+      [
+        "#2D2D2B",
+        "#C39E9E",
+        "#9EC3A4",
+        "#C3BC9E",
+        "#9EA9C3",
+        "#B99EC3",
+        "#F6F5F0",
+      ]
+        .map(
+          (color) =>
+            `<span style="background:${color}">&nbsp;&nbsp;&nbsp;</span>`,
+        )
+        .join(""),
+    ];
+
+    const logoWidth = Interpreter.GliderLogo[0].length;
+    const lines = info.map((line, i) => {
+      const logoLine = (Interpreter.GliderLogo[i] ?? "").padEnd(logoWidth, " ");
+      return `${accent(logoLine)}   ${line}`;
+    });
+
+    return `<pre class="neofetch">${lines.join("\n")}</pre>`;
+  };
+
+  uptimeCommand = async () => {
+    const status = await BotApi.getStatus();
+    if (!status) return "uptime: cannot reach the space";
+
+    const now = new Date().toLocaleTimeString("ru-RU", {
+      timeZone: "Asia/Yerevan",
+    });
+    const duration = this.formatDuration(Date.now() - status.dateChanged);
+    return `${now} ${status.open ? "up" : "down"} ${duration}, ${this.plural(status.inside.length, "user")}, load average: 0.42, 0.69, 4.20`;
+  };
+
+  gitBlameCommand = (command, input) => {
+    const file = command.expression.exec(input)[1]?.trim() || "space.ts";
+    const blamedLines = [
+      "if (space.isOnFire) {",
+      "    // TODO: put out the fire",
+      "    return; // should be fine",
+      "}",
+      "const coffee = brew(); // works on my machine",
+    ];
+    const hash = () => Math.random().toString(16).slice(2, 10);
+
+    const lines = blamedLines.map(
+      (line, i) =>
+        `${hash()} (tectonic 2026-04-01 13:37:00 +0400 ${i + 1}) ${line}`,
+    );
+
+    return `<pre class="neofetch">${file}\n${lines.join("\n")}</pre>`;
+  };
+
+  historyCommand = () => {
+    return this.commandHistory
+      .map((line, i) => `${String(i + 1).padStart(5, " ")}  ${line}`)
+      .join("\n")
+      .replaceAll(" ", "&nbsp;");
+  };
+
+  coffeeCommand = () => {
+    const teapot = [
+      "             ;,'",
+      "     _o_    ;:;'",
+      " ,-.'---`.__ ;",
+      "((j`=====',-'",
+      " `-\\     /",
+      "    `-=-'",
+    ];
+
+    return `<pre class="neofetch">${teapot.join("\n")}\n\nHTTP/1.1 418 I'm a teapot</pre>`;
+  };
+
+  rmCommand = (command, input) => {
+    const [, sudo, args] = command.expression.exec(input);
+    const target = /^-(?:rf|fr) (.+)$/i.exec(args ?? "")?.[1];
+
+    if (!target)
+      return [
+        "Usage: rm [OPTION]... [FILE]...",
+        "Remove (unlink) the FILE(s).",
+        "",
+        "  -f, --force           ignore nonexistent files, never prompt",
+        "  -r, -R, --recursive   remove directories and their contents recursively",
+      ]
+        .join("\n")
+        .replaceAll(" ", "&nbsp;");
+
+    if (!sudo)
+      return `rm: cannot remove '${target}': Permission denied\nTry: sudo rm -rf ${target}`;
+
+    return this.wipeCommand();
+  };
+
+  wipeCommand = () => {
+    // Bsod meme listens for this
+    setTimeout(() => window.dispatchEvent(new CustomEvent("bsod")), 1500);
+    return String.raw`Deleting C:\Memes\... done. Goodbye!`;
+  };
+
+  vimCommand = (command, input) => {
+    const file = command.expression.exec(input)[1]?.trim() || "untitled";
+    // Vim.js opens the editor over the console
+    window.dispatchEvent(new CustomEvent("vim", { detail: { file } }));
+    return "";
+  };
+
+  resetAchievementsCommand = () => {
+    AchievementsDOM.resetAchievements();
+    return "Пасхалки сброшены. Ищи заново!";
+  };
+
+  catArt() {
+    const cat = [
+      " /\\_/\\",
+      "( o.o )",
+      " > ^ &lt;   meow",
+    ];
+
+    return `<pre class="neofetch">${cat.join("\n")}</pre>`;
+  }
+
+  // "Sat Nov 14 01:27" in Yerevan time
+  formatUnixDate(ms) {
+    const parts = Object.fromEntries(
+      new Intl.DateTimeFormat("en-US", {
+        timeZone: "Asia/Yerevan",
+        weekday: "short",
+        month: "short",
+        day: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit",
+        hourCycle: "h23",
+      })
+        .formatToParts(new Date(ms))
+        .map((part) => [part.type, part.value])
+    );
+
+    return `${parts.weekday} ${parts.month} ${parts.day} ${parts.hour}:${parts.minute}`;
+  }
+
+  whoCommand = async () => {
+    const status = await BotApi.getStatus();
+    if (!status) return "who: cannot reach the space";
+
+    const width = Math.max(8, ...status.inside.map((person) => person.username.length));
+    const lines = status.inside
+      .toSorted((a, b) => a.dateChanged - b.dateChanged)
+      .map((person) => `${person.username.padEnd(width, " ")} space    ${this.formatUnixDate(person.dateChanged).slice(4)}`);
+
+    return `<pre class="neofetch">${lines.join("\n")}</pre>`;
+  };
+
+  lastCommand = async () => {
+    const status = await BotApi.getStatus();
+    if (!status) return "last: cannot reach the space";
+
+    const width = Math.max(8, status.changedBy.length, ...status.inside.map((person) => person.username.length));
+    const row = (user, tty, date, note) =>
+      `${user.padEnd(width, " ")} ${tty.padEnd(8, " ")} hackem   ${this.formatUnixDate(date)}   ${note}`;
+
+    const sessions = status.inside
+      .toSorted((a, b) => b.dateChanged - a.dateChanged)
+      .map((person) => row(person.username, "space", person.dateChanged, "still logged in"));
+
+    const lines = [
+      ...sessions,
+      row(status.changedBy, "door", status.dateChanged, status.open ? "opened the space" : "closed the space"),
+      "",
+      `wtmp begins ${this.formatUnixDate(status.dateChanged)}`,
+    ];
+
+    return `<pre class="neofetch">${lines.join("\n")}</pre>`;
+  };
+
+  dfCommand = async () => {
+    const data = await BotApi.getDonations();
+    if (!data) return "df: /dev/rent: cannot reach the space";
+
+    const { name, target_value, collected_value, target_currency } = data.fund;
+    const size = Math.round(Number(target_value));
+    const used = Math.round(Number(collected_value));
+    const avail = Math.max(0, size - used);
+    const percent = size > 0 ? Math.round((used / size) * 100) : 0;
+    const col = (value) => String(value).padStart(10, " ");
+
+    const lines = [
+      `Filesystem      ${col("Size")} ${col("Used")} ${col("Avail")} Use% Mounted on`,
+      `/dev/rent       ${col(size)} ${col(used)} ${col(avail)} ${`${percent}%`.padStart(4, " ")} /${name}`,
+      "",
+      `[${"#".repeat(Math.min(30, Math.round(percent * 0.3))).padEnd(30, ".")}] ${target_currency}`,
+      percent < 100 ? "Чтобы освободить место - набери donate" : "Аренда собрана, спасибо!",
+    ];
+
+    return `<pre class="neofetch">${lines.join("\n")}</pre>`;
+  };
+
+  pingCommand = async (command, input) => {
+    const ownHost = new URL(BotApi.APIEndpoint).hostname;
+    const host = command.expression.exec(input)[1] ?? ownHost;
+    const isOwnHost = [ownHost, "hackem.cc", "localhost", "127.0.0.1"].includes(host.toLowerCase());
+    const lines = [`PING ${host}: 56 data bytes`];
+    const times = [];
+
+    for (let seq = 0; seq < 4; seq++) {
+      const time = isOwnHost ? await BotApi.ping() : null;
+
+      if (time === null) {
+        lines.push(`Request timeout for icmp_seq ${seq}`);
+      } else {
+        times.push(time);
+        lines.push(`64 bytes from ${host}: icmp_seq=${seq} ttl=64 time=${time} ms`);
+      }
+    }
+
+    const loss = (((4 - times.length) / 4) * 100).toFixed(1);
+    lines.push("", `--- ${host} ping statistics ---`, `4 packets transmitted, ${times.length} packets received, ${loss}% packet loss`);
+
+    if (times.length > 0) {
+      const avg = Math.round(times.reduce((sum, t) => sum + t, 0) / times.length);
+      lines.push(`round-trip min/avg/max = ${Math.min(...times)}/${avg}/${Math.max(...times)} ms`);
+    }
+
+    return `<pre class="neofetch">${lines.join("\n")}</pre>`;
+  };
+
+  // PageEffects.js does the actual work, resolves once the effect is over
+  runEffect(name, arg) {
+    return new Promise((done) =>
+      window.dispatchEvent(new CustomEvent("page-effect", { detail: { name, arg, done } }))
+    );
+  }
+
+  effectCommand = (name, output) => {
+    this.runEffect(name);
+    return output;
+  };
+
+  sleepCommand = async (command, input) => {
+    const seconds = Math.min(10, Number(command.expression.exec(input)[1] ?? 5));
+    await this.runEffect("sleep", seconds);
+    return "";
+  };
+
+  manCommand = (command, input) => {
+    const page = command.expression.exec(input)[1];
+    this.runEffect("man");
+    return page ? `No manual entry for ${page}` : "What manual page do you want?";
+  };
+
+  whoamiCommand = () => {
+    return "guest\nХочешь стать резидентом? Набери join";
+  };
+
+  sudoCommand = () => {
+    return "guest is not in the sudoers file. This incident will be reported.";
+  };
+
+  psCommand = async () => {
+    const status = await BotApi.getStatus();
+    const elapsed = (date) => {
+      const totalSeconds = Math.max(0, Math.floor((Date.now() - date) / 1000));
+      const pad = (n) => String(n).padStart(2, "0");
+      return `${pad(Math.floor(totalSeconds / 3600))}:${pad(Math.floor(totalSeconds / 60) % 60)}:${pad(totalSeconds % 60)}`;
+    };
+    const row = (pid, tty, time, cmd) => `${String(pid).padStart(5, " ")} ${tty.padEnd(8, " ")} ${time} ${cmd}`;
+
+    const people = (status?.inside ?? []).map((person, i) =>
+      row(1337 + i * 42, "space", elapsed(person.dateChanged), person.username)
+    );
+
+    const lines = [
+      "  PID TTY          TIME CMD",
+      row(1, "pts/0", "00:00:01", "memesh"),
+      ...people,
+      row(31337, "pts/0", "00:00:00", "ps"),
+    ];
+
+    return `<pre class="neofetch">${lines.join("\n")}</pre>`;
+  };
+
+  powerCommand = (action) => {
+    // Shutdown meme listens for this
+    setTimeout(() => window.dispatchEvent(new CustomEvent(action)), 500);
+    return action === "reboot" ? "Rebooting..." : "Shutting down...";
   };
 
   secretCommand = () => {
@@ -255,6 +795,10 @@ export default class Interpreter {
    * @param {string} input
    * @returns {Promise<string>}
    */
+  get prompt() {
+    return `${this.currentDirectory}>`;
+  }
+
   eval = async (input) => {
     for (const command of this.allCommands) {
       if (command.expression.test(input))
@@ -279,7 +823,11 @@ export default class Interpreter {
       if (newDirectory.startsWith("..")) {
         fullDirectory = newDirectory.replace(
           "..",
-          this.currentDirectory.slice(0, -1).split("\\").slice(0, -1).join("\\")
+          this.currentDirectory
+            .slice(0, -1)
+            .split("\\")
+            .slice(0, -1)
+            .join("\\"),
         );
       } else if (newDirectory.startsWith(".")) {
         fullDirectory = newDirectory.replace(".", this.currentDirectory);
