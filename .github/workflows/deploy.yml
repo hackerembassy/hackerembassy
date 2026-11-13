@@ -1,10 +1,20 @@
-name: Deploy static content to Pages
+name: Site Deployment
 
 on:
   workflow_dispatch:
   push:
     branches:
       - main
+    paths-ignore:
+      - "cypress/**"
+      - "cypress.config.js"
+      - ".husky/**"
+      - "README.md"
+      - "package.json"
+      - "package-lock.json"
+      - ".nvmrc"
+      - "run.bat.sh"
+      - ".github/workflows/test.yml"
 
 permissions:
   contents: read
@@ -16,27 +26,50 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  tests:
+    uses: ./.github/workflows/test.yml
+
   deploy:
+    needs: tests
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v7
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - name: Setup Pages
-        uses: actions/configure-pages@v6
+        uses: actions/configure-pages@45bfe0192ca1faeb007ade9deae92b16b8254a0d # v6.0.0
+      - name: Collect site files
+        run: |
+          mkdir _site
+          cp -r index.html script.js styles.css favicon.ico site.webmanifest CNAME Scripts Images Fonts Sounds icons _site/
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v5
+        uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
         with:
-          # Upload entire repository
-          path: "."
+          path: _site
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v5
-      - uses: appleboy/telegram-action@214f06cfa3d3a588c1472116889437e7c6fd29b1 # v1.1.1
+        uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346 # v5.0.1
+      - uses: appleboy/telegram-action@68ac04bda0e0f4755e24649161566b4b6732cc83 # v1.1.2
         with:
           to: ${{ vars.alerts_chat_id }}
           token: ${{ secrets.NOTIFICATION_BOT_TOKEN }}
+          format: markdown
+          disable_web_page_preview: true
           message: |
-            🖥 New hackem.cc version ${{ github.sha }} was successfully deployed to github pages!
+            🖥️ New site version was successfully deployed! [${{ github.workflow }} #${{ github.run_number }}](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
+
+  notify-failure:
+    needs: [tests, deploy]
+    if: failure()
+    runs-on: ubuntu-latest
+    steps:
+      - uses: appleboy/telegram-action@68ac04bda0e0f4755e24649161566b4b6732cc83 # v1.1.2
+        with:
+          to: ${{ vars.alerts_chat_id }}
+          token: ${{ secrets.NOTIFICATION_BOT_TOKEN }}
+          format: markdown
+          disable_web_page_preview: true
+          message: |
+            ❌ Site deployment failed! [${{ github.workflow }} #${{ github.run_number }}](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
