@@ -92,7 +92,7 @@ export default class PageEffects {
           AchievementsDOM.DefaultShortAchievementDelay
         );
 
-      target
+      void target
         .animate(
           [
             { transform: "scale(1)", opacity: 1, filter: "blur(0)" },

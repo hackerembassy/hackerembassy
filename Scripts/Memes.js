@@ -301,6 +301,24 @@ export class ConsoleMeme extends Meme {
     DOMHelpers.hideElement(this.consoleContainer);
   };
 
+  // Shows the running command with a spinner in place of the input until it finishes
+  showBusy(value) {
+    const running = document.createElement("span");
+    running.classList.add("console-busy");
+    running.dataset.cy = "console-busy";
+    running.textContent = value;
+    this.consoleInput.after(running);
+    this.consoleInput.hidden = true;
+
+    return {
+      done: () => {
+        running.remove();
+        this.consoleInput.hidden = false;
+        this.consoleInput.focus({ preventScroll: true });
+      },
+    };
+  }
+
   inputEnterHandler = async (event) => {
     if (event.key !== "Enter" || this.locked) return;
 
@@ -309,7 +327,9 @@ export class ConsoleMeme extends Meme {
     this.currentCommandIndex = this.commandHistory.length;
 
     this.locked = true;
+    const busy = this.showBusy(value);
     const output = value ? await this.interpreter.eval(value.trim()) : "";
+    busy.done();
 
     this.consoleInput.value = "";
     this.locked = false;

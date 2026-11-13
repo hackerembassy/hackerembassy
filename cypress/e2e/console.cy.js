@@ -115,10 +115,10 @@ describe("Console page", () => {
     cy.getCy("console-input").type("vim{enter}");
     cy.get(".vim").should("be.visible");
 
-    cy.get(".vim-input").type(":q{enter}", { force: true });
+    cy.get(".vim-input").type(":q{enter}");
     cy.get(".vim-status").should("contain.text", "E37");
 
-    cy.get(".vim-input").type(":q!{enter}", { force: true });
+    cy.get(".vim-input").type(":q!{enter}");
     cy.get(".vim").should("not.exist");
   });
 
@@ -135,7 +135,7 @@ describe("Console page", () => {
       });
     cy.getCy("console-output").first().should("have.css", "visibility", "hidden");
 
-    cy.getCy("console-input").type("{esc}", { force: true });
+    cy.document().trigger("keydown", { key: "Escape" });
     cy.get(".effect-kill").should("not.exist");
   });
 
@@ -151,5 +151,16 @@ describe("Console page", () => {
     cy.getCy("console-input").type("ps{enter}");
 
     cy.getCy("console-output").should("contain.text", "PID").and("contain.text", "tectonic");
+  });
+
+  it("shows a spinner while a slow command runs", () => {
+    cy.intercept("GET", `${BotApiEndpoint}/api/printers`, { delay: 1000, body: [{ name: "anette", state: "standby" }] });
+
+    cy.getCy("console-input").type("lpq{enter}");
+
+    cy.getCy("console-busy").should("be.visible").and("contain.text", "lpq");
+    cy.getCy("console-busy").should("not.exist");
+    cy.getCy("console-output").should("contain.text", "anette");
+    cy.getCy("console-input").should("have.focus");
   });
 });

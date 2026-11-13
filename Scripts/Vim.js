@@ -43,7 +43,6 @@ export default class Vim {
     this.input = this.root.querySelector(".vim-input");
     this.input.addEventListener("keydown", this.keydownHandler);
     this.input.addEventListener("input", this.inputHandler);
-    this.root.addEventListener("click", () => this.input.focus({ preventScroll: true }));
 
     this.render();
     this.input.focus();
