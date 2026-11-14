@@ -3,7 +3,7 @@
 // and starts downloading the translation right away instead of waiting for i18next from the CDN.
 // Detection mirrors the i18next detector order in Scripts/I18n.js: ?lng= → saved choice → browser languages.
 (() => {
-  const SupportedLanguages = ["en", "ru", "hy"];
+  const SupportedLanguages = new Set(["en", "ru", "hy"]);
   const DefaultLanguage = "en";
   const QueryParameter = "lng";
   const StorageKey = "i18nextLng";
@@ -29,7 +29,7 @@
   const language =
     candidates
       .map((candidate) => candidate?.toLowerCase().split("-")[0])
-      .find((candidate) => SupportedLanguages.includes(candidate)) ?? DefaultLanguage;
+      .find((candidate) => SupportedLanguages.has(candidate)) ?? DefaultLanguage;
 
   // The markup is already English
   if (language === DefaultLanguage) return;

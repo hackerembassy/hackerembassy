@@ -64,7 +64,8 @@ class NavOverflowDOM {
     };
     new ResizeObserver(scheduleUpdate).observe(this.list.parentElement);
     I18n.onChange(scheduleUpdate);
-    document.fonts?.ready.then(scheduleUpdate);
+    // fonts.ready never rejects
+    void document.fonts?.ready.then(scheduleUpdate);
     this.update();
   }
 }

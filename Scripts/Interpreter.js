@@ -247,9 +247,10 @@ export default class Interpreter {
    * Loads bot commands and the wiki tree from the bot API in the background
    */
   loadRemoteData() {
-    // The bot translates its command descriptions, so wait for the language and reload when it changes
+    // The bot translates its command descriptions, so wait for the language and reload when it changes.
+    // I18n.ready never rejects
     this.botCommandsLoaded = I18n.ready.then(() => this.loadBotCommands());
-    I18n.ready.then(() =>
+    void I18n.ready.then(() =>
       I18n.onChange((language) => {
         if (language !== this.botCommandsLanguage) this.botCommandsLoaded = this.loadBotCommands();
       }),

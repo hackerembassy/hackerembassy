@@ -20,10 +20,10 @@ class LanguageDOM {
       });
     }
 
-    // Nothing is marked until the language is known, so a Russian visitor doesn't see [EN] jump to [RU].
-    // Brackets keep their space either way, so the row doesn't move
+    // Nothing is marked until the language is known, so a Russian visitor doesn't see EN jump to RU
     I18n.onChange((language) => this.markActive(language));
-    I18n.ready.then(() => {
+    // I18n.ready never rejects
+    void I18n.ready.then(() => {
       // Without i18next the page stays English
       if (!I18n.isReady) this.markActive(I18n.language);
     });
