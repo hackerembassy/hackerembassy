@@ -714,6 +714,12 @@ ul.indicators {
   overflow: hidden auto;
 }
 
+/* iOS Safari scrolls the page when the keyboard opens, and for a moment the console can lag behind the
+   visible area; hiding the page (layout kept, so the scroll position survives) leaves nothing to show */
+html.console-open main {
+  visibility: hidden;
+}
+
 #console-input-container {
   display: flex;
   /* A long path drops the input to its own line instead of squeezing the prompt */

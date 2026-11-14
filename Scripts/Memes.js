@@ -287,7 +287,10 @@ export class ConsoleMeme extends Meme {
     this.consolePreInput.innerText =
       (this.interpreter.currentDirectory ?? this.DefaultDirectory) + ">";
     DOMHelpers.displayElement(this.consoleContainer);
-    this.consoleInput.focus();
+    document.documentElement.classList.add("console-open");
+    // preventScroll: a plain focus() scrolls the page under the fixed console, and on iOS the console
+    // then visibly jumps down and back up while it catches up with the keyboard
+    this.consoleInput.focus({ preventScroll: true });
 
     if (AchievementsDOM.earnAchievment("console"))
       AchievementsDOM.triggerAchievmentPopup(
@@ -304,6 +307,7 @@ export class ConsoleMeme extends Meme {
 
   closeConsole = () => {
     DOMHelpers.hideElement(this.consoleContainer);
+    document.documentElement.classList.remove("console-open");
   };
 
   // Shows the running command with a spinner in place of the input until it finishes
@@ -364,7 +368,7 @@ export class ConsoleMeme extends Meme {
     outputNode.dataset.cy = "console-output";
     outputNode.innerHTML = output.replaceAll("\n", "<br>");
     this.consoleContainer.insertBefore(outputNode, this.consoleInputContainer);
-    this.consoleInputContainer.scrollIntoView({ block: "nearest" });
+    this.revealInput();
 
     this.consolePreInput.innerText = this.interpreter.prompt;
   };
@@ -390,6 +394,16 @@ export class ConsoleMeme extends Meme {
     this.consoleInput.setSelectionRange(value.length, value.length);
   };
 
+  // Scrolls only the console (scrollIntoView() would also scroll the page) so the input sits a little above
+  // the bottom edge, which on iOS is under the keyboard's floating bars
+  revealInput() {
+    const container = this.consoleContainer;
+    const input = this.consoleInputContainer;
+    const gap = 40;
+    const target = input.offsetTop + input.offsetHeight + gap - container.clientHeight;
+    if (container.scrollTop < target) container.scrollTop = target;
+  }
+
   // Mobile keyboards shrink the visual viewport but not 100vh, so the console follows the visible area
   trackVisualViewport() {
     const viewport = window.visualViewport;
@@ -400,8 +414,7 @@ export class ConsoleMeme extends Meme {
       root.setProperty("--viewport-height", `${viewport.height}px`);
       root.setProperty("--viewport-top", `${viewport.offsetTop}px`);
 
-      if (document.activeElement === this.consoleInput)
-        this.consoleInputContainer.scrollIntoView({ block: "nearest" });
+      if (document.activeElement === this.consoleInput) this.revealInput();
     };
 
     viewport.addEventListener("resize", update);
