@@ -4,7 +4,8 @@ describe("Console page", () => {
   beforeEach(() => {
     cy.visit("/");
 
-    cy.intercept("GET", `${BotApiEndpoint}/text`).as("getCommands");
+    // The site adds ?lang= to bot requests
+    cy.intercept({ method: "GET", url: `${BotApiEndpoint}/text?*` }).as("getCommands");
 
     cy.getCy("console-button").click();
   });
@@ -89,10 +90,12 @@ describe("Console page", () => {
     cy.getCy("console-input").type("help{enter}");
 
     cy.getCy("console-output")
-      .should("contain.text", "[Файлы]")
+      .should("contain.text", "[Files]")
       .should("contain.text", "vim")
       .should("contain.text", "kill")
-      .should("not.contain.text", "format");
+      // English descriptions contain "information", so match the hidden command as a whole word
+      .invoke("text")
+      .should("not.match", /\bformat\b/);
   });
 
   it("history recall puts the caret at the end and skips empty input", () => {

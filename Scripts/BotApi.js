@@ -1,3 +1,5 @@
+import I18n from "./I18n.js";
+
 export default class BotApi {
   static APIEndpoint = "https://gateway.hackem.cc";
 
@@ -7,7 +9,7 @@ export default class BotApi {
    * @returns {Promise<string>}
    */
   static async sendTextCommand(command) {
-    return fetch(`${this.APIEndpoint}/text/${command}`, {
+    return fetch(`${this.APIEndpoint}/text/${command}?lang=${I18n.language}`, {
       mode: "cors",
     })
       .then((res) => res.text())
@@ -19,7 +21,10 @@ export default class BotApi {
    * @returns {Promise<{command: string, description:string, regex: string}[]}>}
    */
   static async getAvailableCommands() {
-    return fetch(`${this.APIEndpoint}/text`, {
+    // The console can open before the language is known
+    await I18n.ready;
+
+    return fetch(`${this.APIEndpoint}/text?lang=${I18n.language}`, {
       mode: "cors",
     })
       .then((res) => res.json())

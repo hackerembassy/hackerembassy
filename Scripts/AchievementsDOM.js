@@ -1,3 +1,5 @@
+import I18n from "./I18n.js";
+
 class AchievementsDOM {
   static AllAchievements = {
     bsod: "Oh no :O",
@@ -82,7 +84,10 @@ class AchievementsDOM {
     if (!this.EarnedAchievements)
         this.loadEarnedAchievements();
 
-    this.AchievementsStatsPlaceholder.innerHTML = `Найдено пасхалок: ${Object.keys(this.EarnedAchievements).length} из ${Object.keys(this.AllAchievements).length - 1}`;
+    this.AchievementsStatsPlaceholder.textContent = I18n.t("footer.stats", {
+      found: Object.keys(this.EarnedAchievements).length,
+      total: Object.keys(this.AllAchievements).length - 1,
+    });
   }
 }
 

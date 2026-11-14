@@ -1,4 +1,5 @@
 import TyperDOM from "./TyperDOM.js";
+import I18n from "./I18n.js";
 
 class ScrollDOM {
   static indicatorList = document.querySelector(".indicators");
@@ -14,13 +15,19 @@ class ScrollDOM {
       item.className = "indicator";
       const button = document.createElement("button");
       button.className = "indicator-button";
-      button.setAttribute("aria-label", `Scroll to item #${i + 1}`);
       if ("secret" in slide.dataset) button.id = "scroll-indicator-secret";
       item.append(button);
       this.indicatorList.append(item);
       return button;
     });
+    this.updateLabels();
     this.setAriaPressed(0);
+  }
+
+  static updateLabels() {
+    this.indicators.forEach((indicator, i) => {
+      indicator.setAttribute("aria-label", I18n.t("carousel.scrollTo", { number: i + 1 }) || `#${i + 1}`);
+    });
   }
 
   static setAriaPressed(index) {
