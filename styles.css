@@ -92,6 +92,15 @@ section a {
   white-space: pre;
 }
 
+/* Scrolls sideways (ps on phones) without showing a scrollbar */
+.no-scrollbar {
+  scrollbar-width: none;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
 .neofetch-accent {
   color: var(--accent-color);
 }
@@ -718,6 +727,12 @@ ul.indicators {
    visible area; hiding the page (layout kept, so the scroll position survives) leaves nothing to show */
 html.console-open main {
   visibility: hidden;
+}
+
+/* Nothing to scroll behind the console; the gutter keeps the scrollbar's space, so nothing shifts */
+html.console-open {
+  overflow: hidden;
+  scrollbar-gutter: stable;
 }
 
 #console-input-container {

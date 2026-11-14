@@ -834,7 +834,7 @@ export default class Interpreter {
       row(31337, "pts/0", "00:00:00", "ps"),
     ];
 
-    return `<pre class="neofetch">${lines.join("\n")}</pre>`;
+    return `<pre class="neofetch no-scrollbar">${lines.join("\n")}</pre>`;
   };
 
   powerCommand = (action) => {
