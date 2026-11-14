@@ -312,7 +312,7 @@ export default class Interpreter {
         const commands = visible.filter((c) => (c.category ?? "misc") === category);
         if (commands.length === 0) return "";
 
-        const lines = commands.map((c) => `${c.name} ${this.describe(c)}`);
+        const lines = commands.map((c) => `${c.name} - ${this.describe(c)}`);
         const title = I18n.t(`console.categories.${category}`);
         return `<div class="help-group"><span class="neofetch-accent">[${title}]</span>\n${lines.join("\n")}</div>`;
       })

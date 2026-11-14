@@ -72,13 +72,14 @@ describe("Languages", () => {
 
     cy.getCy("console-button").click();
     cy.getCy("console-input").type("help{enter}");
-    cy.getCy("console-output").should("contain.text", "join How to join us");
+    cy.getCy("console-output").should("contain.text", "join - How to join us");
 
     cy.getCy("lang-list").find('a[data-lng="ru"]').click();
     cy.get("html").should("have.attr", "lang", "ru");
-    cy.getCy("console-input").type("clear{enter}");
+    // The English output is cleared on the switch
+    cy.getCy("console-output").should("not.exist");
     cy.getCy("console-input").type("help{enter}");
-    cy.getCy("console-output").should("contain.text", "join Как присоединиться к нам");
+    cy.getCy("console-output").should("contain.text", "join - Как присоединиться к нам");
   });
 
   it("hides the English text until a Russian page is translated", () => {
@@ -143,7 +144,7 @@ describe("Languages", () => {
     cy.getCy("console-input").type("whoami{enter}");
     cy.getCy("console-output").should("contain.text", "Type join");
     cy.getCy("console-input").type("help{enter}");
-    cy.getCy("console-output").should("contain.text", "[Files]").and("contain.text", "join How to join us");
+    cy.getCy("console-output").should("contain.text", "[Files]").and("contain.text", "join - How to join us");
 
     // The switch falls back to a plain ?lng=ru link; the reloaded page has i18next again and applies it
     cy.getCy("lang-list").contains("a", "RU").click();

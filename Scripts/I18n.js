@@ -67,6 +67,13 @@ class I18n {
     } catch (error) {
       console.error(error);
     } finally {
+      // Armenian shows up in the system font and then switches to the web font; let the page appear in it
+      // right away (it is preloaded by LanguageBoot.js, the wait is capped so a slow font can't hide the page)
+      if (this.language === "hy" && document.fonts)
+        await Promise.race([
+          document.fonts.load('16px "Iosevka Charon Mono"', "Ա").catch(() => {}),
+          new Promise((resolve) => setTimeout(resolve, 1500)),
+        ]);
       // Set by Scripts/LanguageBoot.js while ru/hy text is on its way
       document.documentElement.classList.remove("i18n-pending");
       this.#resolveReady();

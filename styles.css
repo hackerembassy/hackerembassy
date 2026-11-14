@@ -8,6 +8,7 @@
   font-display: swap;
 }
 
+/* Armenian only (Courier New has none); Scripts/LanguageBoot.js preloads this regular weight by the same URL */
 @font-face {
   font-family: 'Iosevka Charon Mono';
   font-style: normal;
@@ -15,6 +16,8 @@
   font-display: swap;
   src: url(https://fonts.gstatic.com/s/iosevkacharonmono/v1/ZXu3e00asreaO3wM1TYAhasEUi4e1q2vvUBVda3Nets6MUkTLg.woff2) format('woff2');
   unicode-range: U+0530-058F, U+FB13-FB17;
+  /* A bit smaller than Courier, so Armenian looks lighter next to it */
+  size-adjust: 85%;
 }
 @font-face {
   font-family: 'Iosevka Charon Mono';
@@ -23,6 +26,8 @@
   font-display: swap;
   src: url(https://fonts.gstatic.com/s/iosevkacharonmono/v1/ZXu3e00asreaO3wM1TYAhasEUi4e1q2vvRhUda3Nets6MUkTLg.woff2) format('woff2');
   unicode-range: U+0530-058F, U+FB13-FB17;
+  /* A bit smaller than Courier, so Armenian looks lighter next to it */
+  size-adjust: 85%;
 }
 
 :root {
@@ -184,6 +189,11 @@ html:lang(hy) body {
 /* Iosevka letters are narrower than Courier New (0.5em vs 0.6em): space Armenian pages out to match */
 html:lang(hy) body {
   letter-spacing: 0.1em;
+}
+
+/* The console is mostly Latin (commands, paths, tables), the spacing only spread it out there */
+html:lang(hy) #console {
+  letter-spacing: normal;
 }
 
 body {
@@ -926,6 +936,17 @@ pre {
   nav {
     font-size: 0.9rem;
     top: 29px;
+  }
+
+  /* Russian nav words are long, a slightly smaller font keeps one more link on the row */
+  html:lang(ru) nav {
+    font-size: 0.8rem;
+  }
+
+  /* Line height in rem (0.9rem font x 1.15), so the bar is equally tall whatever font size a language uses */
+  nav a,
+  #nav-more-button {
+    line-height: 1.035rem;
   }
 
   nav li {

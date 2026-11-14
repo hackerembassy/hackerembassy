@@ -46,4 +46,17 @@
     href: `/locales/${language}/translation.json`,
   });
   document.head.append(preload);
+
+  // Armenian text uses a web font (Courier New has no Armenian); fetch it now instead of after the first paint.
+  // Must be the same URL as the regular weight in the @font-face rules of styles.css
+  if (language === "hy")
+    document.head.append(
+      Object.assign(document.createElement("link"), {
+        rel: "preload",
+        as: "font",
+        type: "font/woff2",
+        crossOrigin: "anonymous",
+        href: "https://fonts.gstatic.com/s/iosevkacharonmono/v1/ZXu3e00asreaO3wM1TYAhasEUi4e1q2vvUBVda3Nets6MUkTLg.woff2",
+      }),
+    );
 })();

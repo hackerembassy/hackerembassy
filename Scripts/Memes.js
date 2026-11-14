@@ -427,8 +427,18 @@ export class ConsoleMeme extends Meme {
     update();
   }
 
+  // Output already printed stays in the old language, so a language switch starts with a clean console
+  clearOnLanguageChange() {
+    let language = I18n.isReady ? I18n.language : null;
+    I18n.onChange((next) => {
+      if (language && next !== language) this.clearConsole();
+      language = next;
+    });
+  }
+
   init() {
     this.trackVisualViewport();
+    this.clearOnLanguageChange();
     document.body.addEventListener("keydown", this.CtrlCHandler);
     document
       // Nav links and the window title (back to the top) take you to the page, so they close the console
