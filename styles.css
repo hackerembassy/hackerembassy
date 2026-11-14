@@ -403,8 +403,24 @@ html.i18n-pending nav {
   color: var(--secondary-color);
 }
 
-#topbar a:hover {
-  color: gray;
+/* Only on real hover: phones keep :hover on the tapped title until the next tap */
+@media (hover: hover) {
+  #topbar a:hover {
+    color: gray;
+  }
+}
+
+/* On tap the title just fades a little: no blue flash, no focus ring (keyboard focus keeps the ring) */
+#topbar > a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+#topbar > a:focus:not(:focus-visible) {
+  outline: none;
+}
+
+#topbar > a:active {
+  opacity: 0.6;
 }
 
 /* Конец стилей nav */

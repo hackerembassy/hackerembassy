@@ -15,6 +15,9 @@ AchievementsDOM.updateStatsString();
 LanguageDOM.init();
 NavOverflowDOM.init();
 
+// iOS Safari applies :active (the tap feedback on links) only when a touchstart listener exists
+document.addEventListener("touchstart", () => {}, { passive: true });
+
 I18n.onChange(() => {
   TyperDOM.StopTypingAll();
   TyperDOM.StartTypingAll();

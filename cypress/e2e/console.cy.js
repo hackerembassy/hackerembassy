@@ -86,6 +86,12 @@ describe("Console page", () => {
     cy.getCy("console-wrapper").should("not.be.visible");
   });
 
+  it("clicking the window title closes the console", () => {
+    cy.get("#topbar > a").click();
+
+    cy.getCy("console-wrapper").should("not.be.visible");
+  });
+
   it("help groups commands by category and hides easter eggs", () => {
     cy.getCy("console-input").type("help{enter}");
 

@@ -428,7 +428,8 @@ export class ConsoleMeme extends Meme {
     this.trackVisualViewport();
     document.body.addEventListener("keydown", this.CtrlCHandler);
     document
-      .querySelectorAll("#nav-list a")
+      // Nav links and the window title (back to the top) take you to the page, so they close the console
+      .querySelectorAll("#nav-list a, #topbar > a")
       .forEach((navlink) =>
         navlink.addEventListener("click", this.closeConsole),
       );
