@@ -181,6 +181,8 @@ body {
   background-color: var(--background-color);
   color: var(--secondary-color);
   font-family: 'Courier New', 'Iosevka Charon Mono', Courier, monospace;
+  /* Paths, URLs and long words break instead of making narrow screens scroll sideways */
+  overflow-wrap: break-word;
 }
 
 /* nav styles */
@@ -352,10 +354,17 @@ html.i18n-pending nav {
   /* Language switch | title | window buttons; equal side columns keep the title centered.
      The side padding lines the contents up with the nav link text below */
   display: grid;
-  grid-template-columns: 1fr auto 1fr;
+  /* The title may shrink (with an ellipsis) so very narrow screens don't scroll sideways */
+  grid-template-columns: 1fr minmax(0, auto) 1fr;
   align-items: center;
   box-sizing: border-box;
   padding: 0 20px;
+}
+
+#topbar > a {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 #topbuttons {
@@ -499,6 +508,8 @@ ul.scroll {
 /* The hidden full caption shares the grid cell, so the box is sized for the finished text and the photo below never moves while it types */
 .scroll-name {
   display: grid;
+  /* Fixed to the section width, so a long word in a caption wraps instead of widening the page */
+  grid-template-columns: minmax(0, 1fr);
   margin: 0 0 20px;
 }
 
@@ -721,7 +732,7 @@ pre {
   display: inline-block;
   /* Keep "C:\Memes\user>" on one line; only break inside it if it's wider than the whole row */
   max-width: 100%;
-  overflow-wrap: anywhere;
+  overflow-wrap: break-word;
 }
 
 .console-busy::after {
@@ -744,8 +755,9 @@ pre {
 #console-input,
 #console-input:focus-visible,
 #console-input:active {
-  flex: 1 1 8ch;
-  min-width: 8ch;
+  /* Stays next to the prompt while there is room for a couple of characters */
+  flex: 1 1 0;
+  min-width: 2ch;
   padding: 0;
   padding-top: 5px;
   background: none;
