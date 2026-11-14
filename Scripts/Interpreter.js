@@ -1,5 +1,6 @@
 import BotApi from "./BotApi.js";
 import AchievementsDOM from "./AchievementsDOM.js";
+import I18n from "./I18n.js";
 
 export default class Interpreter {
   defaultDirectory = String.raw`C:\Memes\user`;
@@ -13,267 +14,231 @@ export default class Interpreter {
 
   constructor() {
     /**
-     * @type {{name: string, expression: RegExp, handler: function, description: string}[]}
+     * Help descriptions live in locales under console.commands.<name>, bot commands bring their own
+     * @type {{name: string, category?: string, expression: RegExp, handler: function, description?: string, hidden?: boolean}[]}
      */
     this.allCommands = [
       {
         name: "help",
-        category: "Консоль",
+        category: "console",
         expression: /^\/?(help|помогите|че делать\?+)$/i,
         handler: this.helpCommand,
-        description: "Помощь",
       },
       {
         name: "calendar",
-        category: "Спейс",
+        category: "space",
         expression: /^\/?(calendar|cal|gcal\?+)$/i,
         handler: this.calendarCommand,
-        description: "Календарь публичных мероприятий",
       },
       {
         name: "eval",
-        category: "Консоль",
+        category: "console",
         expression: /^eval (.*)$/i,
         handler: this.evalCommand,
-        description: "[command] JavaScript код",
       },
       {
         name: "echo",
-        category: "Консоль",
+        category: "console",
         expression: /^echo (.*)$/i,
         handler: this.echoCommand,
-        description: "[text] Вывести сообщение",
       },
       {
         name: "pwd",
-        category: "Файлы",
+        category: "files",
         expression: /^pwd$/i,
         handler: this.pwdCommand,
-        description: "Текущая директория",
       },
       {
         name: "cd",
-        category: "Файлы",
+        category: "files",
         expression: /^cd(?: (.*))?$/i,
         handler: this.changeDirectoryCommand,
-        description: "Cменить директорию",
       },
       {
         name: "cat",
-        category: "Файлы",
+        category: "files",
         expression: /^cat(?: (.*))?$/i,
         handler: this.displayCommand,
-        description: "Прочесть файл",
       },
       {
         name: "vim",
-        category: "Файлы",
+        category: "files",
         expression: /^n?vim?(?: (.*))?$/i,
         handler: this.vimCommand,
-        description: "[file] Редактор",
       },
       {
         name: "rm",
-        category: "Файлы",
+        category: "files",
         expression: /^(sudo )?rm(?: (.*))?$/i,
         handler: this.rmCommand,
-        description: "Удалить файл",
       },
       {
         name: "ls",
-        category: "Файлы",
+        category: "files",
         expression: /^ls$/i,
         handler: this.listCommand,
-        description: "Просмотреть директорию",
       },
       {
         name: "neofetch",
-        category: "Система",
+        category: "system",
         expression: /^neofetch$/i,
         handler: this.neofetchCommand,
-        description: "Информация о системе",
       },
       {
         name: "uptime",
-        category: "Спейс",
+        category: "space",
         expression: /^uptime$/i,
         handler: this.uptimeCommand,
-        description: "Сколько спейс уже открыт",
       },
       {
         name: "git blame",
-        category: "Прочее",
+        category: "misc",
         expression: /^git blame(?: (.*))?$/i,
         handler: this.gitBlameCommand,
-        description: "[file] Найти виноватого",
       },
       {
         name: "history",
-        category: "Консоль",
+        category: "console",
         expression: /^history$/i,
         handler: this.historyCommand,
-        description: "История команд",
       },
       {
         name: "coffee",
-        category: "Прочее",
+        category: "misc",
         expression: /^(make |brew )?coffee$/i,
         handler: this.coffeeCommand,
-        description: "Сварить кофе",
       },
       {
         name: "whoami",
-        category: "Система",
+        category: "system",
         expression: /^whoami$/i,
         handler: this.whoamiCommand,
-        description: "Кто я",
       },
       {
         name: "who",
-        category: "Спейс",
+        category: "space",
         expression: /^who$/i,
         handler: this.whoCommand,
-        description: "Кто сейчас в спейсе",
       },
       {
         name: "last",
-        category: "Спейс",
+        category: "space",
         expression: /^last$/i,
         handler: this.lastCommand,
-        description: "Последние входы",
       },
       {
         name: "df",
-        category: "Спейс",
+        category: "space",
         expression: /^df(?: .*)?$/i,
         handler: this.dfCommand,
-        description: "Свободное место (в фонде аренды)",
       },
       {
         name: "ping",
-        category: "Спейс",
+        category: "space",
         expression: /^ping(?: (\S+))?$/i,
         handler: this.pingCommand,
-        description: "[host] Проверить связь со спейсом",
       },
       {
         name: "less",
-        category: "Система",
+        category: "system",
         expression: /^less(?: .*)?$/i,
         handler: this.effectCommand.bind(this, "less", ""),
-        description: "Поменьше",
       },
       {
         name: "more",
-        category: "Система",
+        category: "system",
         expression: /^more(?: .*)?$/i,
         handler: this.effectCommand.bind(this, "more", ""),
-        description: "Побольше",
       },
       {
         name: "free",
-        category: "Система",
+        category: "system",
         expression: /^free(?: .*)?$/i,
         handler: this.effectCommand.bind(this, "free", ""),
-        description: "Освободить память",
       },
       {
         name: "sleep",
-        category: "Система",
+        category: "system",
         expression: /^sleep(?: (\d+))?$/i,
         handler: this.sleepCommand,
-        description: "[seconds] Поспать",
       },
       {
         name: "man",
-        category: "Система",
+        category: "system",
         expression: /^man(?: (\S+))?$/i,
         handler: this.manCommand,
-        description: "[command] Мануал",
       },
       {
         name: "kill",
-        category: "Система",
+        category: "system",
         expression: /^kill(?: .*)?$/i,
         handler: this.effectCommand.bind(this, "kill", "kill: click anything to terminate it, press Esc to stop killing\nType reboot to bring everything back"),
-        description: "Завершить процесс",
       },
       {
         name: "sensors",
-        category: "Спейс",
+        category: "space",
         expression: /^sensors(?: .*)?$/i,
         handler: this.sensorsCommand,
-        description: "Температура в спейсе",
       },
       {
         name: "lpstat",
-        category: "Спейс",
+        category: "space",
         expression: /^(lpstat|lpq)(?: .*)?$/i,
         handler: this.lpstatCommand,
-        description: "3D принтеры",
       },
       {
         name: "ps",
-        category: "Система",
+        category: "system",
         expression: /^ps(?: .*)?$/i,
         handler: this.psCommand,
-        description: "Запущенные процессы",
       },
       {
         name: "shutdown",
-        category: "Система",
+        category: "system",
         expression: /^shutdown(?: .*)?$/i,
         handler: this.powerCommand.bind(this, "shutdown"),
-        description: "Выключить компьютер",
       },
       {
         name: "reboot",
-        category: "Система",
+        category: "system",
         expression: /^(reboot|reload)$/i,
         handler: this.powerCommand.bind(this, "reboot"),
-        description: "Перезагрузить компьютер",
       },
       {
         name: "format",
         expression: /^format c:?$/i,
         handler: this.wipeCommand,
-        description: "",
         hidden: true,
       },
       {
         name: "reset",
-        category: "Консоль",
+        category: "console",
         expression: /^reset$/i,
         handler: this.resetAchievementsCommand,
-        description: "Сбросить найденные пасхалки",
       },
       {
         name: "secret",
-        category: "Прочее",
+        category: "misc",
         expression: /^(secret|sudo su)$/i,
         handler: this.secretCommand,
-        description: "...",
       },
       {
         name: "sudo",
         expression: /^sudo(?: .*)?$/i,
         handler: this.sudoCommand,
-        description: "",
         hidden: true,
       },
       {
         name: "clear",
-        category: "Консоль",
+        category: "console",
         expression: /^clear$/i,
         handler: this.emptyCommand,
-        description: "Очистить консоль",
       },
       {
         name: "exit",
-        category: "Консоль",
+        category: "console",
         expression: /^exit$/i,
         handler: this.emptyCommand,
-        description: "Выйти из консоли",
       },
     ];
   }
@@ -282,21 +247,14 @@ export default class Interpreter {
    * Loads bot commands and the wiki tree from the bot API in the background
    */
   loadRemoteData() {
-    this.botCommandsLoaded = BotApi.getAvailableCommands()
-      .then((commands) => {
-        this.allCommands.splice(
-          1,
-          0,
-          ...commands.map((c) => ({
-            name: c.command,
-            expression: new RegExp(c.regex, "i"),
-            description: c.description,
-            category: "Спейс",
-            handler: this.botCommand.bind(this, c.command),
-          })),
-        );
-      })
-      .catch(console.error);
+    // The bot translates its command descriptions, so wait for the language and reload when it changes.
+    // I18n.ready never rejects
+    this.botCommandsLoaded = I18n.ready.then(() => this.loadBotCommands());
+    void I18n.ready.then(() =>
+      I18n.onChange((language) => {
+        if (language !== this.botCommandsLanguage) this.botCommandsLoaded = this.loadBotCommands();
+      }),
+    );
 
     BotApi.getWikiTree()
       .then((forest) => {
@@ -306,21 +264,57 @@ export default class Interpreter {
       .catch(console.error);
   }
 
-  static HelpCategories = ["Спейс", "Файлы", "Система", "Консоль", "Прочее"];
+  /**
+   * Replaces bot commands with the ones from the bot API, described in the current language
+   */
+  async loadBotCommands() {
+    const language = I18n.language;
+    this.botCommandsLanguage = language;
+
+    try {
+      const commands = await BotApi.getAvailableCommands();
+      // A newer language switch already started another load
+      if (language !== this.botCommandsLanguage) return;
+
+      this.allCommands = this.allCommands.filter((c) => !c.remote);
+      this.allCommands.splice(
+        1,
+        0,
+        ...commands.map((c) => ({
+          name: c.command,
+          expression: new RegExp(c.regex, "i"),
+          description: c.description,
+          category: "space",
+          remote: true,
+          handler: this.botCommand.bind(this, c.command),
+        })),
+      );
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  static HelpCategories = ["space", "files", "system", "console", "misc"];
+
+  // Bot commands come already translated, local ones are described in our locales
+  describe(command) {
+    return command.description ?? I18n.t(`console.commands.${command.name}`);
+  }
 
   helpCommand = async () => {
-    // Typing "help" right after opening the console shouldn't miss the bot commands
-    await this.botCommandsLoaded;
+    // Typing "help" right after opening the console shouldn't miss the bot commands or translations
+    await Promise.all([this.botCommandsLoaded, I18n.ready]);
     const visible = this.allCommands.filter((c) => !c.hidden);
-    const categories = [...new Set(Interpreter.HelpCategories.concat(visible.map((c) => c.category ?? "Прочее")))];
+    const categories = [...new Set(Interpreter.HelpCategories.concat(visible.map((c) => c.category ?? "misc")))];
 
     const groups = categories
       .map((category) => {
-        const commands = visible.filter((c) => (c.category ?? "Прочее") === category);
+        const commands = visible.filter((c) => (c.category ?? "misc") === category);
         if (commands.length === 0) return "";
 
-        const lines = commands.map((c) => `${c.name} ${c.description}`);
-        return `<div class="help-group"><span class="neofetch-accent">[${category}]</span>\n${lines.join("\n")}</div>`;
+        const lines = commands.map((c) => `${c.name} ${this.describe(c)}`);
+        const title = I18n.t(`console.categories.${category}`);
+        return `<div class="help-group"><span class="neofetch-accent">[${title}]</span>\n${lines.join("\n")}</div>`;
       })
       .join("");
 
@@ -329,7 +323,7 @@ export default class Interpreter {
   };
 
   calendarCommand = () => {
-    return `<iframe class="gcal" src="${this.calendarUrl}" frameborder="0" scrolling="no"></iframe>`;
+    return `<iframe class="gcal" src="${this.calendarUrl}&hl=${I18n.language}" frameborder="0" scrolling="no"></iframe>`;
   };
 
   evalCommand = (command, input) => {
@@ -539,7 +533,7 @@ export default class Interpreter {
     const status = await BotApi.getStatus();
     if (!status) return "uptime: cannot reach the space";
 
-    const now = new Date().toLocaleTimeString("ru-RU", {
+    const now = new Date().toLocaleTimeString(I18n.language, {
       timeZone: "Asia/Yerevan",
     });
     const duration = this.formatDuration(Date.now() - status.dateChanged);
@@ -621,7 +615,7 @@ export default class Interpreter {
 
   resetAchievementsCommand = () => {
     AchievementsDOM.resetAchievements();
-    return "Пасхалки сброшены. Ищи заново!";
+    return I18n.t("console.reset");
   };
 
   catArt() {
@@ -703,7 +697,7 @@ export default class Interpreter {
       `/dev/rent       ${col(size)} ${col(used)} ${col(avail)} ${(percent + "%").padStart(4, " ")} /${name}`,
       "",
       `[${"#".repeat(Math.min(30, Math.round(percent * 0.3))).padEnd(30, ".")}] ${target_currency}`,
-      percent < 100 ? "Чтобы освободить место - набери donate" : "Аренда собрана, спасибо!",
+      I18n.t(percent < 100 ? "console.dfHint" : "console.dfDone"),
     ];
 
     return `<pre class="neofetch">${lines.join("\n")}</pre>`;
@@ -813,7 +807,7 @@ export default class Interpreter {
   };
 
   whoamiCommand = () => {
-    return "guest\nХочешь стать резидентом? Набери join";
+    return `guest\n${I18n.t("console.whoamiHint")}`;
   };
 
   sudoCommand = () => {

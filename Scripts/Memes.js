@@ -2,6 +2,7 @@ import DOMHelpers from "./DOMHelpers.js";
 import AchievementsDOM from "./AchievementsDOM.js";
 import TyperDOM from "./TyperDOM.js";
 import Interpreter from "./Interpreter.js";
+import I18n from "./I18n.js";
 
 class Meme {
   init() {
@@ -166,21 +167,25 @@ export class Idle extends Meme {
       this.heIsAliveHandler,
     );
 
-    TyperDOM.StopTypingAll();
-    this.subheading.dataset.type =
-      '[ "Эй", "Ты там живой?", "Я волнуюсь", "Проснись, пожалуйста", "Не умирай!", "Я всё прощу", "Нам было так хорошо вместе" ]';
-    TyperDOM.StartTypingAll();
+    this.retype("idle.sleeping");
   };
+
+  retype(key) {
+    const lines = I18n.t(key, { returnObjects: true });
+    // Without translations the subheading just keeps typing what it had
+    if (!Array.isArray(lines)) return;
+
+    TyperDOM.StopTypingAll();
+    this.subheading.dataset.type = JSON.stringify(lines);
+    TyperDOM.StartTypingAll();
+  }
 
   heIsAliveHandler = () => {
     DOMHelpers.removeMultipleEventListeners(
       this.ActivityEvents,
       this.heIsAliveHandler,
     );
-    TyperDOM.StopTypingAll();
-    this.subheading.dataset.type =
-      '[ "Ура", "Ты проснулся", "Я уже собирался в скорую звонить", "Пронесло..." ]';
-    TyperDOM.StartTypingAll();
+    this.retype("idle.awake");
 
     if (AchievementsDOM.earnAchievment("alive"))
       AchievementsDOM.triggerAchievmentPopup(
@@ -408,7 +413,7 @@ export class ConsoleMeme extends Meme {
     this.trackVisualViewport();
     document.body.addEventListener("keydown", this.CtrlCHandler);
     document
-      .querySelectorAll("nav a")
+      .querySelectorAll("#nav-list a")
       .forEach((navlink) =>
         navlink.addEventListener("click", this.closeConsole),
       );

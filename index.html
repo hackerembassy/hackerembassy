@@ -1,10 +1,28 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-content">
   <title>Hacker Space Yerevan</title>
+  <script src="Scripts/LanguageBoot.js"></script>
+  <link rel="alternate" hreflang="en" href="https://hackem.cc/">
+  <link rel="alternate" hreflang="ru" href="https://hackem.cc/?lng=ru">
+  <link rel="alternate" hreflang="hy" href="https://hackem.cc/?lng=hy">
+  <link rel="alternate" hreflang="x-default" href="https://hackem.cc/">
+  <meta name="description"
+    content="Hacker Embassy is a non-commercial hackerspace in Yerevan: 3D printers, soldering, electronics, board games, talks and workshops. Semi-open meetups every Friday at 20:00."
+    data-i18n-attr="content:meta.description">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Hacker Embassy">
+  <meta property="og:title" content="Hacker Embassy — Yerevan hackerspace" data-i18n-attr="content:meta.ogTitle">
+  <meta property="og:description"
+    content="Hacker Embassy is a non-commercial hackerspace in Yerevan: 3D printers, soldering, electronics, board games, talks and workshops. Semi-open meetups every Friday at 20:00."
+    data-i18n-attr="content:meta.description">
+  <meta property="og:url" content="https://hackem.cc/">
+  <meta property="og:locale" content="en_US" data-i18n-attr="content:meta.ogLocale">
+  <meta property="og:locale:alternate" content="ru_RU">
+  <meta property="og:locale:alternate" content="hy_AM">
   <link rel='stylesheet' href="styles.css">
   <link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon.png">
   <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32x32.png">
@@ -25,84 +43,104 @@
 </head>
 
 <body>
+  <script defer src="https://unpkg.com/i18next@27.1.1/dist/umd/i18next.min.js"
+    integrity="sha384-S3chCsuHEuCQZkzRKiuY1QH25Wm5/mTv37SV83nxYnewbNMciYQQN3v4tt+KOEMV"
+    crossorigin="anonymous"></script>
+  <script defer
+    src="https://unpkg.com/i18next-browser-languagedetector@8.3.0/dist/umd/i18nextBrowserLanguageDetector.min.js"
+    integrity="sha384-D4GjBh0QvxnfHW07YzQqF1D33lNbW0yI3UE6A8dKAvgpFifYarh4MO9ZNzgTGJq0"
+    crossorigin="anonymous"></script>
+  <script defer src="https://unpkg.com/i18next-http-backend@4.0.10/i18nextHttpBackend.min.js"
+    integrity="sha384-9SlYPEcLE0nYQyMvPOaD9Scf9/vRS5QVmHVgfu39nRKBjrjiFkfEiflhRaevbRrV"
+    crossorigin="anonymous"></script>
   <script type="module" src="script.js"></script>
   <script defer src="https://unpkg.com/maplibre-gl@5.24.0/dist/maplibre-gl.js"
-    integrity="sha384-5+cfbwT0iiub6VsQAdn6yz16nr6sDiQoHx6tm4O8OVYXHYOxcffFmCJBL0dgdvGp" crossorigin="anonymous"></script>
+    integrity="sha384-5+cfbwT0iiub6VsQAdn6yz16nr6sDiQoHx6tm4O8OVYXHYOxcffFmCJBL0dgdvGp"
+    crossorigin="anonymous"></script>
   <script defer src="Scripts/Map.js"></script>
 
-  <div id="topbar"><a href="#">user@hackem.cc: ~</a>
+  <div id="topbar">
+    <ul id="lang-list" data-cy="lang-list" aria-label="Language" data-i18n-attr="aria-label:nav.language">
+      <li><a href="?lng=en" hreflang="en" lang="en" data-lng="en">EN</a></li>
+      <li><a href="?lng=hy" hreflang="hy" lang="hy" data-lng="hy">HY</a></li>
+      <li><a href="?lng=ru" hreflang="ru" lang="ru" data-lng="ru">RU</a></li>
+    </ul>
+    <a href="#">user@hackem.cc: ~</a>
     <div id="topbuttons">
-      <img id="minimize" src="/icons/minimize.svg" alt="minimize button">
-      <img id="maximize" src="/icons/maximize.svg" alt="maximize button">
-      <img id="close" src="/icons/close.svg" alt="close button">
+      <img id="minimize" src="/icons/minimize.svg" alt="minimize button" data-i18n-attr="alt:topbar.minimize">
+      <img id="maximize" src="/icons/maximize.svg" alt="maximize button" data-i18n-attr="alt:topbar.maximize">
+      <img id="close" src="/icons/close.svg" alt="close button" data-i18n-attr="alt:topbar.close">
     </div>
   </div>
   <nav>
     <ul id="nav-list">
-      <li><a href="#about">О нас</a></li>
-      <li><a href="#announces">Мероприятия</a></li>
-      <li><a href="#contacts">Контакты</a></li>
-      <li><a href="https://lore.hackem.cc/" target="_blank">Вики</a></li>
-      <li><a href="https://books.hackem.cc/" target="_blank" title="Лучшая коллекция комиксов в Ереване!">Библиотека</a></li>
-      <li><a id="console-button" data-cy="console-button" title="Консоль внутри консоли? Вы серьезно?">Консоль</a></li>
+      <li><a href="#about" data-i18n="nav.about">About</a></li>
+      <li><a href="#announces" data-i18n="nav.events">Events</a></li>
+      <li><a href="#contacts" data-i18n="nav.contacts">Contacts</a></li>
+      <li><a href="https://lore.hackem.cc/" target="_blank" data-i18n="nav.wiki">Wiki</a></li>
+      <li><a href="https://books.hackem.cc/" target="_blank" title="The best comics collection in Yerevan!"
+          data-i18n="nav.library" data-i18n-attr="title:nav.libraryTitle">Library</a></li>
+      <li><a id="console-button" data-cy="console-button" title="A console inside a console? Seriously?"
+          data-i18n="nav.console" data-i18n-attr="title:nav.consoleTitle">Console</a></li>
+      <!-- Links that don't fit on small screens move here, see Scripts/NavOverflowDOM.js -->
+      <li id="nav-more" hidden>
+        <button id="nav-more-button" type="button" aria-expanded="false" aria-controls="nav-more-list"
+          aria-label="More" data-i18n-attr="aria-label:nav.more" data-cy="nav-more">&gt;</button>
+        <ul id="nav-more-list" hidden></ul>
+      </li>
     </ul>
   </nav>
   <main>
     <section id="promo">
       <h1>Hacker Embassy</h1>
-      <p id="subheading" class="typed" data-period="2000"
-        data-type='[ "Ереванский хакспейс", "Без британского флага на входе, но всё ещё с хакерской теплотой внутри", "Скролль ниже, не стесняйся" ]'>
+      <p id="subheading" class="typed" data-period="2000" data-i18n-type="promo.typed"
+        data-type='["Yerevan hackerspace", "No British flag at the door anymore, but still full of hacker warmth inside", "Scroll down, don&#39;t be shy"]'>
       </p>
     </section>
     <section id="about">
-      <h2>О нас</h2>
-      <p>
-        Мы приехали из разных стран и городов и открыли хакспейс в Ереване.
-      </p>
-      <p>
-        Хакспейс - это пространство, где собираются единомышленники, увлеченные технологиями и творчеством.
-        Мы вместе работаем над проектами, делимся идеями и знаниями, просто общаемся.<br>
-        Здесь разные люди находят себе занятие и единомышленников.
-        Мы поддерживаем друг друга, договариваемся и общаемся на равных. <br>
-        Наша цель - развивать сообщество, чтобы каждый участник мог заниматься любимым делом вместе с другими,
-        обмениваясь опытом и помогая друг другу.
-      </p>
-      <p>
-        Хакспейс не является коммерческим проектом и существует на пожертвования участников.
-        Мы вносим свой вклад в развитие хакспейса: забота о пространстве, пожертвования, помощь в приобретении
-        оборудования.<br>
-        Если вы находитесь в Ереване, увлечены технологиями и ищете единомышленников, заходите к нам.
-      </p>
-      <h3>Что у нас есть?</h3>
-      <ul>
-        <li>3D принтеры (2 FDM и 1 SLA)</li>
-        <li>Лазерная МФУшечка</li>
-        <li>Термопринтеры для наклеек и чеков</li>
-        <li>Паяльная станция с феном</li>
-        <li>Макетные платы, радиокомпоненты и детали</li>
-        <li>ESP-шки, Arduin'ки и множество разнообразных модулей к ним</li>
-        <li>Набор ручного и электрического инструмента</li>
-        <li>Кухня со всем необходимым (иногда включая продукты)</li>
-        <li>Чай, кофе и вкусняшки</li>
-        <li>Много пуфиков</li>
-        <li>Настолки (от Манчкина до Монополии)</li>
-        <li>VR шлемы, консоли и игровой ПК</li>
-        <li>Уют и хорошее настроение</li>
-        <li>Многое другое</li>
+      <h2 data-i18n="about.heading">About us</h2>
+      <p data-i18n="about.intro">We came from different countries and cities and opened a hackerspace in Yerevan.</p>
+      <p data-i18n="[html]about.what">A hackerspace is a place where like-minded people passionate about technology and
+        creativity get together. We work on projects together, share ideas and knowledge, or just hang out.<br>All kinds
+        of people find something to do and kindred spirits here. We support each other, make decisions together and talk
+        as equals.<br>Our goal is to grow the community so that every member can do what they love alongside others,
+        sharing experience and helping each other.</p>
+      <p data-i18n="[html]about.donations">The hackerspace is not a commercial project and runs on donations from its
+        members. We all contribute to it: taking care of the space, donating, helping to get new equipment.<br>If you
+        are in Yerevan, love technology and are looking for like-minded people, come visit us.</p>
+      <h3 data-i18n="about.hasHeading">What do we have?</h3>
+      <ul data-i18n-list="about.has">
+        <li>3D printers (2 FDM and 1 SLA)</li>
+        <li>A laser all-in-one printer</li>
+        <li>Thermal printers for stickers and receipts</li>
+        <li>A soldering station with a hot air gun</li>
+        <li>Breadboards, radio components and parts</li>
+        <li>ESPs, Arduinos and lots of modules for them</li>
+        <li>A set of hand and power tools</li>
+        <li>A fully equipped kitchen (sometimes even with food)</li>
+        <li>Tea, coffee and snacks</li>
+        <li>Lots of beanbags</li>
+        <li>Board games (from Munchkin to Monopoly)</li>
+        <li>VR headsets, consoles and a gaming PC</li>
+        <li>Coziness and good vibes</li>
+        <li>And much more</li>
       </ul>
 
-      <h3>Хочешь узнать больше?</h3>
+      <h3 data-i18n="about.moreHeading">Want to know more?</h3>
       <ul>
-        <li><a href="https://lore.hackem.cc/" target="_blank">Посмотри в нашей вики lore.hackem.cc</a>
+        <li><a href="https://lore.hackem.cc/" target="_blank" data-i18n="about.moreWiki">Check out our wiki
+            lore.hackem.cc</a>
         </li>
-        <li><a href="https://t.me/HackerEmbassyBot" target="_blank">Напиши в личку телеграм боту @HackerEmbassyBot</a>
+        <li><a href="https://t.me/HackerEmbassyBot" target="_blank" data-i18n="about.moreBot">Message our Telegram bot
+            @HackerEmbassyBot</a>
         </li>
-        <li><a href="https://t.me/hacker_embassy" target="_blank">Спроси в чатике в телеге @hacker_embassy</a></li>
+        <li><a href="https://t.me/hacker_embassy" target="_blank" data-i18n="about.moreChat">Ask in our Telegram chat
+            @hacker_embassy</a></li>
       </ul>
     </section>
 
     <section id="photos">
-      <h2>Фотки</h2>
+      <h2 data-i18n="photos.heading">Photos</h2>
       <div class="scroll-name">
         <p id="scroll-name-placement" class="typed" data-period="999999" data-speed="500"></p>
         <p id="scroll-name-sizer" aria-hidden="true"></p>
@@ -161,29 +199,29 @@
     </section>
 
     <section id="announces">
-      <h2>Мероприятия</h2>
+      <h2 data-i18n="events.heading">Events</h2>
+      <p data-i18n="events.weekly">Semi-open meetups every Friday at 20:00. Getting to know each other, chatting,
+        working, designing, etc.</p>
+      <p data-i18n="events.workshops">Workshops and talks on all kinds of topics, from 3D printing, modeling and
+        soldering to neural networks, theorem proving algorithms and shibari. We announce the time in advance in our
+        Telegram chat</p>
       <p>
-        Полуоткрытые встречи каждую пятницу в 20.00. Знакомимся, общаемся, работаем, проектируем и.т.п.
-      </p>
-      <p>
-        Мастерклассы и презентации на различные темы от 3D печати, моделирования и пайки до нейросетей, алгоритмов
-        доказательства теорем и шибари. Время анонсируем заранее в телеграм чатике
-      </p>
-      <p>
-        Посмотреть расписание можно в нашем <a id="console-button-calendar"
-          data-cy="console-button-calendar">[календарике]</a>
+        <span data-i18n="events.schedule">Check out the schedule in our</span> <a id="console-button-calendar"
+          data-cy="console-button-calendar" data-i18n="events.calendar">[calendar]</a>
       </p>
     </section>
 
     <section id="contacts">
-      <h2>Где мы</h2>
-      <a class="block" href="https://t.me/hacker_embassy" target="_blank">Основной чатик t.me/hacker_embassy</a>
-      <a class="block" href="https://www.instagram.com/hackerembassy/" target="_blank">Инстаграм @hackerembassy</a>
-      <a class="block" href="https://github.com/hackerembassy/" target="_blank">GitHub github.com/hackerembassy/</a>
+      <h2 data-i18n="contacts.heading">Where we are</h2>
+      <a class="block" href="https://t.me/hacker_embassy" target="_blank" data-i18n="contacts.chat">Main chat
+        t.me/hacker_embassy</a>
+      <a class="block" href="https://www.instagram.com/hackerembassy/" target="_blank"
+        data-i18n="contacts.instagram">Instagram @hackerembassy</a>
+      <a class="block" href="https://github.com/hackerembassy/" target="_blank" data-i18n="contacts.github">GitHub
+        github.com/hackerembassy/</a>
       <a class="block" href="https://www.openstreetmap.org/?mlat=40.194239&mlon=44.497708#map=19/40.194239/44.497708"
-        target="_blank">Армения, Ереван, пр-т Баграмяна 60
-        (вход с улицы)</a>
-      <h3>Как нас найти</h3>
+        target="_blank" data-i18n="contacts.address">Armenia, Yerevan, Baghramyan Ave 60 (entrance from the street)</a>
+      <h3 data-i18n="contacts.howToFind">How to find us</h3>
       <p>display /home/user/images/house.jpg</p>
       <img id="house" class="bordered" src="Images/house.jpg" loading="lazy" alt="hackerspace house">
       <p>display /home/user/images/map.osm</p>
@@ -193,7 +231,8 @@
     </section>
     <footer>
       <div id="additional-info">
-        <p id="achievements-stats"></p><span id="refresh-button"><img src="/icons/refresh.svg" alt="refresh"></span>
+        <p id="achievements-stats"></p><span id="refresh-button"><img src="/icons/refresh.svg" alt="refresh"
+            data-i18n-attr="alt:footer.refresh"></span>
       </div>
     </footer>
   </main>
@@ -207,7 +246,7 @@
     <img id="screenshot" class="full-width-height" src="/Images/screenshot.jpg" loading="lazy" alt="screenshot" />
     <div id="achievement">
       <div class="achievement-text">
-        <p>Achievement unlocked</p>
+        <p data-i18n="achievement.unlocked">Achievement unlocked</p>
         <p id="achievement-placeholder"></p>
       </div>
       <img src="/Images/achievement.svg" loading="lazy" alt="achievement" />

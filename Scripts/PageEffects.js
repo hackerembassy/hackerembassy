@@ -19,7 +19,7 @@ export default class PageEffects {
 
   // Everything floats away weightless and never comes back. The input line stays so the console still works
   async free() {
-    const elements = [...document.querySelectorAll("#console > p, nav li, #topbar > a, #topbuttons img")].filter(
+    const elements = [...document.querySelectorAll("#console > p, nav li, #topbar > a, #lang-list li, #topbuttons img")].filter(
       (element) => element.style.visibility !== "hidden"
     );
 
