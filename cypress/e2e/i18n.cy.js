@@ -31,7 +31,7 @@ describe("Languages", () => {
     cy.location("search").should("eq", "");
     cy.get('link[rel="canonical"]').should("have.attr", "href", "https://hackem.cc/?lng=hy");
     cy.get('link[rel="alternate"][hreflang]').should("have.length", 4);
-    cy.get('meta[name="description"]').should("have.attr", "content").and("contain", "հաքսփեյս");
+    cy.get('meta[name="description"]').should("have.attr", "content").and("contain", "Երևանի");
     cy.get('meta[property="og:locale"]').should("have.attr", "content", "hy_AM");
     cy.get('meta[property="og:url"]').should("have.attr", "content", "https://hackem.cc/?lng=hy");
   });
