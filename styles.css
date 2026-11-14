@@ -200,6 +200,7 @@ nav {
   background-color: #373737;
   font-size: 1.2rem;
   padding-top: 10px;
+  -webkit-tap-highlight-color: transparent;
 }
 
 nav ul {
@@ -239,6 +240,14 @@ nav ul {
   border: none;
   padding: 5px 10px;
   cursor: pointer;
+  /* No blue on tap: no tap flash, no text selection of ">", no focus ring (keyboard focus keeps it) */
+  -webkit-tap-highlight-color: transparent;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+#nav-more-button:focus:not(:focus-visible) {
+  outline: none;
 }
 
 /* Only on real hover: phones keep :hover after a tap, which would leave the button highlighted */
@@ -866,8 +875,9 @@ pre {
     padding: 2px 5px;
   }
 
+  /* Left padding only: a wider tap area for ">" that keeps it in place under the close button */
   #nav-more-button {
-    padding: 0;
+    padding: 0 0 0 15px;
   }
 
   #promo h1 {
