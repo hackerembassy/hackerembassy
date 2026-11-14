@@ -276,7 +276,8 @@ export class ConsoleMeme extends Meme {
       this.consoleInput.focus({ preventScroll: true });
   };
 
-  startConsole(interpreter) {
+  // focus: false opens the console without focusing the input, so phones don't pop up the keyboard
+  startConsole(interpreter, { focus = true } = {}) {
     document.body.removeEventListener("keydown", this.CtrlCHandler);
     this.consoleInput.addEventListener("keyup", this.inputEnterHandler);
     this.consoleInput.addEventListener("keydown", this.inputArrowHandler);
@@ -290,7 +291,7 @@ export class ConsoleMeme extends Meme {
     document.documentElement.classList.add("console-open");
     // preventScroll: a plain focus() scrolls the page under the fixed console, and on iOS the console
     // then visibly jumps down and back up while it catches up with the keyboard
-    this.consoleInput.focus({ preventScroll: true });
+    if (focus) this.consoleInput.focus({ preventScroll: true });
 
     if (AchievementsDOM.earnAchievment("console"))
       AchievementsDOM.triggerAchievmentPopup(
@@ -317,14 +318,16 @@ export class ConsoleMeme extends Meme {
     running.dataset.cy = "console-busy";
     running.textContent = value;
     this.consoleInput.after(running);
+    const hadFocus = document.activeElement === this.consoleInput;
     this.consoleInput.hidden = true;
 
     return {
       done: () => {
         running.remove();
         this.consoleInput.hidden = false;
-        // Hiding the input dropped focus to the body; a command that opened something (vim) keeps its focus
-        if (document.activeElement === document.body)
+        // Hiding the input dropped its focus to the body: give it back, unless the command opened something
+        // that took focus (vim) or the input wasn't focused at all (typed by the [calendar] link on phones)
+        if (hadFocus && document.activeElement === document.body)
           this.consoleInput.focus({ preventScroll: true });
       },
     };
@@ -441,7 +444,9 @@ export class ConsoleMeme extends Meme {
 
     this.calendarInConsoleButton.addEventListener("click", async (event) => {
       event.preventDefault();
-      this.startConsole(new Interpreter());
+      // The command types itself, a phone keyboard would only cover the calendar
+      const isTouch = window.matchMedia("(hover: none)").matches;
+      this.startConsole(new Interpreter(), { focus: !isTouch });
 
       // Show 'em how to type like a pro
       await sleep(500);
