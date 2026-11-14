@@ -702,6 +702,8 @@ ul.indicators {
 
 #console-input-container {
   display: flex;
+  /* A long path drops the input to its own line instead of squeezing the prompt */
+  flex-wrap: wrap;
 }
 
 #console p,
@@ -714,6 +716,9 @@ pre {
 
 #pre-input {
   display: inline-block;
+  /* Keep "C:\Memes\user>" on one line; only break inside it if it's wider than the whole row */
+  max-width: 100%;
+  overflow-wrap: anywhere;
 }
 
 .console-busy::after {
@@ -736,10 +741,10 @@ pre {
 #console-input,
 #console-input:focus-visible,
 #console-input:active {
-  flex-grow: 1;
+  flex: 1 1 8ch;
+  min-width: 8ch;
   padding: 0;
   padding-top: 5px;
-  width: 80%;
   background: none;
   border: none;
   outline: none;
