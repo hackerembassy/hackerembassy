@@ -125,6 +125,27 @@ describe("Console page", () => {
     cy.get(".vim").should("not.exist");
   });
 
+  it("vim has an Esc button for phone keyboards", () => {
+    cy.getCy("console-input").type("vim{enter}");
+    // The console doesn't take focus back when the command finishes, keys go straight to vim
+    cy.focused().should("have.class", "vim-input");
+    cy.get(".vim-input").type("ihello");
+    cy.get(".vim-status").should("contain.text", "-- INSERT --");
+
+    // Shown only on touch screens, Cypress runs with a mouse
+    cy.getCy("vim-esc").click({ force: true });
+    cy.get(".vim-status").should("not.contain.text", "-- INSERT --");
+    // The button doesn't steal focus, typing still reaches the editor
+    cy.focused().should("have.class", "vim-input");
+
+    cy.get(".vim-input").type("i");
+    cy.get(".vim-status").should("contain.text", "-- INSERT --");
+    cy.getCy("vim-esc").click({ force: true });
+
+    cy.get(".vim-input").type(":q!{enter}");
+    cy.get(".vim").should("not.exist");
+  });
+
   it("kill removes clicked elements until Esc", () => {
     cy.getCy("console-input").type("echo victim{enter}");
     cy.getCy("console-input").type("kill{enter}");

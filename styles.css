@@ -1060,10 +1060,39 @@ pre {
   text-align: center;
 }
 
+.vim-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
 .vim-status {
+  flex: 1;
   display: flex;
   justify-content: space-between;
   padding-top: 4px;
+}
+
+/* Only touch screens get an Esc button, keyboards have the real key */
+.vim-esc {
+  display: none;
+  font: inherit;
+  color: var(--secondary-color);
+  background: none;
+  border: 1px solid var(--secondary-color);
+  padding: 4px 12px;
+  /* Above the invisible .vim-input that covers the editor to catch taps */
+  position: relative;
+  z-index: 1;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+@media (hover: none) {
+  .vim-esc {
+    display: block;
+  }
 }
 
 .vim-error {

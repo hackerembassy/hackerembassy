@@ -37,12 +37,21 @@ export default class Vim {
 
     this.root = document.createElement("div");
     this.root.classList.add("vim");
-    this.root.innerHTML = `<div class="vim-buffer"></div><div class="vim-status"></div><textarea class="vim-input" autocapitalize="off" autocomplete="off" spellcheck="false"></textarea>`;
+    this.root.innerHTML = `<div class="vim-buffer"></div><div class="vim-bar"><div class="vim-status"></div><button type="button" class="vim-esc" data-cy="vim-esc">Esc</button></div><textarea class="vim-input" autocapitalize="off" autocomplete="off" spellcheck="false"></textarea>`;
     document.body.appendChild(this.root);
 
     this.input = this.root.querySelector(".vim-input");
     this.input.addEventListener("keydown", this.keydownHandler);
     this.input.addEventListener("input", this.inputHandler);
+
+    // Phone keyboards have no Escape key, without it insert mode is a dead end (shown only on touch screens)
+    const esc = this.root.querySelector(".vim-esc");
+    // The button never takes focus: typing keeps going to the textarea and the keyboard stays as it was
+    esc.addEventListener("mousedown", (event) => event.preventDefault());
+    esc.addEventListener("click", () => {
+      this.handleKey("Escape");
+      this.render();
+    });
 
     this.render();
     this.input.focus();

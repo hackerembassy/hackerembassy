@@ -323,7 +323,9 @@ export class ConsoleMeme extends Meme {
       done: () => {
         running.remove();
         this.consoleInput.hidden = false;
-        this.consoleInput.focus({ preventScroll: true });
+        // Hiding the input dropped focus to the body; a command that opened something (vim) keeps its focus
+        if (document.activeElement === document.body)
+          this.consoleInput.focus({ preventScroll: true });
       },
     };
   }
