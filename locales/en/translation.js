@@ -27,27 +27,27 @@ export default {
   "promo": {
     "typed": [
       "Yerevan hackerspace",
-      "No British flag at the door anymore, but still full of hacker warmth inside",
+      "The British flag may be gone, but the tinkering never stopped",
       "Scroll down, don't be shy"
     ]
   },
   "about": {
     "heading": "About us",
     "intro": "We came from different countries and cities and opened a hackerspace in Yerevan.",
-    "what": "A hackerspace is a place where like-minded people passionate about technology and creativity get together. We work on projects together, share ideas and knowledge, or just hang out.<br>All kinds of people find something to do and kindred spirits here. We support each other, make decisions together and talk as equals.<br>Our goal is to grow the community so that every member can do what they love alongside others, sharing experience and helping each other.",
-    "donations": "The hackerspace is not a commercial project and runs on donations from its members. We all contribute to it: taking care of the space, donating, helping to get new equipment.<br>If you are in Yerevan, love technology and are looking for like-minded people, come visit us.",
+    "what": "Our hackerspace is a gathering point for technology and creative enthusiasts. Whether you want to build projects, exchange insights, or just socialize, you will find a welcoming community of peers here.<br>We believe in mutual support, equal voices, and collective decision-making, all aimed at fostering an environment where everyone can pursue their passions and grow together.",
+    "donations": "We are not a business. We run on member donations, and we all help out by cleaning up, chipping in money, and getting new gear.<br>If you are in Yerevan, love tech, and want to meet people like you, come visit!",
     "hasHeading": "What do we have?",
     "has": [
       "3D printers (2 FDM and 1 SLA)",
       "A laser all-in-one printer",
       "Thermal printers for stickers and receipts",
-      "A soldering station with a hot air gun",
+      "A few rework/soldering stations with hot air guns",
       "Breadboards, radio components and parts",
-      "ESPs, Arduinos and lots of modules for them",
+      "ESP32-s, Arduino-s and lots of modules for them",
       "A set of hand and power tools",
-      "A fully equipped kitchen (sometimes even with food)",
+      "A fully equipped kitchen (sometimes with food)",
       "Tea, coffee and snacks",
-      "Lots of beanbags",
+      "Lots of poufs",
       "Board games (from Munchkin to Monopoly)",
       "VR headsets, consoles and a gaming PC",
       "Coziness and good vibes",
