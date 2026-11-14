@@ -695,6 +695,9 @@ ul.indicators {
   width: 100vw;
   height: var(--viewport-height, 100vh);
   background-color: var(--background-color);
+  /* The console follows the visual viewport, which on iOS ends above the see-through keyboard and its
+     floating bars; paint the background past its edges so the page never shows through below it */
+  box-shadow: 0 0 0 100vmax var(--background-color);
   z-index: 5;
   /* Vertical only: "scroll" always drew an empty horizontal scrollbar, wide pre blocks scroll on their own */
   overflow: hidden auto;
